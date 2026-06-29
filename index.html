@@ -2,144 +2,236 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>JEE 2027 Master Planner</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JEE 2027 Master Planner Pro</title>
     
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1e293b">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0f172a">
+
+    <!-- Firebase App & Firestore Compatibility SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <style>
-        /* --- Modern UI Variables & Reset --- */
+        /* --- Premium Neon-Slate Variable System & Reset --- */
         :root {
-            --bg-dark: #0f172a; --bg-panel: #1e293b; --text-main: #f8fafc;
-            --text-muted: #94a3b8; --accent-blue: #3b82f6; --accent-green: #10b981;
-            --accent-purple: #a855f7; --accent-orange: #f97316; --border-color: #334155;
-            --progress-bg: #020617;
+            --bg-dark: #090d16;        /* Deeper cosmic black */
+            --bg-panel: #131c2e;       /* Fluid deep slate panel */
+            --bg-card: #1e293b;        /* Elevated card background */
+            --text-main: #f8fafc;      /* Crisp brilliant white */
+            --text-muted: #64748b;     /* Muted cool grey */
+            --accent-blue: #3b82f6;    /* Neon electric blue */
+            --accent-green: #10b981;   /* Radiant emerald green */
+            --accent-purple: #a855f7;  /* High-energy violet */
+            --accent-orange: #f97316;  /* Vivid burning orange */
+            --border-color: rgba(255, 255, 255, 0.06);
+            --progress-bg: #020617;    /* Inset deep track */
+            --glow-blue: rgba(59, 130, 246, 0.25);
+            --glow-green: rgba(16, 185, 129, 0.25);
         }
         
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
         
         body { 
             display: grid; 
-            grid-template-columns: 260px 1fr; 
-            grid-template-rows: 70px 1fr; 
+            grid-template-columns: 280px 1fr; 
+            grid-template-rows: 75px 1fr; 
             grid-template-areas: "sidebar topbar" "sidebar main"; 
-            height: 100vh; background-color: var(--bg-dark); color: var(--text-main); 
-            overflow: hidden; letter-spacing: 0.3px; 
+            height: 100vh; 
+            background-color: var(--bg-dark); 
+            color: var(--text-main); 
+            overflow: hidden; 
+            letter-spacing: -0.1px; 
         }
 
-        /* --- Panel Styling --- */
-        .sidebar { grid-area: sidebar; background-color: var(--bg-panel); border-right: 1px solid var(--border-color); padding: 25px 20px; z-index: 1000; display: flex; flex-direction: column;}
-        .topbar { grid-area: topbar; background-color: var(--bg-dark); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 25px; z-index: 10;}
-        .workspace { grid-area: main; padding: 30px; overflow-y: auto; overflow-x: hidden; }
+        /* --- Scrollbar Customization --- */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-blue); }
+
+        /* --- Sidebar Redesign --- */
+        .sidebar { 
+            grid-area: sidebar; 
+            background: linear-gradient(180deg, #0d1527 0%, #070a12 100%); 
+            border-right: 1px solid var(--border-color); 
+            padding: 30px 24px; 
+            display: flex; 
+            flex-direction: column; 
+            z-index: 11;
+        }
+        .sidebar h2 { 
+            color: var(--text-main); 
+            margin-bottom: 40px; 
+            font-size: 1.7rem; 
+            font-weight: 800; 
+            letter-spacing: -0.5px;
+            display: flex; 
+            align-items: center; 
+            gap: 8px;
+        }
+        .sidebar h2 span { color: var(--accent-blue); text-shadow: 0 0 15px var(--glow-blue); }
+        .sidebar ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+        .sidebar li { 
+            padding: 12px 16px; 
+            color: #94a3b8; 
+            cursor: pointer; 
+            border-radius: 10px; 
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); 
+            font-weight: 600; 
+            font-size: 0.95rem; 
+            display: flex; 
+            align-items: center; 
+            gap: 12px;
+        }
+        .sidebar li:hover { background-color: rgba(255, 255, 255, 0.03); color: var(--text-main); transform: translateX(2px); }
+        .sidebar li.active { 
+            background: linear-gradient(135deg, var(--accent-blue) 0%, #1d4ed8 100%); 
+            color: #fff; 
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3); 
+        }
+
+        /* --- Topbar Styling --- */
+        .topbar { 
+            grid-area: topbar; 
+            background-color: rgba(9, 13, 22, 0.7); 
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color); 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 0 40px; 
+            z-index: 10;
+        }
+        .topbar-actions { display: flex; align-items: center; gap: 14px; }
+        .btn-backup { 
+            background: rgba(255, 255, 255, 0.03); 
+            border: 1px solid var(--border-color); 
+            color: #cbd5e1; 
+            padding: 8px 16px; 
+            border-radius: 8px; 
+            font-size: 0.85rem; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+        }
+        .btn-backup:hover { border-color: var(--accent-blue); color: #fff; background: rgba(59, 130, 246, 0.1); }
+        .compact-toggle-wrap { display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; margin-right: 10px; }
+
+        /* --- Main Workspace Architecture --- */
+        .workspace { grid-area: main; padding: 40px; overflow-y: auto; background-color: var(--bg-dark); position: relative; }
+        .view-section { display: none; } 
+        .view-section.active { display: block; animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         
-        .sidebar h2 { color: var(--text-main); margin-bottom: 35px; font-size: 1.6rem; font-weight: 800;}
-        .sidebar h2 span { color: var(--accent-blue); }
-        .sidebar ul { list-style: none; flex-grow: 1;}
-        .sidebar li { padding: 14px 18px; margin-bottom: 8px; color: var(--text-muted); cursor: pointer; border-radius: 8px; font-weight: 600; font-size: 0.95rem; transition: 0.2s;}
-        .sidebar li:hover { background-color: rgba(59, 130, 246, 0.1); color: var(--accent-blue); }
-        .sidebar li.active { background-color: var(--accent-blue); color: #fff; }
-
-        /* Install App Button */
-        #installBtn { display: none; margin-top: 20px; background-color: var(--accent-green); color: var(--bg-dark); border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; text-align: center; box-shadow: 0 4px 12px rgba(16,185,129,0.3); }
-
-        /* Hamburger Menu */
-        .menu-btn { display: none; background: none; border: none; color: var(--text-main); font-size: 1.8rem; cursor: pointer; padding-right: 15px;}
-        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 999; backdrop-filter: blur(2px); opacity: 0; transition: opacity 0.3s;}
-
-        /* --- Homepage Grid --- */
-        .home-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
-        .countdown-card { grid-column: span 2; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid var(--border-color); padding: 25px; border-radius: 16px; text-align: center; }
-        .timer-display { display: flex; justify-content: center; gap: 15px; margin-top: 15px; flex-wrap: wrap;}
-        .time-box { background: var(--bg-dark); padding: 15px; border-radius: 12px; flex: 1; min-width: 80px; border-bottom: 4px solid var(--accent-blue); }
-        .time-val { font-size: 2rem; font-weight: 800; }
-        .time-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;}
+        /* --- High Performance Dashboard Layout --- */
+        .home-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; }
         
-        .card { background-color: var(--bg-panel); padding: 25px; border-radius: 16px; border: 1px solid var(--border-color); }
-        .card-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; }
+        .countdown-card { 
+            grid-column: span 12; 
+            background: linear-gradient(135deg, #131e35 0%, #090e1a 100%); 
+            border: 1px solid rgba(59, 130, 246, 0.15); 
+            padding: 30px; 
+            border-radius: 20px; 
+            text-align: center; 
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .timer-display { display: flex; justify-content: center; gap: 20px; margin-top: 15px; }
+        .time-box { background: rgba(2, 6, 23, 0.6); padding: 16px 24px; border-radius: 14px; min-width: 110px; border-bottom: 4px solid var(--accent-blue); }
+        .time-val { font-size: 2.4rem; font-weight: 900; letter-spacing: -1px; }
+        .time-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; margin-top: 6px; font-weight: 700; }
         
-        /* Practice Tracker UI */
-        .prac-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;}
-        .prac-input-group { display: flex; width: 100%; justify-content: flex-end;}
-        .prac-input { width: 60px; background: var(--bg-dark); border: 1px solid var(--border-color); color: white; padding: 8px; border-radius: 6px; text-align: center; margin-right: 10px; font-weight: bold;}
-        .prac-btn { background: var(--accent-blue); border: none; color: white; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; }
-
-        /* Progress Bars */
-        .stat-row { margin-bottom: 15px; width: 100%;}
-        .stat-labels { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 5px; font-weight: 600;}
-        .stat-bar-bg { background-color: var(--progress-bg); height: 10px; border-radius: 5px; overflow: hidden; width: 100%;}
-        .stat-bar-fill { height: 100%; transition: width 0.6s ease; border-radius: 5px;}
-
-        /* Big Analytics Numbers */
-        .big-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .big-stat-box { background: var(--bg-dark); padding: 15px; border-radius: 12px; text-align: center; border: 1px solid var(--border-color); }
-        .big-stat-num { font-size: 1.8rem; font-weight: 800; color: var(--text-main); }
-        .big-stat-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; margin-top: 5px; font-weight: 600;}
-
-        /* --- Dynamic Components --- */
-        .task-card { background-color: var(--bg-panel); padding: 20px; border-radius: 12px; margin-bottom: 15px; border-left: 5px solid var(--accent-green); }
-        .task-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;}
-        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); gap: 8px; margin-bottom: 15px; }
-        .video-checkbox { display: flex; align-items: center; justify-content: center; height: 35px; background-color: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600; user-select: none; }
-        .video-checkbox.watched { background-color: var(--accent-green); color: var(--bg-dark); border-color: var(--accent-green); }
+        /* Interactive Grid Scaling */
+        .grid-md-6 { grid-column: span 6; }
+        .grid-md-4 { grid-column: span 4; }
+        .grid-md-12 { grid-column: span 12; }
         
-        button.action-btn, button.delete-btn { padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: bold; border: none; }
-        button.action-btn { background-color: var(--accent-blue); color: white; }
-        button.delete-btn { background-color: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .card { 
+            background: linear-gradient(145deg, rgba(19, 28, 46, 0.8) 0%, rgba(15, 23, 42, 0.5) 100%);
+            backdrop-filter: blur(20px);
+            padding: 28px; 
+            border-radius: 20px; 
+            border: 1px solid var(--border-color); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .card:hover { border-color: rgba(255,255,255,0.1); }
+        .card-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 14px; display: flex; align-items: center; justify-content: space-between; }
+
+        /* --- Velocity Metrics Banner --- */
+        .velocity-banner { display: flex; align-items: center; justify-content: space-between; background: rgba(16, 185, 129, 0.05); border: 1px dashed rgba(16, 185, 129, 0.2); padding: 14px 20px; border-radius: 12px; margin-bottom: 15px; }
+        .velocity-metric { font-weight: 700; color: var(--accent-green); text-shadow: 0 0 10px rgba(16, 185, 129, 0.2); }
+
+        /* --- GitHub Activity Grid Engine --- */
+        .heatmap-container { display: flex; flex-direction: column; gap: 8px; margin-top: 5px; }
+        .heatmap-grid { display: grid; grid-template-columns: repeat(27, 1fr); gap: 4px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.02); }
+        .heatmap-cell { width: 100%; aspect-ratio: 1; background-color: #1e293b; border-radius: 2px; position: relative; cursor: pointer; }
+        .heatmap-cell:hover::after { content: attr(data-tooltip); position: absolute; bottom: 125%; left: 50%; transform: translateX(-50%); background: #020617; color: #fff; padding: 6px 10px; border-radius: 6px; font-size: 0.75rem; white-space: nowrap; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.5); border: 1px solid #334155; }
+        .heatmap-cell.level-0 { background-color: #131d31; }
+        .heatmap-cell.level-1 { background-color: #064e3b; }
+        .heatmap-cell.level-2 { background-color: #047857; }
+        .heatmap-cell.level-3 { background-color: #10b981; }
+        .heatmap-cell.level-4 { background-color: #34d399; }
+        .heatmap-labels { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); font-weight: 600; padding: 0 4px; }
+
+        /* --- Practice Dynamic Rows --- */
+        .prac-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .stat-labels { display: flex; justify-content: space-between; font-size: 0.88rem; margin-bottom: 8px; font-weight: 600;}
+        .stat-bar-bg { background-color: var(--progress-bg); height: 8px; border-radius: 10px; overflow: hidden; }
+        .stat-bar-fill { height: 100%; transition: width 0.8s cubic-bezier(0.25, 1, 0.5, 1); border-radius: 10px;}
+
+        /* --- Big Analytics Microbox --- */
+        .big-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .big-stat-box { background: rgba(2, 6, 23, 0.4); padding: 18px; border-radius: 14px; text-align: center; border: 1px solid rgba(255,255,255,0.03); }
+        .big-stat-num { font-size: 1.8rem; font-weight: 800; }
+        .big-stat-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; margin-top: 4px; font-weight: 700; letter-spacing: 0.5px;}
+
+        /* --- Dynamic Card Queue System --- */
+        .task-card { background: #131c2e; padding: 24px; border-radius: 16px; margin-bottom: 20px; border-left: 5px solid var(--accent-green); position: relative; transition: all 0.3s; border: 1px solid rgba(255,255,255,0.02); }
+        .task-card.revision-flagged { border-left-color: var(--accent-purple) !important; background: linear-gradient(90deg, rgba(168, 85, 247, 0.03) 0%, #131c2e 100%); }
+        .task-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(38px, 1fr)); gap: 8px; margin-bottom: 15px; }
+        .video-grid.is-compact { display: flex; flex-wrap: wrap; gap: 6px; }
+        .video-grid.is-compact .video-checkbox { width: 28px; height: 24px; font-size: 0.75rem; border-radius: 4px; }
         
-        /* Timeline UI */
-        .timeline-card { background-color: var(--bg-panel); border-left: 4px solid var(--accent-purple); border-radius: 12px; margin-bottom: 20px; padding: 15px; }
-        .timeline-date { display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 1.1rem; color: var(--accent-purple); margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;}
-        .timeline-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px dashed var(--border-color); flex-wrap: wrap; gap: 10px;}
+        .video-checkbox { display: flex; align-items: center; justify-content: center; height: 36px; background-color: var(--bg-dark); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; user-select: none; transition: all 0.2s; color: #94a3b8; }
+        .video-checkbox:hover { border-color: var(--accent-blue); color: #fff; transform: translateY(-1px); }
+        .video-checkbox.watched { background: linear-gradient(135deg, var(--accent-green) 0%, #059669 100%); color: #020617; border-color: transparent; box-shadow: 0 4px 12px var(--glow-green); }
+        
+        /* --- Timeline Base Mapping --- */
+        .timeline-card { background: #131c2e; border-left: 4px solid var(--accent-purple); border-radius: 14px; margin-bottom: 18px; padding: 20px; border: 1px solid rgba(255,255,255,0.02); }
+        .timeline-date { display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 1.05rem; color: var(--accent-purple); margin-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.04); padding-bottom: 8px;}
+        .timeline-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed rgba(255,255,255,0.04); }
         .timeline-row:last-child { border-bottom: none; }
-        .timeline-subj { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; width: 80px; display: inline-block; }
-        .add-mini { background-color: var(--accent-blue); color: white; border: none; border-radius: 8px; width: 35px; height: 35px; cursor: pointer; font-weight: bold; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;}
-        .off-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 600; }
-        .is-off { opacity: 0.3; pointer-events: none; text-decoration: line-through; filter: grayscale(100%); }
-
-        .syllabus-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin-top: 20px; }
-        .syllabus-item { background-color: var(--bg-panel); padding: 15px; border-radius: 12px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;}
-        .view-section { display: none; } .view-section.active { display: block; animation: fadeIn 0.3s;}
         
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* --- Global Structural Control Elements --- */
+        button.action-btn { background: var(--accent-blue); color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: all 0.2s; font-size: 0.85rem; }
+        button.action-btn:hover { background: #2563eb; transform: translateY(-1px); box-shadow: 0 4px 12px var(--glow-blue); }
+        button.delete-btn { background: rgba(239, 68, 68, 0.08); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.8rem; transition: 0.2s;}
+        button.delete-btn:hover { background: #ef4444; color: white; }
+        button.revision-btn { background: rgba(168, 85, 247, 0.1); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.2); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.8rem; margin-right: 8px; transition: 0.2s; }
+        button.revision-btn:hover { background: var(--accent-purple); color: white; }
 
-        /* --- RESPONSIVE MEDIA QUERIES --- */
-        @media (max-width: 950px) {
-            /* Switch to Mobile Layout */
-            body { 
-                grid-template-columns: 1fr; 
-                grid-template-areas: "topbar" "main"; 
-            }
-            
-            /* Sidebar becomes an off-canvas drawer */
-            .sidebar { 
-                position: fixed; top: 0; left: -300px; height: 100vh; width: 280px; 
-                transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-            }
-            .sidebar.open { left: 0; }
-            .overlay.open { display: block; opacity: 1; }
-            
-            .menu-btn { display: block; }
-            .workspace { padding: 20px; }
-            
-            /* Stack Home Grid Elements */
-            .home-grid { grid-template-columns: 1fr; }
-            .countdown-card { grid-column: span 1; }
-            
-            /* Fix Practice Input alignment on mobile */
-            .prac-row > div:first-child { width: 100%; }
-        }
+        .syllabus-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-top: 20px; }
+        .syllabus-item { background-color: #131c2e; padding: 18px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.03); display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; }
+        .syllabus-item:hover { transform: translateY(-2px); border-color: var(--accent-blue); background: #16223b; }
+
+        /* --- Slide-Out Scratchpad Drawer --- */
+        .scratchpad-toggle { position: fixed; bottom: 30px; right: 30px; background: var(--accent-blue); color: white; border: none; width: 56px; height: 56px; border-radius: 28px; cursor: pointer; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4); z-index: 100; transition: transform 0.2s; }
+        .scratchpad-toggle:hover { transform: scale(1.05); }
+        .scratchpad-drawer { position: fixed; top: 0; right: -360px; width: 360px; height: 100vh; background: #0f1626; border-left: 1px solid var(--border-color); box-shadow: -10px 0 30px rgba(0,0,0,0.5); z-index: 99; padding: 30px 24px; display: flex; flex-direction: column; gap: 15px; transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .scratchpad-drawer.open { right: 0; }
+        .scratchpad-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px; }
+        .scratchpad-textarea { flex-grow: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; color: var(--text-main); font-size: 0.95rem; line-height: 1.5; resize: none; }
+        .scratchpad-textarea:focus { outline: 1px solid var(--accent-blue); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-    <div class="overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
-
-    <aside class="sidebar" id="appSidebar">
-        <h2 style="display: flex; justify-content: space-between; align-items: center;">
-            <div>JEE <span>2027</span></div>
-        </h2>
+    <aside class="sidebar">
+        <h2>JEE <span>2027</span></h2>
         <nav>
             <ul id="navMenu">
                 <li class="active" onclick="switchView('home')">Home Dashboard</li>
@@ -150,295 +242,754 @@
                 <li onclick="switchView('mathematics')">Maths Syllabus</li>
             </ul>
         </nav>
-        <button id="installBtn" onclick="installApp()">📥 Install App</button>
     </aside>
 
     <header class="topbar">
-        <div style="display: flex; align-items: center;">
-            <button class="menu-btn" onclick="toggleSidebar()">☰</button>
-            <div style="font-weight: 600; color: var(--text-muted); font-size: 0.85rem;">STATUS: <span style="color: var(--accent-green);">OFFLINE</span></div>
+        <div style="font-weight: 700; color: var(--text-muted); font-size: 0.85rem; letter-spacing: 0.5px;">STATUS: <span id="syncStatus" style="color: var(--accent-orange);">INITIALIZING SYSTEM...</span></div>
+        
+        <div class="topbar-actions">
+            <div class="compact-toggle-wrap">
+                <input type="checkbox" id="compactModeCheck" onchange="toggleCompactLayout(this)">
+                <label for="compactModeCheck">Compact Mode</label>
+            </div>
+            <button class="btn-backup" onclick="exportDataData()">Export Data</button>
+            <button class="btn-backup" onclick="document.getElementById('hiddenFileInput').click()">Import Data</button>
+            <input type="file" id="hiddenFileInput" style="display:none" accept=".json" onchange="importDataData(event)">
+            <div id="headerDateDisplay" style="color: var(--text-main); font-weight: 700; margin-left: 10px; font-size: 0.9rem;"></div>
         </div>
-        <div id="headerDateDisplay" style="color: var(--text-main); font-weight: 700; font-size: 0.9rem;"></div>
     </header>
 
-    <!-- MAIN WORKSPACE CONTENT REMAINS IDENTICAL TO PREVIOUS VERSION -->
     <main class="workspace">
         <section id="view-home" class="view-section active">
             <div class="home-grid">
                 
                 <div class="countdown-card">
-                    <div style="color: var(--accent-blue); font-size: 1.1rem; font-weight: 800; letter-spacing: 2px; margin-bottom: 5px;">TARGET: JEE MAINS 2027</div>
+                    <div style="color: var(--accent-blue); font-size: 1rem; font-weight: 800; letter-spacing: 4px; margin-bottom: 5px;">TARGET: JEE MAINS 2027</div>
                     <div class="timer-display">
                         <div class="time-box"><div class="time-val" id="t-days">00</div><div class="time-label">Days</div></div>
-                        <div class="time-box"><div class="time-val" id="t-hours">00</div><div class="time-label">Hrs</div></div>
+                        <div class="time-box"><div class="time-val" id="t-hours">00</div><div class="time-label">Hours</div></div>
                         <div class="time-box"><div class="time-val" id="t-mins">00</div><div class="time-label">Mins</div></div>
                         <div class="time-box"><div class="time-val" id="t-secs">00</div><div class="time-label">Secs</div></div>
                     </div>
                 </div>
 
-                <div class="card">
-                    <div class="card-title" style="color: var(--accent-purple);">Today's Target</div>
+                <div class="card grid-md-12">
+                    <div class="card-title" style="color: var(--accent-green); margin-bottom: 12px;">Consistent Practice Heatmap</div>
+                    <div class="heatmap-container">
+                        <div class="heatmap-grid" id="consistencyHeatmap"></div>
+                        <div class="heatmap-labels">
+                            <span id="heatmapStartLabel">Past Weeks</span>
+                            <span>Current Week</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card grid-md-6">
+                    <div class="card-title" style="color: var(--accent-purple);">Today's Scheduled Target</div>
                     <div id="todayScheduleContainer"></div>
                 </div>
 
-                <div class="card">
+                <div class="card grid-md-6">
                     <div class="card-title" style="color: var(--text-main);">Daily Practice Goal</div>
+                    
                     <div class="prac-row">
-                        <div><div class="stat-labels"><span style="color: var(--accent-blue);">Physics</span><span id="pQTxt">0/30</span></div><div class="stat-bar-bg"><div id="pQBar" class="stat-bar-fill" style="background: var(--accent-blue); width: 0%;"></div></div></div>
-                        <div class="prac-input-group"><input type="number" id="pQInp" class="prac-input" placeholder="+"><button class="prac-btn" onclick="addPractice('p')">Log</button></div>
+                        <div style="flex-grow: 1;">
+                            <div class="stat-labels"><span style="color: var(--accent-blue); font-weight: 700;">Physics (Goal: 30)</span><span id="pQTxt">0/30</span></div>
+                            <div class="stat-bar-bg"><div id="pQBar" class="stat-bar-fill" style="background: var(--accent-blue); width: 0%;"></div></div>
+                        </div>
+                        <div style="margin-left: 20px; display: flex;">
+                            <input type="number" id="pQInp" class="prac-input" min="1" placeholder="+">
+                            <button class="prac-btn" onclick="addPractice('p')">Log</button>
+                        </div>
                     </div>
+
                     <div class="prac-row">
-                        <div><div class="stat-labels"><span style="color: var(--accent-orange);">Chemistry</span><span id="cQTxt">0/40</span></div><div class="stat-bar-bg"><div id="cQBar" class="stat-bar-fill" style="background: var(--accent-orange); width: 0%;"></div></div></div>
-                        <div class="prac-input-group"><input type="number" id="cQInp" class="prac-input" placeholder="+"><button class="prac-btn" onclick="addPractice('c')">Log</button></div>
+                        <div style="flex-grow: 1;">
+                            <div class="stat-labels"><span style="color: var(--accent-orange); font-weight: 700;">Chemistry (Goal: 40)</span><span id="cQTxt">0/40</span></div>
+                            <div class="stat-bar-bg"><div id="cQBar" class="stat-bar-fill" style="background: var(--accent-orange); width: 0%;"></div></div>
+                        </div>
+                        <div style="margin-left: 20px; display: flex;">
+                            <input type="number" id="cQInp" class="prac-input" min="1" placeholder="+">
+                            <button class="prac-btn" onclick="addPractice('c')">Log</button>
+                        </div>
                     </div>
+
                     <div class="prac-row">
-                        <div><div class="stat-labels"><span style="color: var(--accent-purple);">Maths</span><span id="mQTxt">0/30</span></div><div class="stat-bar-bg"><div id="mQBar" class="stat-bar-fill" style="background: var(--accent-purple); width: 0%;"></div></div></div>
-                        <div class="prac-input-group"><input type="number" id="mQInp" class="prac-input" placeholder="+"><button class="prac-btn" onclick="addPractice('m')">Log</button></div>
+                        <div style="flex-grow: 1;">
+                            <div class="stat-labels"><span style="color: var(--accent-purple); font-weight: 700;">Maths (Goal: 30)</span><span id="mQTxt">0/30</span></div>
+                            <div class="stat-bar-bg"><div id="mQBar" class="stat-bar-fill" style="background: var(--accent-purple); width: 0%;"></div></div>
+                        </div>
+                        <div style="margin-left: 20px; display: flex;">
+                            <input type="number" id="mQInp" class="prac-input" min="1" placeholder="+">
+                            <button class="prac-btn" onclick="addPractice('m')">Log</button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="card">
-                    <div class="card-title" style="color: var(--text-main);">Overall Study Hours</div>
-                    <div class="stat-row"><div class="stat-labels"><span style="color: var(--accent-green);">Mastered</span><span id="stat-a-hrs">0 / 0 hrs</span></div><div class="stat-bar-bg"><div id="bar-a-hrs" class="stat-bar-fill" style="background: var(--accent-green); width: 0%;"></div></div></div>
-                    <div class="stat-row"><div class="stat-labels"><span>Physics</span><span id="stat-p-hrs">0 / 0 hrs</span></div><div class="stat-bar-bg"><div id="bar-p-hrs" class="stat-bar-fill" style="background: var(--accent-blue); width: 0%;"></div></div></div>
-                    <div class="stat-row"><div class="stat-labels"><span>Chemistry</span><span id="stat-c-hrs">0 / 0 hrs</span></div><div class="stat-bar-bg"><div id="bar-c-hrs" class="stat-bar-fill" style="background: var(--accent-orange); width: 0%;"></div></div></div>
-                    <div class="stat-row"><div class="stat-labels"><span>Maths</span><span id="stat-m-hrs">0 / 0 hrs</span></div><div class="stat-bar-bg"><div id="bar-m-hrs" class="stat-bar-fill" style="background: var(--accent-purple); width: 0%;"></div></div></div>
+                <div class="card grid-md-6">
+                    <div class="card-title" style="color: var(--text-main);">Syllabus Velocity Tracker</div>
+                    <div class="velocity-banner">
+                        <span style="font-size:0.85rem; font-weight:600; color:var(--text-muted);">Syllabus Finish Projection:</span>
+                        <span class="velocity-metric" id="velocityPredictionTxt">Calculating Velocity...</span>
+                    </div>
+                    
+                    <div class="stat-row" style="margin-bottom:14px;">
+                        <div class="stat-labels"><span style="color: var(--accent-green);">Total Mastered</span><span id="stat-a-hrs">0 / 0 hrs</span></div>
+                        <div class="stat-bar-bg"><div id="bar-a-hrs" class="stat-bar-fill" style="background: var(--accent-green); width: 0%; box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);"></div></div>
+                    </div>
+                    <div class="stat-row" style="margin-bottom:14px;">
+                        <div class="stat-labels"><span>Physics</span><span id="stat-p-hrs">0 / 0 hrs</span></div>
+                        <div class="stat-bar-bg"><div id="bar-p-hrs" class="stat-bar-fill" style="background: var(--accent-blue); width: 0%;"></div></div>
+                    </div>
+                    <div class="stat-row" style="margin-bottom:14px;">
+                        <div class="stat-labels"><span>Chemistry</span><span id="stat-c-hrs">0 / 0 hrs</span></div>
+                        <div class="stat-bar-bg"><div id="bar-c-hrs" class="stat-bar-fill" style="background: var(--accent-orange); width: 0%;"></div></div>
+                    </div>
+                    <div class="stat-row">
+                        <div class="stat-labels"><span>Maths</span><span id="stat-m-hrs">0 / 0 hrs</span></div>
+                        <div class="stat-bar-bg"><div id="bar-m-hrs" class="stat-bar-fill" style="background: var(--accent-purple); width: 0%;"></div></div>
+                    </div>
                 </div>
 
-                <div class="card">
-                    <div class="card-title" style="color: var(--text-main);">Total Questions</div>
+                <div class="card grid-md-6">
+                    <div class="card-title" style="color: var(--text-main);">Total Questions Practiced</div>
                     <div class="big-stat-grid">
-                        <div class="big-stat-box"><div id="tot-a-q" class="big-stat-num" style="color: var(--accent-green)">0</div><div class="big-stat-label">Total</div></div>
+                        <div class="big-stat-box"><div id="tot-a-q" class="big-stat-num" style="color: var(--accent-green)">0</div><div class="big-stat-label">Total Logs</div></div>
                         <div class="big-stat-box"><div id="tot-p-q" class="big-stat-num" style="color: var(--accent-blue)">0</div><div class="big-stat-label">Physics</div></div>
                         <div class="big-stat-box"><div id="tot-c-q" class="big-stat-num" style="color: var(--accent-orange)">0</div><div class="big-stat-label">Chemistry</div></div>
                         <div class="big-stat-box"><div id="tot-m-q" class="big-stat-num" style="color: var(--accent-purple)">0</div><div class="big-stat-label">Maths</div></div>
                     </div>
                 </div>
+
             </div>
         </section>
 
-        <section id="view-dashboard" class="view-section"><h3 style="margin-bottom: 25px; font-size: 1.5rem; font-weight: 800;">Active Study Queue</h3><div id="dynamicTasks"></div></section>
-        <section id="view-schedule" class="view-section"><h3 style="margin-bottom: 10px; font-size: 1.5rem; font-weight: 800;">Master Study Timeline</h3><p style="color: var(--text-muted); margin-bottom: 25px;">Use 'Skip Subj' to shift your schedule.</p><div id="timelineContainer"></div></section>
+        <section id="view-dashboard" class="view-section">
+            <h3 style="margin-bottom: 25px; font-size: 1.5rem; font-weight: 800;">Active Study Queue</h3>
+            <div id="dynamicTasks"></div>
+        </section>
+
+        <section id="view-schedule" class="view-section">
+            <h3 style="margin-bottom: 10px; font-size: 1.5rem; font-weight: 800;">Master Study Timeline</h3>
+            <p style="color: var(--text-muted); margin-bottom: 25px;">Use the 'Skip Subj' buttons to shift your schedule down dynamically.</p>
+            <div id="timelineContainer"></div>
+        </section>
+
         <section id="view-physics" class="view-section"><h3 style="margin-bottom: 25px; font-size: 1.5rem; font-weight: 800; color: var(--accent-blue);">Physics Syllabus</h3><div id="grid-p" class="syllabus-grid"></div></section>
         <section id="view-chemistry" class="view-section"><h3 style="margin-bottom: 25px; font-size: 1.5rem; font-weight: 800; color: var(--accent-orange);">Chemistry Syllabus</h3><div id="grid-c" class="syllabus-grid"></div></section>
         <section id="view-mathematics" class="view-section"><h3 style="margin-bottom: 25px; font-size: 1.5rem; font-weight: 800; color: var(--accent-purple);">Mathematics Syllabus</h3><div id="grid-m" class="syllabus-grid"></div></section>
     </main>
 
+    <!-- Slide Out Drawer Controls -->
+    <button class="scratchpad-toggle" onclick="toggleScratchpad()">📝</button>
+    <div class="scratchpad-drawer" id="scratchpadDrawer">
+        <div class="scratchpad-header">
+            <h3 style="font-weight:700;">Scratchpad Notes</h3>
+            <button class="delete-btn" style="padding: 4px 8px;" onclick="toggleScratchpad()">Close</button>
+        </div>
+        <textarea class="scratchpad-textarea" id="scratchpadInput" placeholder="Type engineering shortcuts, active formulas, or question anomalies here... Data saves dynamically down into cloud profile storage." oninput="saveScratchpadData()"></textarea>
+    </div>
+
     <script>
-        // --- 1. DATABASES & CONFIG ---
+        // --- 1. FIREBASE SETUP WITH INTEGRATED CREDENTIALS ---
+        let db = null;
+        let userDocRef = null;
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyChMLBb9DYZU0wZAv9mZdZ9ESinshq3fkI",
+            authDomain: "jee-planner-2dda7.firebaseapp.com",
+            projectId: "jee-planner-2dda7",
+            storageBucket: "jee-planner-2dda7.firebasestorage.app",
+            messagingSenderId: "546239377529",
+            appId: "1:546239377529:web:f438f1abd1950486724a8"
+        };
+
+        try {
+            if (firebaseConfig.apiKey !== "YOUR_API_KEY") {
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.firestore();
+                userDocRef = db.collection("users").doc("jee_tracker_data");
+            }
+        } catch(e) {
+            console.error("Firebase Initialization failed: ", e);
+        }
+
+        // --- 2. MASTER DATABASE ---
         const syllabusDB = {
-            "p": [{n: "Unit & dimensions", v: 17, l: 455}, {n: "Vectors", v: 18, l: 542}, {n: "Error", v: 15, l: 355}, {n: "NLM", v: 23, l: 486}, {n: "Circular motion", v: 16, l: 316}, {n: "COM", v: 23, l: 582}, {n: "W.E.P", v: 16, l: 433}, {n: "Rotation", v: 28, l: 594}, {n: "Fluid", v: 24, l: 549}, {n: "Elasticity", v: 5, l: 157}, {n: "Kinematics", v: 35, l: 814}, {n: "Heat & thermo", v: 29, l: 892}, {n: "SHM", v: 13, l: 249}, {n: "Electrostatics", v: 59, l: 900}, {n: "Current Electricity", v: 18, l: 474}, {n: "Capacitor", v: 20, l: 423}, {n: "Magnetism", v: 36, l: 910}, {n: "EMI/AC", v: 28, l: 475}, {n: "EM Waves", v: 4, l: 170}, {n: "Ray Optics", v: 43, l: 912}, {n: "Wave Optics", v: 24, l: 538}, {n: "Semi-Conductors", v: 15, l: 337}, {n: "Modern Physics", v: 26, l: 786}],
-            "c": [{n: "IUPAC", v: 20, l: 554}, {n: "Str. Iso.", v: 6, l: 197}, {n: "Stereo. Isomerism", v: 31, l: 770}, {n: "GOC", v: 34, l: 985}, {n: "Reaction mechanism", v: 16, l: 449}, {n: "Hydrocarbon", v: 22, l: 476}, {n: "Aromatic hydrocarbon", v: 19, l: 316}, {n: "P.O.C", v: 5, l: 184}, {n: "Halogen Derivative", v: 17, l: 404}, {n: "Alcohol & ether", v: 22, l: 429}, {n: "Carbonyl Compounds", v: 21, l: 310}, {n: "Carboxylic acid", v: 22, l: 506}, {n: "Amines", v: 20, l: 393}, {n: "Biomolecules", v: 14, l: 234}, {n: "Polymer", v: 4, l: 46}, {n: "Chemistry in everyday life", v: 3, l: 74}, {n: "Organometallic compounds", v: 7, l: 202}, {n: "Oxidation & Reduction", v: 15, l: 289}, {n: "Mole concept", v: 41, l: 804}, {n: "Concentration Terms", v: 24, l: 497}, {n: "Stoichiometry", v: 26, l: 688}, {n: "Eudiometry", v: 24, l: 507}, {n: "Atomic structure", v: 24, l: 487}, {n: "Ideal Gas", v: 11, l: 317}, {n: "Thermodynamics II", v: 9, l: 227}, {n: "Thermochemistry", v: 7, l: 196}, {n: "Chemical Equilibrium", v: 11, l: 362}, {n: "lonic Equilibrium", v: 27, l: 502}, {n: "Redox Reactions", v: 22, l: 570}, {n: "Solid state", v: 16, l: 310}, {n: "Solutions", v: 22, l: 386}, {n: "Electrochemistry", v: 35, l: 700}, {n: "Chemical Kinetics", v: 69, l: 1489}, {n: "Surface chemistry", v: 12, l: 339}, {n: "Quantum Numbers", v: 26, l: 688}, {n: "Periodic classification", v: 17, l: 306}, {n: "Chemical bonding", v: 41, l: 990}, {n: "S-block", v: 8, l: 191}, {n: "Hydrogen", v: 7, l: 130}, {n: "Co-ordination chemistry", v: 44, l: 1404}, {n: "Metallurgy", v: 24, l: 590}, {n: "Salt analysis", v: 22, l: 417}, {n: "P-Block", v: 49, l: 758}, {n: "d & f block", v: 12, l: 257}],
-            "m": [{n: "Set & Relations", v: 19, l: 490}, {n: "Basic Maths", v: 35, l: 700}, {n: "Quadratic equations", v: 14, l: 402}, {n: "Trigonometric ratios", v: 30, l: 484}, {n: "Trigonometric equations", v: 13, l: 229}, {n: "Properties of triangle", v: 20, l: 357}, {n: "Sequence & series", v: 25, l: 617}, {n: "P & C", v: 27, l: 640}, {n: "Binomial theorem", v: 16, l: 405}, {n: "Point", v: 20, l: 386}, {n: "Straight line", v: 20, l: 400}, {n: "Parabola", v: 25, l: 502}, {n: "Circle", v: 22, l: 561}, {n: "Hyperbola", v: 15, l: 318}, {n: "Ellipse", v: 16, l: 293}, {n: "Statistic", v: 33, l: 246}, {n: "limits", v: 21, l: 295}, {n: "Continuity & diff.", v: 21, l: 487}, {n: "Differentiation", v: 20, l: 398}, {n: "AoD", v: 29, l: 594}, {n: "Indef. Integration", v: 24, l: 536}, {n: "Def. Integ", v: 24, l: 621}, {n: "Area under the curve", v: 5, l: 123}, {n: "Differential equation", v: 12, l: 311}, {n: "Matrix", v: 21, l: 522}, {n: "Determinants", v: 12, l: 286}, {n: "Vectors", v: 18, l: 542}, {n: "3-D Geometry", v: 14, l: 321}, {n: "Complex Number", v: 22, l: 462}, {n: "Probability", v: 18, l: 307}]
+            "p": [
+                {n: "Unit & dimensions", v: 17, l: 455}, {n: "Vectors", v: 18, l: 542}, {n: "Error", v: 15, l: 355},
+                {n: "NLM", v: 23, l: 486}, {n: "Circular motion", v: 16, l: 316}, {n: "COM", v: 23, l: 582},
+                {n: "W.E.P", v: 16, l: 433}, {n: "Rotation", v: 28, l: 594}, {n: "Fluid", v: 24, l: 549},
+                {n: "Elasticity", v: 5, l: 157}, {n: "Kinematics", v: 35, l: 814}, {n: "Heat & thermo", v: 29, l: 892}, 
+                {n: "SHM", v: 13, l: 249}, {n: "Electrostatics", v: 59, l: 900}, {n: "Current Electricity", v: 18, l: 474}, 
+                {n: "Capacitor", v: 20, l: 423}, {n: "Magnetism", v: 36, l: 910}, {n: "EMI/AC", v: 28, l: 475}, 
+                {n: "EM Waves", v: 4, l: 170}, {n: "Ray Optics", v: 43, l: 912}, {n: "Wave Optics", v: 24, l: 538}, 
+                {n: "Semi-Conductors", v: 15, l: 337}, {n: "Modern Physics", v: 26, l: 786}
+            ],
+            "c": [
+                {n: "IUPAC", v: 20, l: 554}, {n: "Str. Iso.", v: 6, l: 197}, {n: "Stereo. Isomerism", v: 31, l: 770},
+                {n: "GOC", v: 34, l: 985}, {n: "Reaction mechanism", v: 16, l: 449}, {n: "Hydrocarbon", v: 22, l: 476},
+                {n: "Aromatic hydrocarbon", v: 19, l: 316}, {n: "P.O.C", v: 5, l: 184}, {n: "Halogen Derivative", v: 17, l: 404}, 
+                {n: "Alcohol & ether", v: 22, l: 429}, {n: "Carbonyl Compounds", v: 21, l: 310}, {n: "Carboxylic acid", v: 22, l: 506}, 
+                {n: "Amines", v: 20, l: 393}, {n: "Biomolecules", v: 14, l: 234}, {n: "Polymer", v: 4, l: 46}, 
+                {n: "Chemistry in everyday life", v: 3, l: 74}, {n: "Organometallic compounds", v: 7, l: 202}, {n: "Oxidation & Reduction", v: 15, l: 289},
+                {n: "Mole concept", v: 41, l: 804}, {n: "Concentration Terms", v: 24, l: 497}, {n: "Stoichiometry", v: 26, l: 688},
+                {n: "Eudiometry", v: 24, l: 507}, {n: "Atomic structure", v: 24, l: 487}, {n: "Ideal Gas", v: 11, l: 317},
+                {n: "Thermodynamics II", v: 9, l: 227}, {n: "Thermochemistry", v: 7, l: 196}, {n: "Chemical Equilibrium", v: 11, l: 362},
+                {n: "lonic Equilibrium", v: 27, l: 502}, {n: "Redox Reactions", v: 22, l: 570}, {n: "Solid state", v: 16, l: 310}, 
+                {n: "Solutions", v: 22, l: 386}, {n: "Electrochemistry", v: 35, l: 700}, {n: "Chemical Kinetics", v: 69, l: 1489}, 
+                {n: "Surface chemistry", v: 12, l: 339}, {n: "Quantum Numbers", v: 26, l: 688}, {n: "Periodic classification", v: 17, l: 306}, 
+                {n: "Chemical bonding", v: 41, l: 990}, {n: "S-block", v: 8, l: 191}, {n: "Hydrogen", v: 7, l: 130},
+                {n: "Co-ordination chemistry", v: 44, l: 1404}, {n: "Metallurgy", v: 24, l: 590}, {n: "Salt analysis", v: 22, l: 417},
+                {n: "P-Block", v: 49, l: 758}, {n: "d & f block", v: 12, l: 257}
+            ],
+            "m": [
+                {n: "Set & Relations", v: 19, l: 490}, {n: "Basic Maths", v: 35, l: 700}, {n: "Quadratic equations", v: 14, l: 402},
+                {n: "Trigonometric ratios", v: 30, l: 484}, {n: "Trigonometric equations", v: 13, l: 229}, {n: "Properties of triangle", v: 20, l: 357},
+                {n: "Sequence & series", v: 25, l: 617}, {n: "P & C", v: 27, l: 640}, {n: "Binomial theorem", v: 16, l: 405},
+                {n: "Point", v: 20, l: 386}, {n: "Straight line", v: 20, l: 400}, {n: "Parabola", v: 25, l: 502},
+                {n: "Circle", v: 22, l: 561}, {n: "Hyperbola", v: 15, l: 318}, {n: "Ellipse", v: 16, l: 293}, 
+                {n: "Statistic", v: 33, l: 246}, {n: "limits", v: 21, l: 295}, {n: "Continuity & diff.", v: 21, l: 487}, 
+                {n: "Differentiation", v: 20, l: 398}, {n: "AoD", v: 29, l: 594}, {n: "Indef. Integration", v: 24, l: 536}, 
+                {n: "Def. Integ", v: 24, l: 621}, {n: "Area under the curve", v: 5, l: 123}, {n: "Differential equation", v: 12, l: 311}, 
+                {n: "Matrix", v: 21, l: 522}, {n: "Determinants", v: 12, l: 286}, {n: "Vectors", v: 18, l: 542}, 
+                {n: "3-D Geometry", v: 14, l: 321}, {n: "Complex Number", v: 22, l: 462}, {n: "Probability", v: 18, l: 307}
+            ]
         };
 
         const subjMap = { p: "Physics", c: "Chemistry", m: "Maths" };
         const colorMap = { p: "var(--accent-blue)", c: "var(--accent-orange)", m: "var(--accent-purple)" };
-        const baseTimeline = [{ p: "NLM", c: "Atomic Structure", m: "Sequence & Series" }, { p: "NLM", c: "Atomic Structure", m: "Sequence & Series" }, { p: "NLM", c: "Atomic Structure", m: "Sequence & Series" }, { p: "Friction", c: "Atomic Structure", m: "Sequence & Series" }, { p: "Friction", c: null, m: "Sequence & Series" }, { p: "Friction", c: "Redox Reactions", m: "Relations & Functions" }, { p: null, c: "Redox Reactions", m: "Relations & Functions" }, { p: "Circular Motion", c: "Redox Reactions", m: "Relations & Functions" }, { p: "Circular Motion", c: "Redox Reactions", m: "Relations & Functions" }, { p: "Circular Motion", c: null, m: "ITF" }, { p: "Circular Motion", c: "Chemical Equilibrium", m: "ITF" }, { p: null, c: "Chemical Equilibrium", m: "ITF" }, { p: "WPE", c: "Chemical Equilibrium", m: "ITF" }, { p: "WPE", c: "Chemical Equilibrium", m: "P & C" }, { p: "WPE", c: "Chemical Equilibrium", m: "P & C" }, { p: "WPE", c: "Ionic Equilibrium", m: "P & C" }, { p: null, c: "Ionic Equilibrium", m: "P & C" }, { p: "COM", c: "Ionic Equilibrium", m: "P & C" }, { p: "COM", c: "Ionic Equilibrium", m: "P & C" }, { p: "COM", c: "Ionic Equilibrium", m: "Binomial Theorem" }, { p: "COM", c: null, m: "Binomial Theorem" }, { p: "COM", c: "Electrochemistry", m: "Binomial Theorem" }, { p: null, c: "Electrochemistry", m: "Binomial Theorem" }, { p: "Rotational Motion", c: "Electrochemistry", m: "Binomial Theorem" }, { p: "Rotational Motion", c: "Electrochemistry", m: "Binomial Theorem" }, { p: "Rotational Motion", c: "Electrochemistry", m: null }, { p: "Rotational Motion", c: null, m: "Trigonometric Ratios" }, { p: "Rotational Motion", c: "Solid State", m: "Trigonometric Ratios" }, { p: "Rotational Motion", c: "Solid State", m: "Trigonometric Ratios" }, { p: "Rotational Motion", c: "Solid State", m: "Trigonometric Ratios" }, { p: null, c: "Solid State", m: "Trigonometric Ratios" }, { p: "Current Electricity", c: "Mole Concepts", m: "Trigonometric Equation" }, { p: "Current Electricity", c: "Mole Concepts", m: "Trigonometric Equation" }, { p: "Current Electricity", c: "Mole Concepts", m: "Trigonometric Equation" }, { p: "Current Electricity", c: "Mole Concepts", m: "Trigonometric Equation" }, { p: "Current Electricity", c: "Chemical Kinetics", m: null }, { p: "Current Electricity", c: "Chemical Kinetics", m: "Straight Line" }, { p: "Current Electricity", c: "Chemical Kinetics", m: "Straight Line" }, { p: null, c: "Chemical Kinetics", m: "Straight Line" }, { p: "Electrostats", c: "Periodicity", m: "Straight Line" }, { p: "Electrostats", c: "Periodicity", m: "Straight Line" }, { p: "Electrostats", c: "Periodicity", m: "Straight Line" }, { p: "Electrostats", c: "Periodicity", m: "Straight Line" }, { p: "Electrostats", c: "Periodicity", m: "Determinants" }, { p: "Electrostats", c: "Periodicity", m: "Determinants" }, { p: "Electrostats", c: "Periodicity", m: "Determinants" }, { p: "Electrostats", c: "Chemical Bonding", m: "Determinants" }];
 
-        let studyQueue = [], offDays = { global: [], p: [], c: [], m: [] }, practiceData = {};
-        try { const sq = JSON.parse(localStorage.getItem('jeeQueueV2')); if(sq) studyQueue = sq; } catch(e){}
-        try { const od = JSON.parse(localStorage.getItem('jeeOffDays')); if(od && od.global) offDays = od; } catch(e){}
-        try { const pd = JSON.parse(localStorage.getItem('jeePractice')); if(pd) practiceData = pd; } catch(e){}
+        const baseTimeline = [
+            { p: "NLM", c: "Atomic structure", m: "Sequence & series" }, 
+            { p: "NLM", c: "Atomic structure", m: "Sequence & series" }, 
+            { p: "NLM", c: "Atomic structure", m: "Sequence & series" }, 
+            { p: "Kinematics", c: "Atomic structure", m: "Sequence & series" }, 
+            { p: "Kinematics", c: null, m: "Sequence & series" }, 
+            { p: "Kinematics", c: "Redox Reactions", m: "Set & Relations" }, 
+            { p: null, c: "Redox Reactions", m: "Set & Relations" }, 
+            { p: "Circular motion", c: "Redox Reactions", m: "Set & Relations" }, 
+            { p: "Circular motion", c: "Redox Reactions", m: "Set & Relations" }, 
+            { p: "Circular motion", c: null, m: "Basic Maths" }, 
+            { p: "Circular motion", c: "Chemical Equilibrium", m: "Basic Maths" }, 
+            { p: null, c: "Chemical Equilibrium", m: "Basic Maths" }, 
+            { p: "W.E.P", c: "Chemical Equilibrium", m: "Basic Maths" }, 
+            { p: "W.E.P", c: "Chemical Equilibrium", m: "P & C" }, 
+            { p: "W.E.P", c: "Chemical Equilibrium", m: "P & C" }, 
+            { p: "W.E.P", c: "lonic Equilibrium", m: "P & C" }, 
+            { p: null, c: "lonic Equilibrium", m: "P & C" }, 
+            { p: "COM", c: "lonic Equilibrium", m: "P & C" }, 
+            { p: "COM", c: "lonic Equilibrium", m: "P & C" }, 
+            { p: "COM", c: "lonic Equilibrium", m: "Binomial theorem" }, 
+            { p: "COM", c: null, m: "Binomial theorem" }, 
+            { p: "COM", c: "Electrochemistry", m: "Binomial theorem" }, 
+            { p: null, c: "Electrochemistry", m: "Binomial theorem" }, 
+            { p: "Rotation", c: "Electrochemistry", m: "Binomial theorem" }, 
+            { p: "Rotation", c: "Electrochemistry", m: "Binomial theorem" }, 
+            { p: "Rotation", c: "Electrochemistry", m: null }, 
+            { p: "Rotation", c: null, m: "Trigonometric ratios" }, 
+            { p: "Rotation", c: "Solid state", m: "Trigonometric ratios" }, 
+            { p: "Rotation", c: "Solid state", m: "Trigonometric ratios" }, 
+            { p: "Rotation", c: "Solid state", m: "Trigonometric ratios" }, 
+            { p: null, c: "Solid state", m: "Trigonometric ratios" }, 
+            { p: "Current Electricity", c: "Mole concept", m: "Trigonometric equations" }, 
+            { p: "Current Electricity", c: "Mole concept", m: "Trigonometric equations" }, 
+            { p: "Current Electricity", c: "Mole concept", m: "Trigonometric equations" }, 
+            { p: "Current Electricity", c: "Mole concept", m: "Trigonometric equations" }, 
+            { p: "Current Electricity", c: "Chemical Kinetics", m: null }, 
+            { p: "Current Electricity", c: "Chemical Kinetics", m: "Straight line" }, 
+            { p: "Current Electricity", c: "Chemical Kinetics", m: "Straight line" }, 
+            { p: null, c: "Chemical Kinetics", m: "Straight line" }, 
+            { p: "Electrostatics", c: "Periodic classification", m: "Straight line" }, 
+            { p: "Electrostatics", c: "Periodic classification", m: "Straight line" }, 
+            { p: "Electrostatics", c: "Periodic classification", m: "Straight line" }, 
+            { p: "Electrostatics", c: "Periodic classification", m: "Straight line" }, 
+            { p: "Electrostatics", c: "Periodic classification", m: "Determinants" }, 
+            { p: "Electrostatics", c: "Periodic classification", m: "Determinants" }, 
+            { p: "Electrostatics", c: "Periodic classification", m: "Determinants" }, 
+            { p: "Electrostatics", c: "Chemical bonding", m: "Determinants" }
+        ];
+
+        // --- 3. STATE LIFECYCLE ---
+        let studyQueue = [];
+        let offDays = { global: [], p: [], c: [], m: [] };
+        let practiceData = {};
+        let scratchpadText = "";
+        let compactLayoutActive = false;
 
         const timelineStartDate = new Date("2026-06-12T00:00:00");
         let generatedTimeline = [];
 
         window.onload = function() {
-            const t = new Date();
-            const opts = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
-            document.getElementById('headerDateDisplay').innerText = t.toLocaleDateString('en-US', opts);
-            initCountdown(); generateDynamicTimeline(); populateSyllabusGrids(); renderTasks(); renderPracticeTracker();
+            document.getElementById('headerDateDisplay').innerText = new Date().toDateString();
+            initCountdown();
+            populateSyllabusGrids();
+
+            // Cache parameter loads
+            try { const sq = JSON.parse(localStorage.getItem('jeeQueueV3')); if(sq) studyQueue = sq; } catch(e){}
+            try { const od = JSON.parse(localStorage.getItem('jeeOffDaysV3')); if(od && od.global) offDays = od; } catch(e){}
+            try { const pd = JSON.parse(localStorage.getItem('jeePracticeV3')); if(pd) practiceData = pd; } catch(e){}
+            try { const sp = localStorage.getItem('jeeScratchpad'); if(sp) scratchpadText = sp; document.getElementById('scratchpadInput').value = scratchpadText; } catch(e){}
+            try { compactLayoutActive = localStorage.getItem('jeeCompactMode') === 'true'; document.getElementById('compactModeCheck').checked = compactLayoutActive; } catch(e){}
+
+            generateDynamicTimeline();
+            renderTasks(); 
+            renderPracticeTracker();
+            buildConsistencyHeatmap();
+
+            if (userDocRef) {
+                document.getElementById('syncStatus').innerText = "CONNECTING ONLINE...";
+                userDocRef.get().then((doc) => {
+                    if (doc.exists) {
+                        const cloudData = doc.data();
+                        studyQueue = cloudData.studyQueue || studyQueue;
+                        offDays = cloudData.offDays || offDays;
+                        practiceData = cloudData.practiceData || practiceData;
+                        scratchpadText = cloudData.scratchpadText || scratchpadText;
+                        
+                        document.getElementById('scratchpadInput').value = scratchpadText;
+                        
+                        generateDynamicTimeline();
+                        renderTasks(); 
+                        renderPracticeTracker();
+                        buildConsistencyHeatmap();
+                        
+                        document.getElementById('syncStatus').innerText = "CLOUD SYNCED";
+                        document.getElementById('syncStatus').style.color = "var(--accent-green)";
+                    } else {
+                        document.getElementById('syncStatus').innerText = "CLOUD PROFILE INITIALIZED";
+                        document.getElementById('syncStatus').style.color = "var(--accent-blue)";
+                        syncToCloud();
+                    }
+                }).catch((error) => {
+                    console.error("Cloud Error: ", error);
+                    document.getElementById('syncStatus').innerText = "LOCAL STANDALONE ACTIVE";
+                    document.getElementById('syncStatus').style.color = "var(--accent-blue)";
+                });
+            } else {
+                document.getElementById('syncStatus').innerText = "LOCAL MODE (NO API KEYS)";
+                document.getElementById('syncStatus').style.color = "var(--accent-blue)";
+            }
         };
 
-        // --- RESPONSIVE SIDEBAR LOGIC ---
-        function toggleSidebar() {
-            document.getElementById('appSidebar').classList.toggle('open');
-            document.getElementById('sidebarOverlay').classList.toggle('open');
-        }
-
-        function switchView(viewName) {
-            document.querySelectorAll('#navMenu li').forEach(i => i.classList.remove('active'));
-            event.target.classList.add('active');
-            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
-            document.getElementById(`view-${viewName}`).classList.add('active');
-            
-            // Auto-close sidebar on mobile after clicking
-            if(window.innerWidth <= 950) toggleSidebar();
-        }
-
-        // --- PWA INSTALL LOGIC ---
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            document.getElementById('installBtn').style.display = 'block';
-        });
-
-        function installApp() {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') console.log('User accepted the install prompt');
-                    deferredPrompt = null;
-                    document.getElementById('installBtn').style.display = 'none';
+        function syncToCloud() {
+            if (userDocRef) {
+                userDocRef.set({
+                    studyQueue: studyQueue,
+                    offDays: offDays,
+                    practiceData: practiceData,
+                    scratchpadText: scratchpadText
+                }, { merge: true })
+                .then(() => {
+                    document.getElementById('syncStatus').innerText = "CLOUD SYNCED";
+                    document.getElementById('syncStatus').style.color = "var(--accent-green)";
+                })
+                .catch((err) => {
+                    document.getElementById('syncStatus').innerText = "SYNC ERROR";
+                    document.getElementById('syncStatus').style.color = "#ef4444";
                 });
             }
         }
 
-        // --- APP ENGINE ---
-        function getLocalYYYYMMDD(d) { const tz = d.getTimezoneOffset() * 60000; return (new Date(d - tz)).toISOString().split('T')[0]; }
-
-        function generateDynamicTimeline() {
-            generatedTimeline = []; let cD = new Date(timelineStartDate); let pP = 0, pC = 0, pM = 0;
-            while(pP < baseTimeline.length || pC < baseTimeline.length || pM < baseTimeline.length) {
-                const dS = getLocalYYYYMMDD(cD);
-                if (offDays.global.includes(dS)) { cD.setDate(cD.getDate() + 1); continue; }
-                let dD = { date: dS, dateFormatted: cD.toLocaleDateString('en-US', {month:'short', day:'numeric'}), p: null, c: null, m: null };
-                if (!offDays.p.includes(dS) && pP < baseTimeline.length) { dD.p = baseTimeline[pP].p; pP++; }
-                if (!offDays.c.includes(dS) && pC < baseTimeline.length) { dD.c = baseTimeline[pC].c; pC++; }
-                if (!offDays.m.includes(dS) && pM < baseTimeline.length) { dD.m = baseTimeline[pM].m; pM++; }
-                if(dD.p || dD.c || dD.m) generatedTimeline.push(dD);
-                cD.setDate(cD.getDate() + 1);
-            }
-            renderTimeline(); renderTodaySchedule();
+        // --- 4. EXPORT & IMPORT UTILITIES ---
+        function exportDataData() {
+            const pkg = { studyQueue, offDays, practiceData, scratchpadText, v: 3.0 };
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(pkg, null, 2));
+            const a = document.createElement('a');
+            a.setAttribute("href", dataStr);
+            a.setAttribute("download", `JEE_2027_ProBackup_${getLocalYYYYMMDD(new Date())}.json`);
+            document.body.appendChild(a); a.click(); a.remove();
         }
 
-        function toggleDayOff(dS, type) {
-            const idx = offDays[type].indexOf(dS);
-            if (idx > -1) offDays[type].splice(idx, 1); else offDays[type].push(dS);
-            localStorage.setItem('jeeOffDays', JSON.stringify(offDays)); generateDynamicTimeline();
+        function importDataData(event) {
+            const input = event.target;
+            if (!input.files || input.files.length === 0) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    if (parsed.studyQueue || parsed.practiceData) {
+                        studyQueue = parsed.studyQueue || [];
+                        offDays = parsed.offDays || { global: [], p: [], c: [], m: [] };
+                        practiceData = parsed.practiceData || {};
+                        scratchpadText = parsed.scratchpadText || "";
+                        
+                        localStorage.setItem('jeeQueueV3', JSON.stringify(studyQueue));
+                        localStorage.setItem('jeeOffDaysV3', JSON.stringify(offDays));
+                        localStorage.setItem('jeePracticeV3', JSON.stringify(practiceData));
+                        localStorage.setItem('jeeScratchpad', scratchpadText);
+                        document.getElementById('scratchpadInput').value = scratchpadText;
+
+                        syncToCloud();
+                        generateDynamicTimeline();
+                        renderTasks();
+                        renderPracticeTracker();
+                        buildConsistencyHeatmap();
+                        alert("Data profile package loaded successfully!");
+                    }
+                } catch(err) { alert("Error parsing JSON file compilation layer."); }
+                input.value = "";
+            };
+            reader.readAsText(input.files[0]);
+        }
+
+        // --- 5. COMPACT LAYOUT VIEW & SCRATCHPAD CONTROL ---
+        function toggleCompactLayout(checkbox) {
+            compactLayoutActive = checkbox.checked;
+            localStorage.setItem('jeeCompactMode', compactLayoutActive);
+            renderTasks();
+            renderTodaySchedule();
+        }
+
+        function toggleScratchpad() {
+            document.getElementById('scratchpadDrawer').classList.toggle('open');
+        }
+
+        function saveScratchpadData() {
+            scratchpadText = document.getElementById('scratchpadInput').value;
+            localStorage.setItem('jeeScratchpad', scratchpadText);
+            // Non-blocking cloud check to optimize canvas drawing speed
+            clearTimeout(window.spSyncTimeout);
+            window.spSyncTimeout = setTimeout(syncToCloud, 2000);
+        }
+
+        function switchView(viewName) {
+            document.querySelectorAll('#navMenu li').forEach(item => item.classList.remove('active'));
+            const map = ['home', 'dashboard', 'schedule', 'physics', 'chemistry', 'mathematics'];
+            const idx = map.indexOf(viewName);
+            if(idx !== -1) document.querySelectorAll('#navMenu li')[idx].classList.add('active');
+            
+            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(`view-${viewName}`).classList.add('active');
+        }
+
+        // --- 6. TIMELINE & SCHEDULING ENGINE ---
+        function getLocalYYYYMMDD(dateObj) {
+            const tzOffset = dateObj.getTimezoneOffset() * 60000;
+            return (new Date(dateObj - tzOffset)).toISOString().split('T')[0];
+        }
+
+        function generateDynamicTimeline() {
+            generatedTimeline = [];
+            let currentDate = new Date(timelineStartDate);
+            let ptrP = 0, ptrC = 0, ptrM = 0;
+
+            while(ptrP < baseTimeline.length || ptrC < baseTimeline.length || ptrM < baseTimeline.length) {
+                const dateStr = getLocalYYYYMMDD(currentDate);
+                if (offDays.global.includes(dateStr)) { currentDate.setDate(currentDate.getDate() + 1); continue; }
+
+                let dayData = { date: dateStr, dateFormatted: currentDate.toDateString(), p: null, c: null, m: null };
+                if (!offDays.p.includes(dateStr) && ptrP < baseTimeline.length) { dayData.p = baseTimeline[ptrP].p; ptrP++; }
+                if (!offDays.c.includes(dateStr) && ptrC < baseTimeline.length) { dayData.c = baseTimeline[ptrC].c; ptrC++; }
+                if (!offDays.m.includes(dateStr) && ptrM < baseTimeline.length) { dayData.m = baseTimeline[ptrM].m; ptrM++; }
+
+                if(dayData.p || dayData.c || dayData.m) generatedTimeline.push(dayData);
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            renderTimeline();
+            renderTodaySchedule();
+        }
+
+        function toggleDayOff(dateStr, type) {
+            const arr = offDays[type]; const idx = arr.indexOf(dateStr);
+            if (idx > -1) arr.splice(idx, 1); else arr.push(dateStr);
+            localStorage.setItem('jeeOffDaysV3', JSON.stringify(offDays));
+            syncToCloud(); generateDynamicTimeline();
         }
 
         function renderTimeline() {
+            const container = document.getElementById('timelineContainer'); if(!container) return;
             let html = "";
             generatedTimeline.forEach(day => {
-                html += `<div class="timeline-card"><div class="timeline-date"><span>${day.dateFormatted}</span><button class="off-btn" onclick="toggleDayOff('${day.date}', 'global')">Mark Full Day Off</button></div>`;
-                ['p', 'c', 'm'].forEach(s => {
-                    if(day[s]) {
-                        const isOff = offDays[s].includes(day.date) ? "is-off" : "";
-                        html += `<div class="timeline-row ${isOff}"><div><span class="timeline-subj" style="color:${colorMap[s]}">${subjMap[s]}</span><span style="font-weight:700; color:var(--text-main);">${day[s]}</span></div><div><button class="off-btn" style="margin-right:12px" onclick="toggleDayOff('${day.date}', '${s}')">Skip Subj</button><button class="add-mini" style="background:${colorMap[s]}" onclick="syncTask('${s}', '${day[s]}')">+</button></div></div>`;
+                html += `<div class="timeline-card">
+                            <div class="timeline-date">
+                                <span>${day.dateFormatted}</span>
+                                <button class="off-btn" onclick="toggleDayOff('${day.date}', 'global')">Mark Full Day Off</button>
+                            </div>`;
+                ['p', 'c', 'm'].forEach(subj => {
+                    if(day[subj]) {
+                        const isOff = offDays[subj].includes(day.date) ? "is-off" : "";
+                        html += `<div class="timeline-row ${isOff}">
+                                    <div><span class="timeline-subj" style="color:${colorMap[subj]}">${subjMap[subj]}</span><span style="font-weight:700; color:var(--text-main);">${day[subj]}</span></div>
+                                    <div>
+                                        <button class="off-btn" style="margin-right:12px" onclick="toggleDayOff('${day.date}', '${subj}')">Skip Subj</button>
+                                        <button class="add-mini" style="background:${colorMap[subj]}" onclick="syncTask('${subj}', '${day[subj]}')">+</button>
+                                    </div>
+                                </div>`;
                     }
                 });
                 html += `</div>`;
             });
-            document.getElementById('timelineContainer').innerHTML = html;
+            container.innerHTML = html;
         }
 
         function renderTodaySchedule() {
-            const tdD = generatedTimeline.find(d => d.date === getLocalYYYYMMDD(new Date()));
-            const c = document.getElementById("todayScheduleContainer");
-            if (!tdD) { c.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding: 30px; font-weight:600;">No rigid schedule today.</div>`; return; }
+            const todayStr = getLocalYYYYMMDD(new Date());
+            const todayData = generatedTimeline.find(d => d.date === todayStr);
+            const container = document.getElementById("todayScheduleContainer"); if(!container) return;
+
+            if (!todayData) {
+                container.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:20px; font-weight:600; font-size:0.9rem;">No tracking requirements deployed for today. Protect your velocity loop through testing or revisions!</div>`;
+                return;
+            }
+
             let html = "";
-            ['p', 'c', 'm'].forEach(s => {
-                if(tdD[s]) {
-                    const tS = tdD[s];
-                    let aT = studyQueue.find(t => {
-                        if (t.s !== s) return false;
-                        if (t.i !== undefined) return syllabusDB[s][t.i].n.toLowerCase().includes(tS.toLowerCase()) || tS.toLowerCase().includes(syllabusDB[s][t.i].n.toLowerCase());
-                        else return t.c.toLowerCase().includes(tS.toLowerCase());
+            ['p', 'c', 'm'].forEach(subj => {
+                if(todayData[subj]) {
+                    const topicStr = todayData[subj];
+                    let activeTask = studyQueue.find(t => {
+                        if (t.s !== subj) return false;
+                        if (t.i !== undefined) return syllabusDB[subj][t.i].n.toLowerCase().includes(topicStr.toLowerCase()) || topicStr.toLowerCase().includes(syllabusDB[subj][t.i].n.toLowerCase());
+                        else return t.c.toLowerCase().includes(topicStr.toLowerCase());
                     });
-                    if (aT) {
-                        let tV = aT.tv || (aT.i !== undefined ? syllabusDB[aT.s][aT.i].v : 0);
-                        let cbHtml = ""; for(let i=0; i<tV; i++) cbHtml += `<div class="video-checkbox ${aT.w.includes(i) ? "watched" : ""}" onclick="toggleVideo(${aT.id}, ${i})">${i + 1}</div>`;
-                        html += `<div style="background: var(--bg-dark); border: 1px solid var(--border-color); border-left: 4px solid ${colorMap[s]}; padding: 20px; border-radius: 12px; margin-bottom: 15px;"><div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; flex-wrap:wrap; gap:10px;"><div><span class="timeline-subj" style="color:${colorMap[s]}">${subjMap[s]}</span><span style="font-weight:700; font-size: 1.1rem;">${tS}</span></div><span style="font-size:0.75rem; font-weight: 700; color:var(--text-muted); background: var(--bg-panel); padding: 4px 10px; border-radius: 20px; letter-spacing:1px;">IN QUEUE</span></div><div class="video-grid" style="margin-bottom: 0;">${cbHtml}</div></div>`;
+
+                    if (activeTask) {
+                        let totalVids = activeTask.tv || (activeTask.i !== undefined ? syllabusDB[activeTask.s][activeTask.i].v : 0);
+                        let cbHtml = "";
+                        for(let i = 0; i < totalVids; i++) {
+                            const watched = activeTask.w.includes(i) ? "watched" : "";
+                            cbHtml += `<div class="video-checkbox ${watched}" onclick="toggleVideo(${activeTask.id}, ${i})">${i + 1}</div>`;
+                        }
+                        html += `
+                        <div style="background:var(--bg-dark); border:1px solid rgba(255,255,255,0.04); border-left:4px solid ${colorMap[subj]}; padding:16px; border-radius:12px; margin-bottom:12px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                                <div><span class="timeline-subj" style="color:${colorMap[subj]}">${subjMap[subj]}</span><span style="font-weight:700;">${topicStr}</span></div>
+                                <span style="font-size:0.75rem; font-weight:700; color:var(--text-muted); background:var(--bg-panel); padding:2px 8px; border-radius:10px;">QUEUE ACTIVE</span>
+                            </div>
+                            <div class="video-grid ${compactLayoutActive ? 'is-compact':''}">${cbHtml}</div>
+                        </div>`;
                     } else {
-                        html += `<div class="timeline-row" style="background: var(--bg-dark); padding: 15px 20px; border-radius: 12px; margin-bottom: 12px; border: 1px solid var(--border-color);"><div><span class="timeline-subj" style="color:${colorMap[s]}">${subjMap[s]}</span><span style="font-weight:700;">${tS}</span></div><button class="add-mini" style="background:${colorMap[s]}" onclick="syncTask('${s}', '${tS}')">+</button></div>`;
+                        html += `
+                        <div class="timeline-row" style="background:var(--bg-dark); padding:12px 16px; border-radius:12px; margin-bottom:10px; border:1px solid rgba(255,255,255,0.03);">
+                            <div><span class="timeline-subj" style="color:${colorMap[subj]}">${subjMap[subj]}</span><span style="font-weight:700;">${topicStr}</span></div>
+                            <button class="add-mini" style="background:${colorMap[subj]}" onclick="syncTask('${subj}', '${topicStr}')">+</button>
+                        </div>`;
                     }
                 }
             });
-            c.innerHTML = html;
+            container.innerHTML = html;
         }
 
-        function syncTask(s, tS) {
-            const idx = syllabusDB[s].findIndex(c => c.n.toLowerCase().includes(tS.toLowerCase()) || tS.toLowerCase().includes(c.n.toLowerCase()));
-            if (idx !== -1) { if(!studyQueue.find(t => t.i === idx && t.s === s)) studyQueue.push({ id: Date.now(), s: s, i: idx, w: [] }); }
-            else { if(!studyQueue.find(t => t.c === tS && t.s === s)) studyQueue.push({ id: Date.now(), s: s, c: tS + " (Sub-Topic)", tv: 5, tm: 300, w: [] }); }
+        // --- 8. TRACKING ENGINE & SPACED REPETITION ---
+        function syncTask(s, topicStr) {
+            const idx = syllabusDB[s].findIndex(c => c.n.toLowerCase().trim() === topicStr.toLowerCase().trim());
+            if (idx !== -1) addToQueue(s, idx);
+            else {
+                if (studyQueue.find(t => t.c === topicStr && t.s === s)) return;
+                studyQueue.push({ id: Date.now(), s: s, c: topicStr, tv: 5, tm: 300, w: [], revFlag: false });
+                saveAndRender();
+            }
+        }
+
+        function addToQueue(s, idx) {
+            if (studyQueue.find(t => t.i === idx && t.s === s)) return;
+            studyQueue.push({ id: Date.now(), s: s, i: idx, w: [], revFlag: false }); 
             saveAndRender();
         }
 
-        function addToQueue(s, idx) { if(!studyQueue.find(t => t.i === idx && t.s === s)) studyQueue.push({ id: Date.now(), s: s, i: idx, w: [] }); saveAndRender(); }
-        function removeTask(id) { studyQueue = studyQueue.filter(t => t.id !== id); saveAndRender(); }
-        function toggleVideo(id, vI) {
-            const t = studyQueue.find(x => x.id === id);
-            if(t) { const wI = t.w.indexOf(vI); if (wI > -1) t.w.splice(wI, 1); else t.w.push(vI); saveAndRender(); }
+        function toggleVideo(taskId, vidIndex) {
+            const task = studyQueue.find(t => t.id === taskId);
+            if (task) {
+                const wIdx = task.w.indexOf(vidIndex);
+                if (wIdx > -1) task.w.splice(wIdx, 1); else task.w.push(vidIndex);
+                saveAndRender();
+            }
         }
-        function saveAndRender() { localStorage.setItem('jeeQueueV2', JSON.stringify(studyQueue)); renderTasks(); renderTodaySchedule(); }
+
+        function toggleRevisionFlag(taskId) {
+            const task = studyQueue.find(t => t.id === taskId);
+            if (task) {
+                task.revFlag = !task.revFlag;
+                saveAndRender();
+            }
+        }
+
+        function removeTask(taskId) {
+            studyQueue = studyQueue.filter(t => t.id !== taskId);
+            saveAndRender();
+        }
+
+        function saveAndRender() {
+            localStorage.setItem('jeeQueueV2', JSON.stringify(studyQueue));
+            syncToCloud(); renderTasks(); renderTodaySchedule();
+        }
 
         function renderTasks() {
-            const c = document.getElementById('dynamicTasks'); updateAnalytics();
-            if (studyQueue.length === 0) { c.innerHTML = "<p style='color:var(--text-muted);'>Queue is empty.</p>"; return; }
-            c.innerHTML = studyQueue.map(t => {
-                let n = t.c || ""; let tV = t.tv || 0; let tM = t.tm || 0; let avg = t.tv ? (t.tm/t.tv) : 0;
-                if (t.i !== undefined) { const d = syllabusDB[t.s][t.i]; n = d.n; tV = d.v; tM = d.l; avg = Math.round(d.l / d.v); }
-                const pct = Math.round((t.w.length / tV) * 100); const bC = pct === 100 ? colorMap[t.s] : "var(--accent-green)";
-                let cb = ""; for(let i=0; i<tV; i++) cb += `<div class="video-checkbox ${t.w.includes(i)?"watched":""}" onclick="toggleVideo(${t.id}, ${i})">${i + 1}</div>`;
-                return `<div class="task-card" style="border-left-color: ${bC}"><div class="task-header"><div><div style="font-size:0.8rem; color:${colorMap[t.s]}; font-weight:700; margin-bottom:5px; text-transform:uppercase;">${subjMap[t.s]}</div><h4 style="font-size: 1.2rem;">${n}</h4></div><button class="delete-btn" onclick="removeTask(${t.id})">Remove</button></div><div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px; display: flex; justify-content: space-between; font-weight: 600;"><span>Vids: ${t.w.length} / ${tV}</span><span>Time: ~${t.w.length * avg} / ${tM} mins</span><span>${pct}%</span></div><div class="stat-bar-bg" style="margin-bottom: 20px;"><div class="stat-bar-fill" style="background:${bC}; width:${pct}%"></div></div><div class="video-grid">${cb}</div></div>`;
-            }).reverse().join("");
+            const container = document.getElementById('dynamicTasks'); if(!container) return;
+            updateAnalytics(); 
+
+            if (studyQueue.length === 0) { container.innerHTML = "<p style='color:var(--text-muted); font-size:0.95rem;'>Your study path queue is empty. Pull tracking modules from the Syllabus or Master Timeline frameworks.</p>"; return; }
+
+            container.innerHTML = studyQueue.map(t => {
+                let name = t.c || ""; let totalVids = t.tv || 0; let totalMins = t.tm || 0; let avg = t.tv ? (t.tm/t.tv) : 0;
+                if (t.i !== undefined) {
+                    const dbRef = syllabusDB[t.s][t.i];
+                    name = dbRef.n; totalVids = dbRef.v; totalMins = dbRef.l; avg = Math.round(dbRef.l / dbRef.v);
+                }
+                const compVids = t.w.length;
+                const percent = Math.round((compVids / totalVids) * 100);
+                const bCol = percent === 100 ? colorMap[t.s] : "var(--accent-green)";
+                const revisionClass = t.revFlag ? "revision-flagged" : "";
+                const flagButtonText = t.revFlag ? "Active Revision" : "Flag Revision";
+
+                let cbHtml = "";
+                for(let i = 0; i < totalVids; i++) {
+                    const watched = t.w.includes(i) ? "watched" : "";
+                    cbHtml += `<div class="video-checkbox ${watched}" onclick="toggleVideo(${t.id}, ${i})">${i + 1}</div>`;
+                }
+
+                return `
+                    <div class="task-card ${revisionClass}" style="border-left-color: ${bCol}">
+                        <div class="task-header">
+                            <div><div style="font-size:0.8rem; color:${colorMap[t.s]}; font-weight:800; margin-bottom:3px; text-transform:uppercase;">${subjMap[t.s]}</div><h4 style="font-size: 1.15rem; font-weight:700;">${name}</h4></div>
+                            <div>
+                                <button class="revision-btn" onclick="toggleRevisionFlag(${t.id})">${flagButtonText}</button>
+                                <button class="delete-btn" onclick="removeTask(${t.id})">Remove</button>
+                            </div>
+                        </div>
+                        <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 12px; display: flex; justify-content: space-between; font-weight: 700;">
+                            <span>Modules: ${compVids} / ${totalVids}</span>
+                            <span>Time tracked: ~${Math.round(compVids * avg)} / ${totalMins} mins</span>
+                            <span style="color:var(--text-main); font-weight:800;">${percent}%</span>
+                        </div>
+                        <div class="stat-bar-bg" style="margin-bottom: 16px;"><div class="stat-bar-fill" style="background:${bCol}; width:${percent}%"></div></div>
+                        <div class="video-grid ${compactLayoutActive ? 'is-compact' : ''}">${cbHtml}</div>
+                    </div>`;
+            }).reverse().join(""); 
         }
 
+        // --- 9. FORECAST VELOCITY ENGINE & HEATMAP ---
         const pracTargets = { p: 30, c: 40, m: 30 };
-        function updateAnalytics() {
-            let tP = syllabusDB.p.reduce((s,c)=>s+c.l,0)/60, tC = syllabusDB.c.reduce((s,c)=>s+c.l,0)/60, tM = syllabusDB.m.reduce((s,c)=>s+c.l,0)/60, tA = tP+tC+tM;
-            let dP = 0, dC = 0, dM = 0;
-            studyQueue.forEach(t => {
-                let a = t.i !== undefined ? syllabusDB[t.s][t.i].l/syllabusDB[t.s][t.i].v : t.tm/t.tv;
-                let h = (t.w.length * a)/60;
-                if(t.s==='p') dP+=h; if(t.s==='c') dC+=h; if(t.s==='m') dM+=h;
-            });
-            let dA = dP+dC+dM;
-            document.getElementById("stat-p-hrs").innerText = `${dP.toFixed(1)} / ${tP.toFixed(0)} hrs`; document.getElementById("bar-p-hrs").style.width = `${Math.min((dP/tP)*100,100)}%`;
-            document.getElementById("stat-c-hrs").innerText = `${dC.toFixed(1)} / ${tC.toFixed(0)} hrs`; document.getElementById("bar-c-hrs").style.width = `${Math.min((dC/tC)*100,100)}%`;
-            document.getElementById("stat-m-hrs").innerText = `${dM.toFixed(1)} / ${tM.toFixed(0)} hrs`; document.getElementById("bar-m-hrs").style.width = `${Math.min((dM/tM)*100,100)}%`;
-            document.getElementById("stat-a-hrs").innerText = `${dA.toFixed(1)} / ${tA.toFixed(0)} hrs`; document.getElementById("bar-a-hrs").style.width = `${Math.min((dA/tA)*100,100)}%`;
 
-            let qP=0, qC=0, qM=0;
-            for(let d in practiceData){ qP+=practiceData[d].p||0; qC+=practiceData[d].c||0; qM+=practiceData[d].m||0; }
-            document.getElementById("tot-p-q").innerText = qP; document.getElementById("tot-c-q").innerText = qC;
-            document.getElementById("tot-m-q").innerText = qM; document.getElementById("tot-a-q").innerText = qP+qC+qM;
+        function updateAnalytics() {
+            let tPhy = syllabusDB.p.reduce((s, c) => s + c.l, 0) / 60;
+            let tChe = syllabusDB.c.reduce((s, c) => s + c.l, 0) / 60;
+            let tMat = syllabusDB.m.reduce((s, c) => s + c.l, 0) / 60;
+            let tAll = tPhy + tChe + tMat;
+            let dPhy = 0, dChe = 0, dMat = 0;
+            
+            studyQueue.forEach(t => {
+                let avg = t.i !== undefined ? syllabusDB[t.s][t.i].l / syllabusDB[t.s][t.i].v : t.tm / t.tv;
+                let compHrs = (t.w.length * avg) / 60;
+                if(t.s === 'p') dPhy += compHrs;
+                if(t.s === 'c') dChe += compHrs;
+                if(t.s === 'm') dMat += compHrs;
+            });
+            let dAll = dPhy + dChe + dMat;
+
+            if(document.getElementById("stat-p-hrs")) document.getElementById("stat-p-hrs").innerText = `${dPhy.toFixed(1)} / ${tPhy.toFixed(0)} hrs`;
+            if(document.getElementById("stat-c-hrs")) document.getElementById("stat-c-hrs").innerText = `${dChe.toFixed(1)} / ${tChe.toFixed(0)} hrs`;
+            if(document.getElementById("stat-m-hrs")) document.getElementById("stat-m-hrs").innerText = `${dMat.toFixed(1)} / ${tMat.toFixed(0)} hrs`;
+            if(document.getElementById("stat-a-hrs")) document.getElementById("stat-a-hrs").innerText = `${dAll.toFixed(1)} / ${tAll.toFixed(0)} hrs`;
+
+            if(document.getElementById("bar-p-hrs")) document.getElementById("bar-p-hrs").style.width = `${Math.min((dPhy/tPhy)*100, 100)}%`;
+            if(document.getElementById("bar-c-hrs")) document.getElementById("bar-c-hrs").style.width = `${Math.min((dChe/tChe)*100, 100)}%`;
+            if(document.getElementById("bar-m-hrs")) document.getElementById("bar-m-hrs").style.width = `${Math.min((dMat/tMat)*100, 100)}%`;
+            if(document.getElementById("bar-a-hrs")) document.getElementById("bar-a-hrs").style.width = `${Math.min((dAll/tAll)*100, 100)}%`;
+
+            let tPQ = 0, tCQ = 0, tMQ = 0;
+            for (let d in practiceData) { tPQ += practiceData[d].p||0; tCQ += practiceData[d].c||0; tMQ += practiceData[d].m||0; }
+            if(document.getElementById("tot-p-q")) document.getElementById("tot-p-q").innerText = tPQ; 
+            if(document.getElementById("tot-c-q")) document.getElementById("tot-c-q").innerText = tCQ;
+            if(document.getElementById("tot-m-q")) document.getElementById("tot-m-q").innerText = tMQ; 
+            if(document.getElementById("tot-a-q")) document.getElementById("tot-a-q").innerText = tPQ + tCQ + tMQ;
+
+            // Compute Syllabus Finish Velocity Forecast
+            calculateVelocityForecast(dAll, tAll);
+        }
+
+        function calculateVelocityForecast(completedHrs, totalTargetHrs) {
+            const predEl = document.getElementById("velocityPredictionTxt"); if(!predEl) return;
+            const timePassedMs = new Date().getTime() - timelineStartDate.getTime();
+            const daysPassed = timePassedMs / (1000 * 60 * 60 * 24);
+
+            if (completedHrs <= 0.5 || daysPassed <= 1) { predEl.innerText = "Insufficient Data Baseline"; return; }
+
+            const averageHrsPerDay = completedHrs / daysPassed;
+            const hoursRemaining = totalTargetHrs - completedHrs;
+            const predictedDaysRequired = hoursRemaining / averageHrsPerDay;
+
+            const targetCompletionDate = new Date();
+            targetCompletionDate.setDate(targetCompletionDate.getDate() + predictedDaysRequired);
+
+            predEl.innerText = targetCompletionDate.toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' });
+        }
+
+        function buildConsistencyHeatmap() {
+            const grid = document.getElementById("consistencyHeatmap"); if(!grid) return;
+            grid.innerHTML = "";
+            
+            let trackingDate = new Date();
+            trackingDate.setDate(trackingDate.getDate() - 188); // 27 structural column scaling matrix
+            
+            document.getElementById("heatmapStartLabel").innerText = `Started: ${trackingDate.toLocaleDateString('en-IN', {month: 'short', year: '2-digit'})}`;
+
+            for (let i = 0; i < 189; i++) {
+                const checkStr = getLocalYYYYMMDD(trackingDate);
+                const dayLog = practiceData[checkStr] || { p: 0, c: 0, m: 0 };
+                const rawTotal = (dayLog.p || 0) + (dayLog.c || 0) + (dayLog.m || 0);
+
+                let level = 0;
+                if(rawTotal > 0 && rawTotal <= 15) level = 1;
+                else if(rawTotal > 15 && rawTotal <= 40) level = 2;
+                else if(rawTotal > 40 && rawTotal <= 80) level = 3;
+                else if(rawTotal > 80) level = 4;
+
+                const cell = document.createElement('div');
+                cell.className = `heatmap-cell level-${level}`;
+                cell.setAttribute('data-tooltip', `${trackingDate.toDateString()}: ${rawTotal} Problems`);
+                grid.appendChild(cell);
+
+                trackingDate.setDate(trackingDate.getDate() + 1);
+            }
         }
 
         function addPractice(s) {
-            const td = getLocalYYYYMMDD(new Date()); if(!practiceData[td]) practiceData[td] = {p:0, c:0, m:0};
-            const v = parseInt(document.getElementById(`${s}QInp`).value);
-            if(v > 0) { practiceData[td][s]+=v; localStorage.setItem('jeePractice', JSON.stringify(practiceData)); document.getElementById(`${s}QInp`).value = ""; renderPracticeTracker(); updateAnalytics(); }
+            const today = getLocalYYYYMMDD(new Date());
+            if(!practiceData[today]) practiceData[today] = { p: 0, c: 0, m: 0 };
+            
+            const inputEl = document.getElementById(`${s}QInp`); const val = parseInt(inputEl.value, 10);
+            if(!isNaN(val) && val > 0) {
+                practiceData[today][s] += val;
+                localStorage.setItem('jeePracticeV3', JSON.stringify(practiceData));
+                inputEl.value = "";
+                syncToCloud(); renderPracticeTracker(); updateAnalytics(); buildConsistencyHeatmap();
+            }
         }
 
         function renderPracticeTracker() {
-            const d = practiceData[getLocalYYYYMMDD(new Date())] || {p:0, c:0, m:0};
-            ['p','c','m'].forEach(s => {
-                document.getElementById(`${s}QTxt`).innerText = `${d[s]}/${pracTargets[s]}`;
-                document.getElementById(`${s}QBar`).style.width = `${Math.min((d[s]/pracTargets[s])*100, 100)}%`;
+            const today = getLocalYYYYMMDD(new Date());
+            const data = practiceData[today] || { p: 0, c: 0, m: 0 };
+            ['p', 'c', 'm'].forEach(s => {
+                const target = pracTargets[s]; const done = data[s]; const percent = Math.min((done / target) * 100, 100);
+                const txtEl = document.getElementById(`${s}QTxt`); const barEl = document.getElementById(`${s}QBar`);
+                if(txtEl) txtEl.innerText = `${done}/${target}`; if(barEl) barEl.style.width = `${percent}%`;
             });
         }
 
         function populateSyllabusGrids() {
-            ['p','c','m'].forEach(s => {
-                let h = "";
-                syllabusDB[s].forEach((c, i) => { h += `<div class="syllabus-item"><div><h4 style="margin-bottom:5px;">${c.n}</h4><p style="font-size:0.8rem; color:var(--text-muted); font-weight:600;">${c.v} Videos</p></div><button class="action-btn" onclick="addToQueue('${s}', ${i})">Add</button></div>`; });
-                document.getElementById(`grid-${s}`).innerHTML = h;
+            ['p', 'c', 'm'].forEach(subjKey => {
+                const container = document.getElementById(`grid-${subjKey}`); if(!container) return;
+                let html = "";
+                syllabusDB[subjKey].forEach((chap, index) => {
+                    html += `<div class="syllabus-item">
+                                <div><h4 style="margin-bottom:4px; font-weight:700;">${chap.n}</h4><p style="font-size:0.78rem; color:var(--text-muted); font-weight:600;">${chap.v} Video Modules</p></div>
+                                <button class="action-btn" onclick="addToQueue('${subjKey}', ${index})">Add</button>
+                            </div>`;
+                });
+                container.innerHTML = html;
             });
         }
 
         function initCountdown() {
-            const tD = new Date("January 15, 2027 09:00:00").getTime();
+            const targetDate = new Date("January 15, 2027 09:00:00").getTime();
             setInterval(() => {
-                const d = tD - new Date().getTime();
-                document.getElementById("t-days").innerText = Math.floor(d/(1000*60*60*24)).toString().padStart(2, '0');
-                document.getElementById("t-hours").innerText = Math.floor((d%(1000*60*60*24))/(1000*60*60)).toString().padStart(2, '0');
-                document.getElementById("t-mins").innerText = Math.floor((d%(1000*60*60))/(1000*60)).toString().padStart(2, '0');
-                document.getElementById("t-secs").innerText = Math.floor((d%(1000*60))/1000).toString().padStart(2, '0');
+                const dist = targetDate - new Date().getTime();
+                if(document.getElementById("t-days")) document.getElementById("t-days").innerText = Math.max(0, Math.floor(dist / (1000 * 60 * 60 * 24))).toString().padStart(2, '0');
+                if(document.getElementById("t-hours")) document.getElementById("t-hours").innerText = Math.max(0, Math.floor((dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).toString().padStart(2, '0');
+                if(document.getElementById("t-mins")) document.getElementById("t-mins").innerText = Math.max(0, Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60))).toString().padStart(2, '0');
+                if(document.getElementById("t-secs")) document.getElementById("t-secs").innerText = Math.max(0, Math.floor((dist % (1000 * 60)) / 1000)).toString().padStart(2, '0');
             }, 1000);
-        }
-    </script>
-    
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('Offline Engine Active!'))
-                    .catch(err => console.log('Service Worker failed: ', err));
-            });
         }
     </script>
 </body>
