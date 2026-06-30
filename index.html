@@ -8,6 +8,7 @@
     <meta name="theme-color" content="#070a13">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <style>
         :root, [data-theme="amoled-dark"] {
@@ -226,8 +227,8 @@
         .video-checkbox { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 42px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 10px; cursor: pointer; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); user-select: none; }
         .video-checkbox:hover { border-color: var(--accent-blue); color: var(--text-main); }
         .video-checkbox.watched { background: var(--grad-green); color: #020617; font-weight: 900; border-color: transparent; }
-        .video-grid is-compact { grid-template-columns: repeat(auto-fill, minmax(36px, 1fr)); gap: 6px; padding: 0; background: transparent; border: none; }
-        .video-grid is-compact .video-checkbox { height: 34px; border-radius: 8px; font-size: 0.75rem; }
+        .video-grid.is-compact { grid-template-columns: repeat(auto-fill, minmax(36px, 1fr)); gap: 6px; padding: 0; background: transparent; border: none; }
+        .video-grid.is-compact .video-checkbox { height: 34px; border-radius: 8px; font-size: 0.75rem; }
         
         .dashboard-meta-widget-scroller { display: flex; flex-direction: column; gap: 10px; max-height: 320px; overflow-y: auto; }
         .meta-dynamic-strip { background: rgba(2, 4, 10, 0.25); border: 1px solid var(--border-color); padding: 12px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; gap: 10px; scroll-margin-top: 10px; }
@@ -300,6 +301,42 @@
         .title-actions-container { display: flex; align-items: center; gap: 6px; }
         .revision-date-setter input { background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 6px 10px; border-radius: 6px; font-size: 0.8rem; outline: none; width: 100%; min-width: 120px; }
         
+        /* Premium Multi-Device Access Control Portal */
+        .auth-overlay-matrix {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(3, 5, 13, 0.96); backdrop-filter: blur(14px);
+            z-index: 10000; display: flex; align-items: center; justify-content: center;
+            transition: opacity 0.3s ease, visibility 0.3s;
+        }
+        .auth-overlay-matrix.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .auth-card-panel {
+            background: #0b1122; border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 36px; border-radius: 24px; width: 100%; max-width: 420px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.6); text-align: center;
+        }
+        .auth-input-field {
+            width: 100%; background: #03060d; border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px; color: #fff; padding: 14px; margin-top: 12px;
+            outline: none; font-size: 0.95rem; font-weight: 600; transition: border-color 0.2s;
+        }
+        .auth-input-field:focus { border-color: var(--accent-blue); }
+        .auth-primary-btn {
+            width: 100%; background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: #fff; border: none; padding: 14px; border-radius: 12px;
+            font-weight: 700; margin-top: 20px; cursor: pointer; font-size: 0.95rem;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); transition: opacity 0.2s;
+        }
+        .auth-primary-btn:hover { opacity: 0.95; }
+        .auth-anonymous-btn {
+            width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-muted); padding: 12px; border-radius: 12px;
+            font-weight: 600; margin-top: 12px; cursor: pointer; font-size: 0.9rem; transition: all 0.2s;
+        }
+        .auth-anonymous-btn:hover { background: rgba(255, 255, 255, 0.06); color: #fff; border-color: rgba(255, 255, 255, 0.15); }
+        .auth-toggle-link { color: var(--text-muted); font-size: 0.85rem; margin-top: 18px; display: inline-block; cursor: pointer; text-decoration: underline; }
+        .auth-toggle-link:hover { color: #fff; }
+        .auth-error-msg { color: var(--accent-red); font-size: 0.8rem; font-weight: 700; margin-top: 12px; text-align: left; min-height: 18px; }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Smartphone Landscape Optimization */
@@ -371,7 +408,7 @@
                 display: flex !important; 
             }
             .topbar { grid-row: 1; grid-column: 2; padding: 0 40px; height: 75px; }
-            .workspace { grid-row: 2; grid-column: 2; padding: 40px 40px 120px 40px; height: calc(100vh - 75px); height: calc(100vh - 75px); }
+            .workspace { grid-row: 2; grid-column: 2; padding: 40px 40px 120px 40px; height: calc(100vh - 75px); }
             .floating-menu-toggle { display: none; }
             .grid-md-4 { grid-column: span 4; }
             .grid-md-6 { grid-column: span 6; }
@@ -383,6 +420,25 @@
     </style>
 </head>
 <body>
+    <div id="masterAuthOverlayPortal" class="auth-overlay-matrix">
+        <div class="auth-card-panel">
+            <h2 style="font-size: 1.7rem; font-weight: 900; margin-bottom: 6px;">JEE <span style="color: #00f2fe;">2027</span></h2>
+            <p id="authSubtitle" style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 20px;">Secure Synchronized Progress Environment</p>
+            
+            <div id="authCredentialsFormContainer">
+                <input type="email" id="authEmailInput" class="auth-input-field" placeholder="Account Email Address">
+                <input type="password" id="authPasswordInput" class="auth-input-field" placeholder="System Security Password">
+            </div>
+            
+            <div id="authErrorMessageDisplay" class="auth-error-msg"></div>
+            
+            <button id="authPrimaryActionButton" class="auth-primary-btn" onclick="executeAuthenticationPipeline()">Authenticate Session</button>
+            <button id="authAnonymousActionButton" class="auth-anonymous-btn" onclick="executeAnonymousAuthenticationPipeline()">Access via Anonymous Guest Mode</button>
+            
+            <span id="authToggleActionStateLink" class="auth-toggle-link" onclick="toggleAuthInterfaceStateMode()">Create a new cloud sync profile</span>
+        </div>
+    </div>
+
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebarMenu(false)"></div>
     <aside class="sidebar" id="sidebarMenu">
         <h2>JEE <span>2027</span></h2>
@@ -413,7 +469,7 @@
 
     <header class="topbar">
         <div class="topbar-left">
-            <div style="font-weight: 700; color: var(--text-muted); font-size: 0.85rem; white-space: nowrap;">STATUS: <span id="syncStatus" style="color: var(--accent-orange);">INITIALIZING SYSTEM...</span></div>
+            <div style="font-weight: 700; color: var(--text-muted); font-size: 0.85rem; white-space: nowrap;">STATUS: <span id="syncStatus" style="color: var(--accent-orange);">INITIALIZING MATRIX...</span></div>
         </div>
         <div class="topbar-actions">
             <div class="compact-toggle-wrap"><input type="checkbox" id="compactModeCheck" onchange="toggleCompactLayout(this)"><label for="compactModeCheck">Compact</label></div>
@@ -658,37 +714,13 @@
         let db = null, userDocRef = null, syncTimeoutId = null, localCacheIsDirty = false;
         let homeTestActiveOffset = 0, homeRevActiveOffset = 0;
         let activeOpenViewId = "home";
+        let isNewUserRegistrationMode = false;
 
-        const getOrInitTenantSignature = () => {
-            let s = localStorage.getItem('jee_system_tenant_sig');
-            if (!s) { s = "student_" + Math.random().toString(36).substring(2, 15); localStorage.setItem('jee_system_tenant_sig', s); }
-            return s;
-        };
         const ENV_INFRASTRUCTURE_BLUEPRINT = {
             apiKey: "AIzaSyChMLBb9DYZU0wZAv9mZdZ9ESinshq3fkI", authDomain: "jee-planner-2dda7.firebaseapp.com",
             projectId: "jee-planner-2dda7", storageBucket: "jee-planner-2dda7.firebasestorage.app",
             messagingSenderId: "546239377529", appId: "1:546239377529:web:f438f1abd1950486724a8"
         };
-        try {
-            if (typeof firebase !== 'undefined' && ENV_INFRASTRUCTURE_BLUEPRINT.apiKey) {
-                firebase.initializeApp(ENV_INFRASTRUCTURE_BLUEPRINT); db = firebase.firestore();
-                userDocRef = db.collection("users").doc(getOrInitTenantSignature());
-            }
-        } catch(e) { console.error(e); }
-
-        function toggleSidebarMenu(o) {
-            document.getElementById('sidebarMenu').classList.toggle('open', o);
-            document.getElementById('sidebarOverlay').classList.toggle('open', o);
-        }
-        function toggleSystemThemeMode() {
-            const m = document.body.getAttribute('data-theme') === 'cyber-light' ? 'amoled-dark' : 'cyber-light';
-            document.body.setAttribute('data-theme', m); localStorage.setItem('jee_system_theme_preference', m);
-            if(activeOpenViewId === 'progress' || activeOpenViewId === 'home') renderProgressGraphs();
-        }
-        function toggleFullscreenView() {
-            if (!document.fullscreenElement) { document.documentElement.requestFullscreen().catch(()=>{}); }
-            else { document.exitFullscreen(); }
-        }
 
         const syllabusDB = {
             p: [
@@ -887,11 +919,8 @@
         const timelineStartDate = new Date("2026-06-12T00:00:00"); let generatedTimeline = []; const pracTargets = { p: 30, c: 40, m: 30 };
 
         window.onload = function() {
-            // Activate PWA Installation Engine
             if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('./sw.js')
-                .then(() => console.log("PWA Engine Active"))
-                .catch((err) => console.log("PWA Engine Halted", err));
+                navigator.serviceWorker.register('./sw.js').catch(()=>{});
             }
 
             document.getElementById('headerDateDisplay').innerText = new Date().toDateString();
@@ -909,18 +938,112 @@
             
             window.addEventListener('beforeunload', () => { if (localCacheIsDirty) flushLocalDataToDisk(); });
 
-            if (userDocRef) {
-                userDocRef.get().then((doc) => {
-                    if (doc.exists) {
-                        const cloud = doc.data();
-                        internalProgress = cloud.internalProgress || internalProgress; offDays = cloud.offDays || offDays; practiceData = cloud.practiceData || practiceData; examScoreDB = cloud.examScoreDB || examScoreDB;
-                        runCoreGenerationPipeline(); setSyncBadge("CLOUD SYNCED", "var(--accent-green)");
-                    } else { setSyncBadge("CLOUD DEPLOYED", "var(--accent-blue)"); queueCloudSync(); }
-                }).catch(() => setSyncBadge("LOCAL MODE", "var(--text-muted)"));
-            } else { setSyncBadge("LOCAL MODE", "var(--text-muted)"); }
+            // Network Authentication Architecture Initialization
+            try {
+                if (typeof firebase !== 'undefined' && ENV_INFRASTRUCTURE_BLUEPRINT.apiKey) {
+                    firebase.initializeApp(ENV_INFRASTRUCTURE_BLUEPRINT); 
+                    db = firebase.firestore();
+
+                    firebase.auth().onAuthStateChanged((user) => {
+                        if (user) {
+                            userDocRef = db.collection("users").doc(user.uid);
+                            document.getElementById("masterAuthOverlayPortal").classList.add("hidden");
+                            setSyncBadge("SYNCHRONIZING CORE...", "var(--accent-orange)");
+                            
+                            userDocRef.get().then((doc) => {
+                                if (doc.exists) {
+                                    const cloud = doc.data();
+                                    internalProgress = cloud.internalProgress || internalProgress; 
+                                    offDays = cloud.offDays || offDays; 
+                                    practiceData = cloud.practiceData || practiceData; 
+                                    examScoreDB = cloud.examScoreDB || examScoreDB;
+                                    runCoreGenerationPipeline(); 
+                                    setSyncBadge("CLOUD ECOSYSTEM ACTIVE", "var(--accent-green)");
+                                } else {
+                                    setSyncBadge("CLOUD INSTANCE STAGED", "var(--accent-blue)"); 
+                                    queueCloudSync(); 
+                                }
+                            }).catch(() => setSyncBadge("LOCAL SANDBOX ACTIVE", "var(--text-muted)"));
+                        } else {
+                            document.getElementById("masterAuthOverlayPortal").classList.remove("hidden");
+                            setSyncBadge("AUTHENTICATION REQUIRED", "var(--accent-red)");
+                        }
+                    });
+                } else {
+                    setSyncBadge("LOCAL DEPLOYMENT", "var(--text-muted)");
+                }
+            } catch(e) { 
+                console.error(e); 
+                setSyncBadge("ARCHITECTURAL EXCEPTION", "var(--text-muted)");
+            }
 
             setTimeout(() => { executeDefaultViewportFocusSync(); }, 500);
         };
+
+        function toggleAuthInterfaceStateMode() {
+            isNewUserRegistrationMode = !isNewUserRegistrationMode;
+            const subtitle = document.getElementById("authSubtitle");
+            const actionBtn = document.getElementById("authPrimaryActionButton");
+            const toggleLink = document.getElementById("authToggleActionStateLink");
+            const formContainer = document.getElementById("authCredentialsFormContainer");
+            document.getElementById("authErrorMessageDisplay").innerText = "";
+
+            formContainer.style.display = "block";
+            document.getElementById("authAnonymousActionButton").style.display = "block";
+
+            if (isNewUserRegistrationMode) {
+                subtitle.innerText = "Deploy New Cloud Sync Profile Architecture";
+                actionBtn.innerText = "Register Global Profile";
+                toggleLink.innerText = "Existing User? Sign In to Authorized Channel";
+            } else {
+                subtitle.innerText = "Secure Synchronized Progress Environment";
+                actionBtn.innerText = "Authenticate Session";
+                toggleLink.innerText = "Create a new cloud sync profile";
+            }
+        }
+
+        function executeAuthenticationPipeline() {
+            const email = document.getElementById("authEmailInput").value.trim();
+            const password = document.getElementById("authPasswordInput").value;
+            const errorDisplay = document.getElementById("authErrorMessageDisplay");
+            errorDisplay.innerText = "";
+
+            if(!email || !password) {
+                errorDisplay.innerText = "System requires a valid email address and access configuration key.";
+                return;
+            }
+            if(password.length < 6) {
+                errorDisplay.innerText = "Access security parameters require a minimum length of 6 characters.";
+                return;
+            }
+
+            setSyncBadge("AUTHENTICATING...", "var(--accent-orange)");
+
+            if (isNewUserRegistrationMode) {
+                firebase.auth().createUserWithEmailAndPassword(email, password)
+                    .then(() => { setSyncBadge("IDENTITY INSTANTIATED", "var(--accent-green)"); })
+                    .catch((err) => { errorDisplay.innerText = err.message; setSyncBadge("REGISTRATION EXCEPTION", "var(--accent-red)"); });
+            } else {
+                firebase.auth().signInWithEmailAndPassword(email, password)
+                    .then(() => { setSyncBadge("ACCESS GRANTED", "var(--accent-green)"); })
+                    .catch((err) => { errorDisplay.innerText = "Authentication failed. Verification parameters invalid."; setSyncBadge("CREDENTIAL REJECTION", "var(--accent-red)"); });
+            }
+        }
+
+        function executeAnonymousAuthenticationPipeline() {
+            const errorDisplay = document.getElementById("authErrorMessageDisplay");
+            errorDisplay.innerText = "";
+            setSyncBadge("PROVISIONING GUEST MATRIX...", "var(--accent-orange)");
+
+            firebase.auth().signInAnonymously()
+                .then(() => {
+                    setSyncBadge("GUEST CONFIGURATION DEPLOYED", "var(--accent-green)");
+                })
+                .catch((err) => {
+                    errorDisplay.innerText = "Anonymous security bypass failed: " + err.message;
+                    setSyncBadge("BYPASS EXCEPTION", "var(--accent-red)");
+                });
+        }
 
         function flushLocalDataToDisk() {
             localStorage.setItem('jeeInternalProgressV6', JSON.stringify(internalProgress));
@@ -936,13 +1059,13 @@
         function setSyncBadge(t, c) { const e = document.getElementById('syncStatus'); if(e) { e.innerText = t; e.style.color = c; } }
         
         function queueCloudSync() {
-            localCacheIsDirty = true; flushLocalDataToDisk(); setSyncBadge("MUTATION STAGED", "var(--accent-orange)");
+            localCacheIsDirty = true; flushLocalDataToDisk(); setSyncBadge("MUTATION CODES STAGED", "var(--accent-orange)");
             if (syncTimeoutId) clearTimeout(syncTimeoutId);
             syncTimeoutId = setTimeout(() => {
                 if (userDocRef) {
                     userDocRef.set({ internalProgress, offDays, practiceData, examScoreDB }, { merge: true })
-                    .then(() => setSyncBadge("CLOUD SYNCED", "var(--accent-green)"))
-                    .catch(() => setSyncBadge("SYNC DISCONNECTED", "var(--accent-red)"));
+                    .then(() => setSyncBadge("CLOUD INTEGRATION COMPLETE", "var(--accent-green)"))
+                    .catch(() => setSyncBadge("PIPELINE DISCONNECTED", "var(--accent-red)"));
                 }
             }, 450);
         }
@@ -957,8 +1080,8 @@
                 try {
                     const p = JSON.parse(evt.target.result);
                     internalProgress = p.internalProgress || {p:{},c:{},m:{}}; offDays = p.offDays || {global:[],p:[],c:[],m:[]}; practiceData = p.practiceData || {}; examScoreDB = p.examScoreDB || {};
-                    queueCloudSync(); runCoreGenerationPipeline(); alert("Data imported and sync queued.");
-                } catch(err) { alert("Failed to parse data."); }
+                    queueCloudSync(); runCoreGenerationPipeline(); alert("Data architecture imported successfully into current environment.");
+                } catch(err) { alert("Data structure parse exception encountered."); }
             }; r.readAsText(e.target.files[0]);
         }
 
@@ -971,7 +1094,6 @@
             toggleSidebarMenu(false); 
             
             if(v === 'progress' || v === 'home') renderProgressGraphs();
-            
             if(v === 'schedule') { setTimeout(() => { jumpToActiveTimelineDayNode(); }, 50); }
             if(v === 'revision') jumpToNearestActiveRevisionNode();
             if(v === 'tests') jumpToNearestActiveTestSessionNode();
@@ -1359,6 +1481,20 @@
                 setEl("t-mins", Math.max(0, Math.floor((diff % 3600000) / 60000)).toString().padStart(2, '0'));
                 setEl("t-secs", Math.max(0, Math.floor((diff % 60000) / 1000)).toString().padStart(2, '0'));
             }, 1000);
+        }
+
+        function toggleSidebarMenu(o) {
+            document.getElementById('sidebarMenu').classList.toggle('open', o);
+            document.getElementById('sidebarOverlay').classList.toggle('open', o);
+        }
+        function toggleSystemThemeMode() {
+            const m = document.body.getAttribute('data-theme') === 'cyber-light' ? 'amoled-dark' : 'cyber-light';
+            document.body.setAttribute('data-theme', m); localStorage.setItem('jee_system_theme_preference', m);
+            if(activeOpenViewId === 'progress' || activeOpenViewId === 'home') renderProgressGraphs();
+        }
+        function toggleFullscreenView() {
+            if (!document.fullscreenElement) { document.documentElement.requestFullscreen().catch(()=>{}); }
+            else { document.exitFullscreen(); }
         }
 
         function renderProgressGraphs() {
