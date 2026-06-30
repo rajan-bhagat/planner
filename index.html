@@ -79,9 +79,38 @@
         .sidebar.open { left: 0; }
         .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(2, 4, 10, 0.6); backdrop-filter: blur(4px); z-index: 99; display: none; }
         .sidebar-overlay.open { display: block; }
-        .sidebar h2 { color: var(--text-main); margin-bottom: 40px; font-size: 1.6rem; font-weight: 800; text-align: center; }
+        .sidebar h2 { color: var(--text-main); margin-bottom: 20px; font-size: 1.6rem; font-weight: 800; text-align: center; }
         .sidebar h2 span { color: #00f2fe; text-shadow: 0 0 15px rgba(0, 242, 254, 0.3); }
         [data-theme="cyber-light"] .sidebar h2 span { text-shadow: none; color: var(--accent-blue); }
+        
+        /* Profile Matrix Node */
+        .sidebar-profile-card {
+            background: var(--box-stat-bg);
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            text-align: left;
+        }
+        .profile-card-title {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .profile-card-email {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-main);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
         .sidebar ul { list-style: none; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; flex-grow: 1; padding-bottom: 40px; }
         .sidebar li { padding: 14px 18px; color: var(--text-muted); cursor: pointer; border-radius: 12px; transition: all 0.2s; font-weight: 600; font-size: 0.95rem; }
         .sidebar li:hover { background: rgba(255, 255, 255, 0.04); color: var(--text-main); transform: translateX(4px); }
@@ -460,6 +489,13 @@
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebarMenu(false)"></div>
     <aside class="sidebar" id="sidebarMenu">
         <h2>JEE <span>2027</span></h2>
+        
+        <!-- Profile Section Mapped Area -->
+        <div class="sidebar-profile-card">
+            <div class="profile-card-title">Active Sync Profile</div>
+            <div class="profile-card-email" id="sidebarProfileEmailDisplay">Guest Sandbox Session</div>
+        </div>
+
         <nav><ul id="navMenu">
             <li class="active" onclick="switchView('home')">Home Dashboard</li>
             <li onclick="switchView('schedule')">Master Timeline</li>
@@ -1011,6 +1047,12 @@
                             document.getElementById("masterAuthOverlayPortal").classList.add("hidden");
                             setSyncBadge("SYNCHRONIZING CORE...", "var(--accent-orange)");
                             
+                            // Map Profile Email Element
+                            const emailDisplayElement = document.getElementById("sidebarProfileEmailDisplay");
+                            if (emailDisplayElement) {
+                                emailDisplayElement.innerText = user.isAnonymous ? "Anonymous Guest Account" : user.email;
+                            }
+                            
                             userDocRef.get().then((doc) => {
                                 if (doc.exists) {
                                     const cloud = doc.data();
@@ -1030,6 +1072,11 @@
                         } else {
                             document.getElementById("masterAuthOverlayPortal").classList.remove("hidden");
                             setSyncBadge("AUTHENTICATION REQUIRED", "var(--accent-red)");
+                            
+                            const emailDisplayElement = document.getElementById("sidebarProfileEmailDisplay");
+                            if (emailDisplayElement) {
+                                emailDisplayElement.innerText = "Session Disconnected";
+                            }
                         }
                     });
                 } else {
@@ -1829,17 +1876,14 @@
 
         function executeGlobalSignOutPipeline() {
             if (typeof firebase !== 'undefined' && firebase.auth) {
-                if (confirm("Are you sure you want to log out of this synchronized core space session?")) {
-                    setSyncBadge("TERMINATING SESSION...", "var(--accent-red)");
-                    firebase.auth().signOut()
-                        .then(() => {
-                            document.getElementById("masterAuthOverlayPortal").classList.remove("hidden");
-                            alert("Session terminated successfully.");
-                        })
-                        .catch((err) => {
-                            alert("Sign out exception encountered: " + err.message);
-                        });
-                }
+                setSyncBadge("TERMINATING SESSION...", "var(--accent-red)");
+                firebase.auth().signOut()
+                    .then(() => {
+                        document.getElementById("masterAuthOverlayPortal").classList.remove("hidden");
+                    })
+                    .catch((err) => {
+                        alert("Sign out exception encountered: " + err.message);
+                    });
             } else {
                 alert("Authentication node structure is currently offline or isolated.");
             }
