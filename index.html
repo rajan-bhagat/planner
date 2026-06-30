@@ -462,6 +462,9 @@
                 <button class="btn-backup" style="flex-grow: 1; text-align: center;" onclick="exportData()">Export</button>
                 <button class="btn-backup" style="flex-grow: 1; text-align: center;" onclick="document.getElementById('hiddenFileInput').click()">Import</button>
             </div>
+            <div class="sidebar-utility-row" style="margin-top: 4px;">
+                <button class="btn-backup" style="flex-grow: 1; text-align: center; border-color: rgba(239, 68, 68, 0.3); color: var(--accent-red);" onclick="executeGlobalSignOutPipeline()">Log Out</button>
+            </div>
         </div>
     </aside>
 
@@ -716,10 +719,14 @@
         let activeOpenViewId = "home";
         let isNewUserRegistrationMode = false;
 
+        // UPDATED SECURE CONFIGURATION BLUEPRINT
         const ENV_INFRASTRUCTURE_BLUEPRINT = {
-            apiKey: "AIzaSyChMLBb9DYZU0wZAv9mZdZ9ESinshq3fkI", authDomain: "jee-planner-2dda7.firebaseapp.com",
-            projectId: "jee-planner-2dda7", storageBucket: "jee-planner-2dda7.firebasestorage.app",
-            messagingSenderId: "546239377529", appId: "1:546239377529:web:f438f1abd1950486724a8"
+            apiKey: "AIzaSyChMlBb9DYZU0wZAv9mZdZ9ESinshq3fkI", 
+            authDomain: "jee-planner-2dda7.firebaseapp.com",
+            projectId: "jee-planner-2dda7", 
+            storageBucket: "jee-planner-2dda7.firebasestorage.app",
+            messagingSenderId: "546239377529", 
+            appId: "1:546239377529:web:f438f10abd1950486724a8"
         };
 
         const syllabusDB = {
@@ -1520,7 +1527,7 @@
                 let prob = {p:0,c:0,m:0}, hrs = 0;
                 if (activeGraphTimeframe === "monthly") {
                     Object.keys(practiceData).forEach(s => { const dObj = new Date(s); if(dObj.getFullYear()===p.y && dObj.getMonth()===p.m) { const l = practiceData[s]||{p:0,c:0,m:0}; if(graphSubjectFilter==='all'||graphSubjectFilter==='p') prob.p+=l.p||0; if(graphSubjectFilter==='all'||graphSubjectFilter==='c') prob.c+=l.c||0; if(graphSubjectFilter==='all'||graphSubjectFilter==='m') prob.m+=l.m||0; } });
-                    generatedTimeline.forEach(sched => { const dObj = new Date(sched.date); if(dObj.getFullYear()===p.y && dObj.getMonth()===p.m) { ['p','c','m'].forEach(s => { if(sched[s] && (graphSubjectFilter==='all'||graphSubjectFilter===s)) { const cIdx = syllabusDB[s].findIndex(ch => ch.n.toLowerCase() === sched[s].toLowerCase()); if(cIdx!==-1) hrs += ((getChapterState(s,cIdx).w?.length||0) * (syllabusDB[s][cIdx].l/syllabusDB[s][cIdx].v))/60; } }); } });
+                    generatedTimeline.forEach(sched => { const dObj = new Date(sched.date); if(dObj.getFullYear()===p.y && dObj.getMonth()===p.m) { ['p','c','m'].forEach(s => { if(sched[s] && (graphSubjectFilter==='all'||graphSubjectFilter=='all'||graphSubjectFilter===s)) { const cIdx = syllabusDB[s].findIndex(ch => ch.n.toLowerCase() === sched[s].toLowerCase()); if(cIdx!==-1) hrs += ((getChapterState(s,cIdx).w?.length||0) * (syllabusDB[s][cIdx].l/syllabusDB[s][cIdx].v))/60; } }); } });
                 } else {
                     let loop = new Date(p.start.getTime());
                     while(loop <= p.end) {
@@ -1566,6 +1573,24 @@
                     <div class="chart-axis-label">${item.label}</div>`;
                 wCanvas.appendChild(wPillar);
             });
+        }
+
+        function executeGlobalSignOutPipeline() {
+            if (typeof firebase !== 'undefined' && firebase.auth) {
+                if (confirm("Are you sure you want to log out of this synchronized core space session?")) {
+                    setSyncBadge("TERMINATING SESSION...", "var(--accent-red)");
+                    firebase.auth().signOut()
+                        .then(() => {
+                            document.getElementById("masterAuthOverlayPortal").classList.remove("hidden");
+                            alert("Session terminated successfully.");
+                        })
+                        .catch((err) => {
+                            alert("Sign out exception encountered: " + err.message);
+                        });
+                }
+            } else {
+                alert("Authentication node structure is currently offline or isolated.");
+            }
         }
     </script>
 </body>
