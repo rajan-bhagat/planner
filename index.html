@@ -21,8 +21,9 @@
             --grad-chemistry: linear-gradient(135deg, #ff0844 0%, #ffb199 100%);
             --grad-maths: linear-gradient(135deg, #b180ff 0%, #d2bbff 100%);
             --grad-green: linear-gradient(135deg, #05f8a6 0%, #06b6d4 100%);
+            --grad-pyq: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
             --accent-blue: #3b82f6; --accent-orange: #f97316; --accent-purple: #a855f7;
-            --accent-green: #10b981; --accent-red: #ef4444; --glow-blue: rgba(59, 130, 246, 0.25);
+            --accent-green: #10b981; --accent-red: #ef4444; --accent-yellow: #eab308; --glow-blue: rgba(59, 130, 246, 0.25);
             --shadow-matrix: rgba(0,0,0,0.4); --card-hover-border: rgba(255,255,255,0.12);
             --glass-sheen: rgba(255, 255, 255, 0.03);
             --box-stat-bg: rgba(2, 4, 10, 0.4);
@@ -37,8 +38,9 @@
             --grad-chemistry: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
             --grad-maths: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
             --grad-green: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            --grad-pyq: linear-gradient(135deg, #ca8a04 0%, #a16207 100%);
             --accent-blue: #2563eb; --accent-orange: #ea580c; --accent-purple: #9333ea;
-            --accent-green: #16a34a; --accent-red: #dc2626; --glow-blue: rgba(37, 99, 235, 0.15);
+            --accent-green: #16a34a; --accent-red: #dc2626; --accent-yellow: #ca8a04; --glow-blue: rgba(37, 99, 235, 0.15);
             --shadow-matrix: rgba(148, 163, 184, 0.15); --card-hover-border: rgba(37, 99, 235, 0.4);
             --glass-sheen: rgba(15, 23, 42, 0.04);
             --box-stat-bg: #f8fafc;
@@ -184,9 +186,9 @@
         .velocity-metric { font-weight: 800; color: var(--accent-green); font-size: 0.95rem; }
         
         .heatmap-container { display: flex; flex-direction: column; gap: 8px; width: 100%; overflow-x: auto; }
-        .heatmap-grid { display: grid; grid-template-columns: repeat(27, minmax(12px, 1fr)); gap: 4px; background: rgba(0,0,0,0.15); padding: 10px; border-radius: 12px; border: 1px solid var(--border-color); min-width: 450px; }
+        .heatmap-grid { display: grid; grid-template-columns: repeat(20, minmax(12px, 1fr)); gap: 4px; background: rgba(0,0,0,0.15); padding: 10px; border-radius: 12px; border: 1px solid var(--border-color); min-width: 320px; }
         .heatmap-cell { width: 100%; aspect-ratio: 1; background-color: var(--progress-bg); border-radius: 2px; position: relative; cursor: pointer; }
-        .heatmap-labels { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-muted); font-weight: 700; min-width: 450px; }
+        .heatmap-labels { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-muted); font-weight: 700; min-width: 320px; }
         
         .prac-row-isolated { display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; gap: 12px; }
         .stat-labels { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px; font-weight: 700; }
@@ -276,20 +278,20 @@
         .analytics-table th { background: rgba(11, 17, 32, 0.8); padding: 10px 14px; font-weight: 700; color: var(--text-muted); border-bottom: 1px solid var(--border-color); }
         .analytics-table td { padding: 10px 14px; border-bottom: 1px solid var(--border-color); color: var(--text-main); }
         .badge-yield { padding: 4px 6px; border-radius: 6px; font-weight: 700; font-size: 0.72rem; display: inline-block; }
-        .yield-high { background: rgba(16, 185, 129, 0.15); color: #10b981; }
-        .yield-mid { background: rgba(249, 115, 22, 0.15); color: #f97316; }
-        .yield-low { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+        .badge-yield.yield-high { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+        .badge-yield.yield-mid { background: rgba(249, 115, 22, 0.15); color: #f97316; }
+        .badge-yield.yield-low { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
         
         .chart-master-viewport { display: flex; flex-direction: column; gap: 20px; margin-top: 16px; width: 100%; }
         .chart-panel-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 16px; display: flex; flex-direction: column; width: 100%; }
-        .chart-layout-wrapper { display: flex; width: 100%; height: 240px; margin-top: 12px; position: relative; }
+        .chart-layout-wrapper { display: flex; width: 100%; height: 260px; margin-top: 12px; position: relative; }
         .chart-y-axis-legend { display: flex; flex-direction: column; justify-content: space-between; width: 45px; height: 205px; font-size: 0.65rem; color: var(--text-muted); font-weight: 700; text-align: right; padding-right: 8px; }
         .chart-canvas-container { display: flex; align-items: flex-end; justify-content: space-around; flex-grow: 1; height: 205px; background: rgba(0, 0, 0, 0.15); border-radius: 14px; border: 1px solid var(--border-color); position: relative; padding: 0 4px; }
         .chart-grid-line-layer { position: absolute; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding-top: 10px; pointer-events: none; }
         .chart-grid-horizontal-wire { width: 100%; height: 1px; background: rgba(255, 255, 255, 0.03); }
-        .chart-bar-pillar { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; flex-grow: 1; max-width: 45px; position: relative; z-index: 2; padding-bottom: 20px; }
-        .chart-segment-stack { width: 70%; border-radius: 4px 4px 0 0; display: flex; flex-direction: column; justify-content: flex-end; height: 0%; overflow: hidden; transition: height 0.4s ease; min-height: 2px; }
-        .chart-segment-layer { width: 100%; transition: height 0.3s; }
+        .chart-bar-pillar { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; flex-grow: 1; max-width: 55px; position: relative; z-index: 2; padding-bottom: 24px; }
+        .chart-segment-stack { width: 75%; border-radius: 4px 4px 0 0; display: flex; flex-direction: column; justify-content: flex-end; height: 0%; overflow: visible; transition: height 0.4s ease; min-height: 2px; position: relative; }
+        .chart-segment-layer { width: 100%; transition: height 0.3s; position: relative; }
         .chart-axis-label { position: absolute; bottom: 2px; font-size: 0.65rem; color: var(--text-muted); font-weight: 700; text-align: center; width: 100%; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
         .chart-legend-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 4px; }
         .legend-color-blob { width: 10px; height: 10px; border-radius: 2px; }
@@ -297,6 +299,22 @@
         .graph-nav-btn { background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-main); font-size: 0.75rem; font-weight: 700; padding: 6px 10px; border-radius: 6px; cursor: pointer; }
         .graph-nav-label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); min-width: 100px; text-align: center; }
         
+        .chart-value-label {
+            position: absolute;
+            top: -16px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: var(--text-main);
+            white-space: nowrap;
+            z-index: 5;
+            background: var(--bg-panel);
+            padding: 1px 4px;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+        }
+
         .widget-nav-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-main); width: 26px; height: 26px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.75rem; font-weight: bold; }
         .title-actions-container { display: flex; align-items: center; gap: 6px; }
         .revision-date-setter input { background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 6px 10px; border-radius: 6px; font-size: 0.8rem; outline: none; width: 100%; min-width: 120px; }
@@ -532,7 +550,6 @@
                             <div class="stat-labels"><span>Blueprint Target: 30 Qs</span><span id="pQTxt" style="color: var(--accent-blue);">0/30</span></div>
                             <div class="stat-bar-bg"><div id="pQBar" class="stat-bar-fill" style="background: var(--grad-physics); width: 0%;"></div></div>
                         </div>
-                        <div class="prac-input-group"><input type="number" id="pQInp" class="prac-input" min="1" placeholder="+ Qs"><button class="prac-btn" onclick="addPractice('p')">Log</button></div>
                     </div>
                 </div>
                 <div class="card grid-md-4" style="border-top: 4px solid #ff0844;">
@@ -542,7 +559,6 @@
                             <div class="stat-labels"><span>Blueprint Target: 40 Qs</span><span id="cQTxt" style="color: #ff0844;">0/40</span></div>
                             <div class="stat-bar-bg"><div id="cQBar" class="stat-bar-fill" style="background: var(--grad-chemistry); width: 0%;"></div></div>
                         </div>
-                        <div class="prac-input-group"><input type="number" id="cQInp" class="prac-input" min="1" placeholder="+ Qs"><button class="prac-btn" onclick="addPractice('c')">Log</button></div>
                     </div>
                 </div>
                 <div class="card grid-md-4" style="border-top: 4px solid #b180ff;">
@@ -552,7 +568,15 @@
                             <div class="stat-labels"><span>Blueprint Target: 30 Qs</span><span id="mQTxt" style="color: #b180ff;">0/30</span></div>
                             <div class="stat-bar-bg"><div id="mQBar" class="stat-bar-fill" style="background: var(--grad-maths); width: 0%;"></div></div>
                         </div>
-                        <div class="prac-input-group"><input type="number" id="mQInp" class="prac-input" min="1" placeholder="+ Qs"><button class="prac-btn" onclick="addPractice('m')">Log</button></div>
+                    </div>
+                </div>
+
+                <div class="card grid-md-12" style="border-top: 4px solid #eab308; margin-top: -8px;">
+                    <div class="card-title" style="color: var(--accent-yellow);">Quick Logs Problem Practice Hub</div>
+                    <div style="display: flex; flex-direction: column; gap: 14px;">
+                        <div class="stat-row"><div class="stat-labels"><span style="color: #4facfe;">Quick Logs | Physics</span><span id="pFastQTxt">0 Qs</span></div><div class="stat-bar-bg"><div id="pFastQBar" class="stat-bar-fill" style="background: var(--grad-physics); width: 0%;"></div></div></div>
+                        <div class="stat-row"><div class="stat-labels"><span style="color: #ffb199;">Quick Logs | Chemistry</span><span id="cFastQTxt">0 Qs</span></div><div class="stat-bar-bg"><div id="cFastQBar" class="stat-bar-fill" style="background: var(--grad-chemistry); width: 0%;"></div></div></div>
+                        <div class="stat-row"><div class="stat-labels"><span style="color: #d2bbff;">Quick Logs | Mathematics</span><span id="mFastQTxt">0 Qs</span></div><div class="stat-bar-bg"><div id="mFastQBar" class="stat-bar-fill" style="background: var(--grad-maths); width: 0%;"></div></div></div>
                     </div>
                 </div>
                 
@@ -586,6 +610,14 @@
 
                     <div style="display: flex; flex-direction: column; gap: 14px; margin-top: 20px;">
                         <div class="stat-row"><div class="stat-labels"><span style="color: var(--accent-green);">Total Core Syllabus Progress Matrix</span><span id="stat-a-hrs">0 / 0 hrs</span></div><div class="stat-bar-bg"><div id="bar-a-hrs" class="stat-bar-fill" style="background: var(--grad-green); width: 0%;"></div></div></div>
+                        <div class="stat-row"><div class="stat-labels"><span style="color: var(--accent-yellow);">Global PYQ Completion Tracker</span><span id="stat-a-pyqs">0 PYQs Logged</span></div><div class="stat-bar-bg"><div id="bar-a-pyqs" class="stat-bar-fill" style="background: var(--grad-pyq); width: 0%;"></div></div></div>
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 14px; margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+                        <div style="font-size: 0.8rem; font-weight: 800; color: var(--accent-yellow); margin-bottom: 4px; text-transform: uppercase;">Subject-Wise Dedicated PYQ Solved Trackers</div>
+                        <div class="stat-row"><div class="stat-labels"><span style="color: #4facfe;">Physics PYQs Progress</span><span id="home-pyq-p-txt">0 PYQs</span></div><div class="stat-bar-bg"><div id="home-pyq-p-bar" class="stat-bar-fill" style="background: var(--grad-physics); width: 0%;"></div></div></div>
+                        <div class="stat-row"><div class="stat-labels"><span style="color: #ffb199;">Chemistry PYQs Progress</span><span id="home-pyq-c-txt">0 PYQs</span></div><div class="stat-bar-bg"><div id="home-pyq-c-bar" class="stat-bar-fill" style="background: var(--grad-chemistry); width: 0%;"></div></div></div>
+                        <div class="stat-row"><div class="stat-labels"><span style="color: #d2bbff;">Mathematics PYQs Progress</span><span id="home-pyq-m-txt">0 PYQs</span></div><div class="stat-bar-bg"><div id="home-pyq-m-bar" class="stat-bar-fill" style="background: var(--grad-maths); width: 0%;"></div></div></div>
                     </div>
                 </div>
                 <div class="card grid-md-12">
@@ -615,66 +647,76 @@
         <section id="view-revision" class="view-section">
             <div class="header-routing-group"><h3 style="font-size: 1.4rem; font-weight: 800; color: var(--accent-purple);">Dedicated Revision Calendar Hub</h3><button class="btn-jump-portal" onclick="jumpToNearestActiveRevisionNode()">⏳ Jump to Current Review</button></div>
             <p style="color: var(--text-muted); margin-bottom: 16px; font-size: 0.85rem;">Centrally review logged deadlines. Structural alterations instantly scale into underlying workspaces.</p>
+            
+            <div class="timeline-filter-bar" style="margin-bottom: 8px;">
+                <button class="filter-chip active" id="rev-subj-all" onclick="setRevisionSubjectFilter('all')">All Subjects</button>
+                <button class="filter-chip" id="rev-subj-p" onclick="setRevisionSubjectFilter('p')">Physics</button>
+                <button class="filter-chip" id="rev-subj-c" onclick="setRevisionSubjectFilter('c')">Chemistry</button>
+                <button class="filter-chip" id="rev-subj-m" onclick="setRevisionSubjectFilter('m')">Maths</button>
+            </div>
+
+            <div class="timeline-filter-bar" style="margin-bottom: 16px;">
+                <button class="filter-chip active" id="rev-state-all" onclick="setRevisionStateFilter('all')">All Reviews</button>
+                <button class="filter-chip" id="rev-state-pending" onclick="setRevisionStateFilter('pending')">Pending</button>
+                <button class="filter-chip" id="rev-state-complete" onclick="setRevisionStateFilter('complete')">Complete</button>
+            </div>
+
             <div class="card"><div class="card-title" style="color: var(--accent-purple);">Dynamic Revision Target Matrix</div><div class="chapter-accordion-wrapper" id="masterRevisionListWrapper"></div></div>
         </section>
 
         <section id="view-physics" class="view-section">
-            <div class="subject-dashboard-header"><div class="subject-headline-box" style="border-left: 6px solid #4facfe"><h3 style="font-size: 1.5rem; font-weight: 800;">Physics Workspace</h3><div id="p-sub-stats" style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600; margin-top: 4px;"></div></div><div class="card"><div style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight:800;">Quick Problem Log</div><div style="display:flex; margin-top: 8px; gap:6px;"><input type="number" id="fast-p-inp" class="prac-input" placeholder="+"><button class="prac-btn" onclick="addSubjectFastPractice('p')">Log</button></div></div></div>
+            <div class="subject-dashboard-header">
+                <div class="subject-headline-box" style="border-left: 6px solid #4facfe"><h3 style="font-size: 1.5rem; font-weight: 800;">Physics Workspace</h3><div id="p-sub-stats" style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600; margin-top: 4px;"></div></div>
+                <div style="display: flex; gap: 10px; width: 100%; max-width: 500px;">
+                    <div class="card" style="flex:1;"><div style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight:800;">Quick Problem Log</div><div style="display:flex; margin-top: 8px; gap:6px;"><input type="number" id="fast-p-inp" class="prac-input" placeholder="+"><button class="prac-btn" onclick="addSubjectFastPractice('p')">Log</button></div></div>
+                    <div class="card" style="flex:1;"><div style="font-size: 0.7rem; text-transform: uppercase; color: var(--accent-yellow); font-weight:800;">Quick PYQ Log</div><div style="display:flex; margin-top: 8px; gap:6px;"><input type="number" id="fast-p-pyq" class="prac-input" placeholder="+"><button class="prac-btn" style="border-color: var(--accent-yellow);" onclick="addSubjectFastPYQ('p')">Log</button></div></div>
+                </div>
+            </div>
             <div class="chapter-accordion-wrapper" id="accordion-p"></div>
         </section>
 
         <section id="view-chemistry" class="view-section">
-            <div class="subject-dashboard-header"><div class="subject-headline-box" style="border-left: 6px solid #ff0844"><h3 style="font-size: 1.5rem; font-weight: 800;">Chemistry Workspace</h3><div id="c-sub-stats" style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600; margin-top: 4px;"></div></div><div class="card"><div style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight:800;">Quick Problem Log</div><div style="display:flex; margin-top: 8px; gap:6px;"><input type="number" id="fast-c-inp" class="prac-input" placeholder="+"><button class="prac-btn" onclick="addSubjectFastPractice('c')">Log</button></div></div></div>
+            <div class="subject-dashboard-header">
+                <div class="subject-headline-box" style="border-left: 6px solid #ff0844"><h3 style="font-size: 1.5rem; font-weight: 800;">Chemistry Workspace</h3><div id="c-sub-stats" style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600; margin-top: 4px;"></div></div>
+                <div style="display: flex; gap: 10px; width: 100%; max-width: 500px;">
+                    <div class="card" style="flex:1;"><div style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight:800;">Quick Problem Log</div><div style="display:flex; margin-top: 8px; gap:6px;"><input type="number" id="fast-c-inp" class="prac-input" placeholder="+"><button class="prac-btn" onclick="addSubjectFastPractice('c')">Log</button></div></div>
+                    <div class="card" style="flex:1;"><div style="font-size: 0.7rem; text-transform: uppercase; color: var(--accent-yellow); font-weight:800;">Quick PYQ Log</div><div style="display:flex; margin-top: 8px; gap:6px;"><input type="number" id="fast-c-pyq" class="prac-input" placeholder="+"><button class="prac-btn" style="border-color: var(--accent-yellow);" onclick="addSubjectFastPYQ('c')">Log</button></div></div>
+                </div>
+            </div>
             <div class="chapter-accordion-wrapper" id="accordion-c"></div>
         </section>
 
         <section id="view-mathematics" class="view-section">
-            <div class="subject-dashboard-header"><div class="subject-headline-box" style="border-left: 6px solid #b180ff"><h3 style="font-size: 1.5rem; font-weight: 800;">Mathematics Workspace</h3><div id="m-sub-stats" style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600; margin-top: 4px;"></div></div><div class="card"><div style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight:800;">Quick Problem Log</div><div style="display:flex; margin-top: 8px; gap:6px;"><input type="number" id="fast-m-inp" class="prac-input" placeholder="+"><button class="prac-btn" onclick="addSubjectFastPractice('m')">Log</button></div></div></div>
+            <div class="subject-dashboard-header">
+                <div class="subject-headline-box" style="border-left: 6px solid #b180ff"><h3 style="font-size: 1.5rem; font-weight: 800;">Mathematics Workspace</h3><div id="m-sub-stats" style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600; margin-top: 4px;"></div></div>
+                <div style="display: flex; gap: 10px; width: 100%; max-width: 500px;">
+                    <div class="card" style="flex:1;"><div style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight:800;">Quick Problem Log</div><div style="display:flex; margin-top: 8px; gap:6px;"><input type="number" id="fast-m-inp" class="prac-input" placeholder="+"><button class="prac-btn" onclick="addSubjectFastPractice('m')">Log</button></div></div>
+                    <div class="card" style="flex:1;"><div style="font-size: 0.7rem; text-transform: uppercase; color: var(--accent-yellow); font-weight:800;">Quick PYQ Log</div><div style="display:flex; margin-top: 8px; gap:6px;"><input type="number" id="fast-m-pyq" class="prac-input" placeholder="+"><button class="prac-btn" style="border-color: var(--accent-yellow);" onclick="addSubjectFastPYQ('m')">Log</button></div></div>
+                </div>
+            </div>
             <div class="chapter-accordion-wrapper" id="accordion-m"></div>
         </section>
 
         <section id="view-tests" class="view-section">
-            <div class="header-routing-group"><h3 style="font-size: 1.4rem; font-weight: 800; color: var(--accent-orange);">Test Analytics Workspace</h3><button class="btn-jump-portal" onclick="jumpToNearestActiveTestSessionNode()">⏳ Jump to Current Test</button></div>
+            <div class="header-routing-group">
+                <h3 style="font-size: 1.4rem; font-weight: 800; color: var(--accent-orange);">Test Series Timeline Matrix</h3>
+                <button class="btn-jump-portal" onclick="jumpToNearestActiveTestSessionNode()">⏳ Jump to Current Test</button>
+            </div>
+            
+            <div class="timeline-filter-bar" style="margin-bottom: 8px;">
+                <button class="filter-chip active" id="test-batch-all" onclick="setTestBatchFilter('all')">All Batches</button>
+                <button class="filter-chip" id="test-batch-prayas" onclick="setTestBatchFilter('Prayas')">Prayas</button>
+                <button class="filter-chip" id="test-batch-lakshya" onclick="setTestBatchFilter('Lakshya')">Lakshya</button>
+                <button class="filter-chip" id="test-batch-quizrr" onclick="setTestBatchFilter('Quizrr')">Quizrr</button>
+            </div>
+
             <div class="timeline-filter-bar">
-                <button class="filter-chip active" id="test-flt-all" onclick="setTestSubjectFilter('all')">Global Profile</button>
-                <button class="filter-chip" id="test-flt-p" onclick="setTestSubjectFilter('p')">Physics Track</button>
-                <button class="filter-chip" id="test-flt-c" onclick="setTestSubjectFilter('c')">Chemistry Track</button>
-                <button class="filter-chip" id="test-flt-m" onclick="setTestSubjectFilter('m')">Maths Track</button>
-            </div>
-            <div class="card" style="margin-bottom: 16px;">
-                <div class="card-title" style="color: var(--accent-green);" id="test-hub-panel-title">Performance Yield Indicators</div>
-                <div class="test-metrics-grid">
-                    <div class="metric-banner"><div style="font-size:0.65rem; text-transform:uppercase; color:var(--text-muted);" id="lbl-test-acc">Average Accuracy</div><div class="metric-banner-val" id="avg-test-acc">0.0%</div></div>
-                    <div class="metric-banner"><div style="font-size:0.65rem; text-transform:uppercase; color:var(--text-muted);" id="lbl-test-speed">Speed Index</div><div class="metric-banner-val" id="avg-test-speed">0.0 Q/hr</div></div>
-                    <div class="metric-banner"><div style="font-size:0.65rem; text-transform:uppercase; color:var(--text-muted);" id="lbl-test-neg">Negative Score Drag</div><div class="metric-banner-val" id="avg-test-neg" style="color: var(--accent-red);">0 errors logged</div></div>
-                    <div class="metric-banner"><div style="font-size:0.65rem; text-transform:uppercase; color:var(--text-muted);" id="lbl-test-count">Tests Tracked</div><div class="metric-banner-val" id="total-tests-logged">0</div></div>
-                </div>
+                <button class="filter-chip active" id="test-state-all" onclick="setTestStateFilter('all')">All Attempts</button>
+                <button class="filter-chip" id="test-state-attempted" onclick="setTestStateFilter('attempted')">Attempted Only</button>
+                <button class="filter-chip" id="test-state-unattempted" onclick="setTestStateFilter('unattempted')">Unattempted Only</button>
             </div>
 
-            <div class="card" style="margin-bottom: 16px;">
-                <div class="card-title" style="color: var(--accent-blue);">Historical Test Yield Matrix</div>
-                <div class="analytics-table-wrapper">
-                    <table class="analytics-table">
-                        <thead>
-                            <tr>
-                                <th>Test Identifier</th>
-                                <th>Series/Batch</th>
-                                <th>Gross Marks</th>
-                                <th>Subject Split (P:C:M)</th>
-                                <th>Accuracy</th>
-                                <th>Performance Yield</th>
-                            </tr>
-                        </thead>
-                        <tbody id="testYieldTableBody">
-                            <tr>
-                                <td colspan="6" style="text-align:center; color:var(--text-muted);">No recorded examination logs detected inside active viewport.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="chapter-accordion-wrapper" id="testSeriesAccordionWrapper"></div>
+            <div class="vertical-timeline-container" id="testSeriesAccordionWrapper" style="margin-top: 20px;"></div>
         </section>
 
         <section id="view-progress" class="view-section">
@@ -683,6 +725,13 @@
                 <div class="timeline-filter-bar" style="margin-bottom:0; max-width: 100%;"><button class="filter-chip active" id="time-flt-daily" onclick="switchGraphTimeframe('daily')">Daily</button><button class="filter-chip" id="time-flt-weekly" onclick="switchGraphTimeframe('weekly')">Weekly</button><button class="filter-chip" id="time-flt-monthly" onclick="switchGraphTimeframe('monthly')">Monthly</button></div>
                 <div class="graph-nav-group"><button class="graph-nav-btn" onclick="navigateGraphWindow(-1)">◀</button><span class="graph-nav-label" id="graphWindowRangeLabel">Current Matrix</span><button class="graph-nav-btn" onclick="navigateGraphWindow(1)">▶</button></div>
                 <div class="timeline-filter-bar" style="margin-bottom:0; max-width: 100%;"><button class="filter-chip active" id="graph-subj-all" onclick="setGraphSubjectFilter('all')">Global</button><button class="filter-chip" id="graph-subj-p" onclick="setGraphSubjectFilter('p')">Physics</button><button class="filter-chip" id="graph-subj-c" onclick="setGraphSubjectFilter('c')">Chem</button><button class="filter-chip" id="graph-subj-m" onclick="setGraphSubjectFilter('m')">Maths</button></div>
+            </div>
+            
+            <div class="timeline-filter-bar" style="margin-bottom:16px; background: rgba(11, 17, 32, 0.6);">
+                <button class="filter-chip active" id="graph-metric-total" onclick="setGraphMetricFilter('total')">Total Questions</button>
+                <button class="filter-chip" id="graph-metric-standard" onclick="setGraphMetricFilter('standard')">Standard Questions</button>
+                <button class="filter-chip" id="graph-metric-quick" onclick="setGraphMetricFilter('quick')">Quick Logs</button>
+                <button class="filter-chip" id="graph-metric-pyqs" onclick="setGraphMetricFilter('pyqs')">Dedicated PYQs</button>
             </div>
             
             <div class="card" style="margin-bottom: 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; height: auto;">
@@ -899,7 +948,7 @@
             { d: "19 October", p: "Ray Optics", c: "Coordination Compounds", m: "Differential Equation" }, { d: "20 October", p: "Ray Optics", c: "Coordination Compounds", m: "Vectors" },
             { d: "21 October", p: "Ray Optics", c: "Coordination Compounds", m: "Vectors" }, { d: "22 October", p: "Ray Optics", c: "Coordination Compounds", m: "Vectors" },
             { d: "23 October", p: "Ray Optics", c: null, m: "Vectors" }, { d: "24 October", p: null, c: "Salt Analysis", m: "Vectors" },
-            { d: "25 October", p: "Wave Optics", c: "Salt Analysis", m: "Vectors" }, { d: "26 October", p: "Wave Optics", c: "Salt Analysis", m: "3D Geometry" },
+            { d: "25 October", p: "Wave Optics", c: "Salt Analysis", m: "Vectors" }, { d: "26 October", p: "Wave Optics", c: "3D Geometry" },
             { d: "27 October", p: "Wave Optics", c: "Salt Analysis", m: "3D Geometry" }, { d: "28 October", p: "Wave Optics", c: "Salt Analysis", m: "3D Geometry" },
             { d: "29 October", p: "Wave Optics", c: null, m: "3D Geometry" }, { d: "30 October", p: null, c: "P Block", m: "3D Geometry" },
             { d: "31 October", p: "Semi Conductors", c: "P Block", m: null }, { d: "1 November", p: "Semi Conductors", c: "P Block", m: "Probability" },
@@ -922,7 +971,10 @@
 
         const colorMap = { p: "#4facfe", c: "#ff0844", m: "#b180ff" }, subjMap = { p: "Physics", c: "Chemistry", m: "Maths" };
         let internalProgress = { p: {}, c: {}, m: {} }, offDays = { global: [], p: [], c: [], m: [] }, practiceData = {}, examScoreDB = {}; 
-        let compactLayoutActive = false, currentTimelineFilter = "all", currentTestSubjectFilter = "all", activeGraphTimeframe = "daily", graphSubjectFilter = "all", graphWindowOffset = 0; 
+        let compactLayoutActive = false, currentTimelineFilter = "all", currentTestBatchFilter = "all", currentTestStateFilter = "all", activeGraphTimeframe = "daily", graphSubjectFilter = "all", graphWindowOffset = 0; 
+        let currentRevisionSubjectFilter = "all", currentRevisionStateFilter = "all", graphMetricFilter = "total";
+        let fastPracticeTotals = { p: 0, c: 0, m: 0 };
+        let pyqPracticeTotals = { p: 0, c: 0, m: 0 };
         const timelineStartDate = new Date("2026-06-12T00:00:00"); let generatedTimeline = []; const pracTargets = { p: 30, c: 40, m: 30 };
 
         window.onload = function() {
@@ -937,6 +989,8 @@
             internalProgress = hydrate('jeeInternalProgressV6', { p: {}, c: {}, m: {} });
             offDays = hydrate('jeeOffDaysV3', { global: [], p: [], c: [], m: [] });
             practiceData = hydrate('jeePracticeV3', {}); examScoreDB = hydrate('jeeExamScoreManifest', {});
+            fastPracticeTotals = hydrate('jeeFastPracticeTotalsV1', { p: 0, c: 0, m: 0 });
+            pyqPracticeTotals = hydrate('jeePyqPracticeTotalsV1', { p: 0, c: 0, m: 0 });
             compactLayoutActive = localStorage.getItem('jeeCompactMode') === 'true';
             document.getElementById('compactModeCheck').checked = compactLayoutActive;
             ['p','c','m'].forEach(s => { if(!internalProgress[s]) internalProgress[s] = {}; });
@@ -964,6 +1018,8 @@
                                     offDays = cloud.offDays || offDays; 
                                     practiceData = cloud.practiceData || practiceData; 
                                     examScoreDB = cloud.examScoreDB || examScoreDB;
+                                    fastPracticeTotals = cloud.fastPracticeTotals || fastPracticeTotals;
+                                    pyqPracticeTotals = cloud.pyqPracticeTotals || pyqPracticeTotals;
                                     runCoreGenerationPipeline(); 
                                     setSyncBadge("CLOUD ECOSYSTEM ACTIVE", "var(--accent-green)");
                                 } else {
@@ -1057,6 +1113,8 @@
             localStorage.setItem('jeeOffDaysV3', JSON.stringify(offDays));
             localStorage.setItem('jeePracticeV3', JSON.stringify(practiceData));
             localStorage.setItem('jeeExamScoreManifest', JSON.stringify(examScoreDB));
+            localStorage.setItem('jeeFastPracticeTotalsV1', JSON.stringify(fastPracticeTotals));
+            localStorage.setItem('jeePyqPracticeTotalsV1', JSON.stringify(pyqPracticeTotals));
             localCacheIsDirty = false;
         }
 
@@ -1070,7 +1128,7 @@
             if (syncTimeoutId) clearTimeout(syncTimeoutId);
             syncTimeoutId = setTimeout(() => {
                 if (userDocRef) {
-                    userDocRef.set({ internalProgress, offDays, practiceData, examScoreDB }, { merge: true })
+                    userDocRef.set({ internalProgress, offDays, practiceData, examScoreDB, fastPracticeTotals, pyqPracticeTotals }, { merge: true })
                     .then(() => setSyncBadge("CLOUD INTEGRATION COMPLETE", "var(--accent-green)"))
                     .catch(() => setSyncBadge("PIPELINE DISCONNECTED", "var(--accent-red)"));
                 }
@@ -1078,7 +1136,7 @@
         }
         
         function exportData() {
-            const a = document.createElement('a'); a.setAttribute("href", "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ internalProgress, offDays, practiceData, examScoreDB, v: 8.7 })));
+            const a = document.createElement('a'); a.setAttribute("href", "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ internalProgress, offDays, practiceData, examScoreDB, fastPracticeTotals, pyqPracticeTotals, v: 8.7 })));
             a.setAttribute("download", `JEE_Backup_${getLocalYYYYMMDD(new Date())}.json`); document.body.appendChild(a); a.click(); a.remove();
         }
         function importData(e) {
@@ -1086,7 +1144,7 @@
             r.onload = function(evt) {
                 try {
                     const p = JSON.parse(evt.target.result);
-                    internalProgress = p.internalProgress || {p:{},c:{},m:{}}; offDays = p.offDays || {global:[],p:[],c:[],m:[]}; practiceData = p.practiceData || {}; examScoreDB = p.examScoreDB || {};
+                    internalProgress = p.internalProgress || {p:{},c:{},m:{}}; offDays = p.offDays || {global:[],p:[],c:[],m:[]}; practiceData = p.practiceData || {}; examScoreDB = p.examScoreDB || {}; fastPracticeTotals = p.fastPracticeTotals || {p:0,c:0,m:0}; pyqPracticeTotals = p.pyqPracticeTotals || {p:0,c:0,m:0};
                     queueCloudSync(); runCoreGenerationPipeline(); alert("Data architecture imported successfully into current environment.");
                 } catch(err) { alert("Data structure parse exception encountered."); }
             }; r.readAsText(e.target.files[0]);
@@ -1102,8 +1160,8 @@
             
             if(v === 'progress' || v === 'home') renderProgressGraphs();
             if(v === 'schedule') { setTimeout(() => { jumpToActiveTimelineDayNode(); }, 50); }
-            if(v === 'revision') jumpToNearestActiveRevisionNode();
-            if(v === 'tests') jumpToNearestActiveTestSessionNode();
+            if(v === 'revision') { buildMasterRevisionHub(); jumpToNearestActiveRevisionNode(); }
+            if(v === 'tests') buildExamAnalyticsView();
         }
         
         function getLocalYYYYMMDD(d) { return (new Date(d.getTime() - d.getTimezoneOffset() * 60000)).toISOString().split('T')[0]; }
@@ -1124,9 +1182,34 @@
         }
 
         function setTimelineFilter(t) { currentTimelineFilter = t; document.querySelectorAll('.filter-chip').forEach(b => { if(b.id.startsWith('flt-')) b.classList.toggle('active', b.id === `flt-${t}`); }); renderVerticalTimeline(); }
-        function setTestSubjectFilter(s) { currentTestSubjectFilter = s; document.querySelectorAll('.filter-chip').forEach(b => { if(b.id.startsWith('test-flt-')) b.classList.toggle('active', b.id === `test-flt-${s}`); }); buildExamAnalyticsView(); }
+        
+        function setTestBatchFilter(b) { 
+            currentTestBatchFilter = b; 
+            document.querySelectorAll('[id^="test-batch-"]').forEach(btn => btn.classList.toggle('active', btn.id === `test-batch-${b.toLowerCase()}`)); 
+            buildExamAnalyticsView(); 
+        }
+        
+        function setTestStateFilter(s) { 
+            currentTestStateFilter = s; 
+            document.querySelectorAll('[id^="test-state-"]').forEach(btn => btn.classList.toggle('active', btn.id === `test-state-${s.toLowerCase()}`)); 
+            buildExamAnalyticsView(); 
+        }
+
+        function setRevisionSubjectFilter(s) {
+            currentRevisionSubjectFilter = s;
+            document.querySelectorAll('[id^="rev-subj-"]').forEach(btn => btn.classList.toggle('active', btn.id === `rev-subj-${s.toLowerCase()}`));
+            buildMasterRevisionHub();
+        }
+
+        function setRevisionStateFilter(s) {
+            currentRevisionStateFilter = s;
+            document.querySelectorAll('[id^="rev-state-"]').forEach(btn => btn.classList.toggle('active', btn.id === `rev-state-${s.toLowerCase()}`));
+            buildMasterRevisionHub();
+        }
+        
         function switchGraphTimeframe(m) { activeGraphTimeframe = m; graphWindowOffset = 0; document.querySelectorAll('.filter-chip').forEach(b => { if(b.id.startsWith('time-flt-')) b.classList.toggle('active', b.id === `time-flt-${m}`); }); renderProgressGraphs(); }
         function setGraphSubjectFilter(s) { graphSubjectFilter = s; document.querySelectorAll('.filter-chip').forEach(b => { if(b.id.startsWith('graph-subj-')) b.classList.toggle('active', b.id === `graph-subj-${s}`); }); renderProgressGraphs(); }
+        function setGraphMetricFilter(f) { graphMetricFilter = f; document.querySelectorAll('[id^="graph-metric-"]').forEach(btn => btn.classList.toggle('active', btn.id === `graph-metric-${f}`)); renderProgressGraphs(); }
         function navigateGraphWindow(d) { graphWindowOffset += d; renderProgressGraphs(); }
         
         function executeDefaultViewportFocusSync() {
@@ -1195,7 +1278,7 @@
             ['p', 'c', 'm'].forEach(s => {
                 syllabusDB[s].forEach((chap, idx) => {
                     const st = getChapterState(s, idx);
-                    if (st.rd) { entries.push({ chap, s, idx, time: Date.parse(st.rd), dateStr: st.rd }); }
+                    if (st.rd) { entries.push({ chap, s, idx, time: Date.parse(st.rd), dateStr: st.rd, r_done: !!st.r_done }); }
                 });
             });
             entries.sort((a, b) => a.time - b.time);
@@ -1299,7 +1382,8 @@
             if (revContainer) {
                 if (revisionEntries.length > 0 && homeRevActiveOffset >= 0 && homeRevActiveOffset < revisionEntries.length) {
                     const revItem = revisionEntries[homeRevActiveOffset]; const nowStartToday = new Date(); nowStartToday.setHours(0,0,0,0);
-                    const revisionStatusText = revItem.time < nowStartToday.getTime() ? 'OVERDUE' : 'PENDING'; const revLabelColor = revisionStatusText === 'OVERDUE' ? 'var(--accent-red)' : 'var(--accent-purple)';
+                    const revisionStatusText = revItem.r_done ? 'COMPLETED' : (revItem.time < nowStartToday.getTime() ? 'OVERDUE' : 'PENDING'); 
+                    const revLabelColor = revisionStatusText === 'COMPLETED' ? 'var(--accent-green)' : (revisionStatusText === 'OVERDUE' ? 'var(--accent-red)' : 'var(--accent-purple)');
                     const displayRevDate = new Date(revItem.dateStr).toLocaleDateString('en-IN', {day:'numeric', month:'short'});
                     revContainer.innerHTML = `
                     <div class="meta-dynamic-strip" style="border-left: 3px solid ${colorMap[revItem.s]}; cursor: pointer;" onclick="jumpToSpecificRevisionNode('${revItem.s}', '${revItem.chap.n}')">
@@ -1310,7 +1394,7 @@
             }
         }
 
-        function getChapterState(s, i) { if(!internalProgress[s][i]) internalProgress[s][i] = { w: [], rd: "", q: 0 }; return internalProgress[s][i]; }
+        function getChapterState(s, i) { if(!internalProgress[s][i]) internalProgress[s][i] = { w: [], rd: "", q: 0, pyq: 0, r_done: false, target_q: 0, rev_history: [] }; if(!internalProgress[s][i].rev_history) internalProgress[s][i].rev_history = []; if(!internalProgress[s][i].pyq) internalProgress[s][i].pyq = 0; return internalProgress[s][i]; }
         function toggleAccordionNode(e) { e.parentElement.classList.toggle('expanded'); }
 
         function buildWorkspaces() {
@@ -1323,7 +1407,19 @@
                     subLectureStats[s].w += st.w.length;
                     let cb = ""; for(let i=0; i<chap.v; i++) cb += `<div class="video-checkbox ${st.w.includes(i)?'watched':''}" onclick="event.stopPropagation(); toggleWorkspaceVideo('${s}', ${idx}, ${i})">${i + 1}</div>`;
                     
-                    h += `<div class="chapter-node" id="node-${s}-${idx}"><div class="chapter-node-summary" onclick="toggleAccordionNode(this)"><div style="flex-grow:1;"><h4 style="font-weight:700; font-size:1rem; display:flex; align-items:center; flex-wrap:wrap; gap:6px;"><span>${chap.n}</span>${st.rd ? `<span style="font-size:0.7rem; background:rgba(168,85,247,0.12); color:#c084fc; padding:2px 6px; border-radius:6px;">Rev: ${st.rd}</span>` : ''}</h4><div style="display:flex; gap:12px; font-size:0.78rem; color:var(--text-muted); margin-top:4px;"><span>Modules: ${st.w.length}/${chap.v}</span><span>Problems: <span style="color:var(--text-main); font-weight:700;">${st.q || 0}</span></span></div></div><div style="text-align:right;"><div style="font-weight:900; font-size:0.9rem; color:${pct===100?'var(--accent-green)':'var(--text-main)'}">${pct}%</div></div></div><div class="chapter-node-details" onclick="event.stopPropagation();"><div class="inline-meta-panel"><div><div style="font-size:0.65rem; color:var(--text-muted);">Goal Blueprint Date</div><div style="font-size:0.85rem; font-weight:700; margin-top:2px;">${dStr}</div></div><div><div style="font-size:0.65rem; color:var(--text-muted); margin-bottom:4px;">Bind Calendar</div><div class="revision-date-setter"><input type="date" value="${st.rd || ''}" onchange="setChapterRevisionDate('${s}', ${idx}, this.value)"></div></div><div><div style="font-size:0.65rem; color:var(--text-muted); margin-bottom:4px;">Add Numericals</div><div style="display:flex; gap:4px;"><input type="number" id="inline-q-${s}-${idx}" class="prac-input" placeholder="+"><button class="prac-btn" style="background:${colorMap[s]}; border:none; color:#020617; font-weight:900;" onclick="addInlineChapterPractice('${s}', ${idx})">Log</button></div></div></div><div class="video-grid ${compactLayoutActive ? 'is-compact' : ''}">${cb}</div></div></div>`;
+                    let revHistoryHtml = `<div style="margin-top:14px; background:rgba(2, 4, 10, 0.2); padding:10px; border-radius:10px; border:1px solid var(--border-color);"><span style="font-size:0.65rem; color:var(--text-muted); font-weight:800; text-transform:uppercase; display:block; margin-bottom:6px;">Revision Tracking Logs</span>`;
+                    if(st.rev_history && st.rev_history.length > 0) {
+                        revHistoryHtml += `<ul style="list-style:none; display:flex; flex-direction:column; gap:4px; font-size:0.75rem; color:var(--text-main);">`;
+                        st.rev_history.forEach(revLog => {
+                            revHistoryHtml += `<li style="display:flex; justify-content:space-between; padding:4px 6px; background:rgba(255,255,255,0.02); border-radius:4px;"><span>📅 Completed on: <strong>${revLog.date}</strong></span> <span class="badge-yield yield-high" style="font-size:0.65rem; padding:1px 4px;">Verified</span></li>`;
+                        });
+                        revHistoryHtml += `</ul>`;
+                    } else {
+                        revHistoryHtml += `<div style="font-size:0.72rem; color:var(--text-muted);">No revision logs mapped for this core architecture.</div>`;
+                    }
+                    revHistoryHtml += `</div>`;
+                    
+                    h += `<div class="chapter-node" id="node-${s}-${idx}"><div class="chapter-node-summary" onclick="toggleAccordionNode(this)"><div style="flex-grow:1;"><h4 style="font-weight:700; font-size:1rem; display:flex; align-items:center; flex-wrap:wrap; gap:6px;"><span>${chap.n}</span> <span style="font-size:0.75rem; color:var(--text-muted); font-weight:500;">(${(chap.l/60).toFixed(1)}h total)</span>${st.rd ? `<span style="font-size:0.7rem; background:rgba(168,85,247,0.12); color:#c084fc; padding:2px 6px; border-radius:6px;">Rev: ${st.rd}</span>` : ''}</h4><div style="display:flex; gap:12px; font-size:0.78rem; color:var(--text-muted); margin-top:4px;"><span>Modules: ${st.w.length}/${chap.v}</span><span>Problems: <span style="color:var(--text-main); font-weight:700;">${st.q || 0}/${st.target_q || 0}</span></span><span style="color:var(--accent-yellow); font-weight:700;">PYQs: ${st.pyq || 0}</span></div></div><div style="text-align:right;"><div style="font-weight:900; font-size:0.9rem; color:${pct===100?'var(--accent-green)':'var(--text-main)'}">${pct}%</div></div></div><div class="chapter-node-details" onclick="event.stopPropagation();"><div class="inline-meta-panel"><div><div style="font-size:0.65rem; color:var(--text-muted);">Goal Blueprint Date</div><div style="font-size:0.85rem; font-weight:700; margin-top:2px;">${dStr}</div></div><div><div style="font-size:0.65rem; color:var(--text-muted); margin-bottom:4px;">Bind Calendar</div><div class="revision-date-setter"><input type="date" value="${st.rd || ''}" onchange="setChapterRevisionDate('${s}', ${idx}, this.value)"></div></div><div><div style="font-size:0.65rem; color:var(--text-muted); margin-bottom:4px;">Target Problems Pool</div><div style="display:flex; gap:4px;"><input type="number" id="inline-target-q-${s}-${idx}" class="prac-input" placeholder="Goal Qs" value="${st.target_q || ''}" onchange="setChapterTargetPractice('${s}', ${idx}, this.value)"></div></div><div><div style="font-size:0.65rem; color:var(--text-muted); margin-bottom:4px;">Add Numericals</div><div style="display:flex; gap:4px;"><input type="number" id="inline-q-${s}-${idx}" class="prac-input" placeholder="+"><button class="prac-btn" style="background:${colorMap[s]}; border:none; color:#020617; font-weight:900;" onclick="addInlineChapterPractice('${s}', ${idx})">Log</button></div></div><div><div style="font-size:0.65rem; color:var(--accent-yellow); margin-bottom:4px;">Add PYQs</div><div style="display:flex; gap:4px;"><input type="number" id="inline-pyq-${s}-${idx}" class="prac-input" placeholder="+"><button class="prac-btn" style="background:var(--grad-pyq); border:none; color:#020617; font-weight:900;" onclick="addInlineChapterPYQ('${s}', ${idx})">Log</button></div></div></div><div class="video-grid ${compactLayoutActive ? 'is-compact' : ''}">${cb}</div>${revHistoryHtml}</div></div>`;
                 }); w.innerHTML = h;
             });
 
@@ -1334,17 +1430,59 @@
             updateGlobalAnalytics();
         }
 
+        function setChapterTargetPractice(s, idx, val) {
+            const v = parseInt(val, 10);
+            getChapterState(s, idx).target_q = (!isNaN(v) && v >= 0) ? v : 0;
+            queueCloudSync();
+            buildWorkspaces();
+        }
+
+        function toggleRevisionCompleteState(s, idx) {
+            const st = getChapterState(s, idx);
+            st.r_done = !st.r_done;
+            if(st.r_done) {
+                if(!st.rev_history) st.rev_history = [];
+                st.rev_history.push({ date: new Date().toLocaleDateString('en-IN') });
+            }
+            queueCloudSync();
+            buildWorkspaces();
+            buildMasterRevisionHub();
+            renderHomeDashboardMetaWidgets();
+        }
+
         function buildMasterRevisionHub() {
             const w = document.getElementById("masterRevisionListWrapper"); if(!w) return; let h = "", found = false;
             let sortedEntries = getValidRevisionSortedEntries();
             const todayStr = getLocalYYYYMMDD(new Date());
 
             sortedEntries.forEach(item => {
+                if (currentRevisionSubjectFilter !== "all" && item.s !== currentRevisionSubjectFilter) return;
+                if (currentRevisionStateFilter === "pending" && item.r_done) return;
+                if (currentRevisionStateFilter === "complete" && !item.r_done) return;
+
                 found = true;
                 const isTodayNode = (item.dateStr === todayStr);
-                h += `<div class="chapter-node" id="revision-node-${item.dateStr}" style="border-left: 4px solid ${colorMap[item.s]}; background: ${isTodayNode ? 'rgba(168,85,247,0.06)' : ''};"><div class="chapter-node-summary" style="padding: 12px 16px; flex-wrap:wrap;"><div style="flex-grow:1;"><span style="color:${colorMap[item.s]}; font-size:0.7rem; font-weight:800; margin-right:6px;">${subjMap[item.s].toUpperCase()}</span><strong style="font-size:0.95rem; color:var(--text-main);">${item.chap.n}</strong></div><div class="revision-date-setter" style="display:flex; align-items:center; gap:8px; margin-top:4px;"><input type="date" value="${item.dateStr}" onchange="setChapterRevisionDate('${item.s}', ${item.idx}, this.value)"><button class="off-toggle-btn" onclick="setChapterRevisionDate('${item.s}', ${item.idx}, '')">Clear</button></div></div></div>`;
+                const completeBtnClass = item.r_done ? "off-toggle-btn is-active-state" : "off-toggle-btn";
+                const completeBtnLabel = item.r_done ? "Complete" : "Mark Complete";
+
+                h += `
+                <div class="chapter-node" id="revision-node-${item.dateStr}" style="border-left: 4px solid ${colorMap[item.s]}; background: ${isTodayNode ? 'rgba(168,85,247,0.06)' : ''};">
+                    <div class="chapter-node-summary" style="padding: 12px 16px; flex-wrap:wrap;">
+                        <div style="flex-grow:1; display:flex; align-items:center; gap:8px;">
+                            <button class="${completeBtnClass}" style="padding: 4px 8px; font-size: 0.7 dream;" onclick="toggleRevisionCompleteState('${item.s}', ${item.idx})">${completeBtnLabel}</button>
+                            <div>
+                                <span style="color:${colorMap[item.s]}; font-size:0.7rem; font-weight:800; margin-right:6px;">${subjMap[item.s].toUpperCase()}</span>
+                                <strong style="font-size:0.95rem; color:var(--text-main); ${item.r_done ? 'text-decoration: line-through; opacity:0.6;' : ''}">${item.chap.n}</strong>
+                            </div>
+                        </div>
+                        <div class="revision-date-setter" style="display:flex; align-items:center; gap:8px; margin-top:4px;">
+                            <input type="date" value="${item.dateStr}" onchange="setChapterRevisionDate('${item.s}', ${item.idx}, this.value)">
+                            <button class="off-toggle-btn" onclick="setChapterRevisionDate('${item.s}', ${item.idx}, '')">Clear</button>
+                        </div>
+                    </div>
+                </div>`;
             });
-            w.innerHTML = found ? h : `<div style="text-align:center; color:var(--text-muted); padding:20px; font-size:0.85rem;">No revision targets configured. Map targets via the core subject workspaces.</div>`;
+            w.innerHTML = found ? h : `<div style="text-align:center; color:var(--text-muted); padding:20px; font-size:0.85rem;">No revision targets matching the active filter settings.</div>`;
         }
 
         function removeElementById(id) { const e = document.getElementById(id); if(e) e.remove(); }
@@ -1354,83 +1492,134 @@
             const el = document.getElementById(`inline-q-${s}-${i}`), v = parseInt(el.value, 10);
             if (!isNaN(v) && v > 0) {
                 getChapterState(s, i).q = (getChapterState(s, i).q || 0) + v; const t = getLocalYYYYMMDD(new Date());
-                if(!practiceData[t]) practiceData[t] = { p: 0, c: 0, m: 0 }; practiceData[t][s] = (practiceData[t][s] || 0) + v;
-                el.value = ""; queueCloudSync(); buildWorkspaces(); renderPracticeTracker(); buildConsistencyHeatmap();
+                if(!practiceData[t]) practiceData[t] = { p: 0, c: 0, m: 0, fast_p: 0, fast_c: 0, fast_m: 0, pyq_p: 0, pyq_c: 0, pyq_m: 0 }; 
+                practiceData[t][s] = (practiceData[t][s] || 0) + v;
+                el.value = ""; queueCloudSync(); buildWorkspaces(); renderPracticeTracker(); buildConsistencyHeatmap(); if(activeOpenViewId === 'progress') renderProgressGraphs();
+            }
+        }
+
+        function addInlineChapterPYQ(s, i) {
+            const el = document.getElementById(`inline-pyq-${s}-${i}`), v = parseInt(el.value, 10);
+            if (!isNaN(v) && v > 0) {
+                getChapterState(s, i).pyq = (getChapterState(s, i).pyq || 0) + v;
+                pyqPracticeTotals[s] = (pyqPracticeTotals[s] || 0) + v;
+                const t = getLocalYYYYMMDD(new Date());
+                if(!practiceData[t]) practiceData[t] = { p: 0, c: 0, m: 0, fast_p: 0, fast_c: 0, fast_m: 0, pyq_p: 0, pyq_c: 0, pyq_m: 0 };
+                practiceData[t]['pyq_' + s] = (practiceData[t]['pyq_' + s] || 0) + v;
+                el.value = ""; queueCloudSync(); buildWorkspaces(); renderPracticeTracker(); buildConsistencyHeatmap(); if(activeOpenViewId === 'progress') renderProgressGraphs();
             }
         }
         
         function addSubjectFastPractice(s) {
             const el = document.getElementById(`fast-${s}-inp`), v = parseInt(el.value, 10);
             if(!isNaN(v) && v > 0) {
-                const t = getLocalYYYYMMDD(new Date()); if(!practiceData[t]) practiceData[t] = { p: 0, c: 0, m: 0 };
-                practiceData[t][s] = (practiceData[t][s] || 0) + v;
-                el.value = ""; queueCloudSync(); renderPracticeTracker(); buildWorkspaces(); buildConsistencyHeatmap();
+                const t = getLocalYYYYMMDD(new Date()); 
+                if(!practiceData[t]) practiceData[t] = { p: 0, c: 0, m: 0, fast_p: 0, fast_c: 0, fast_m: 0, pyq_p: 0, pyq_c: 0, pyq_m: 0 };
+                practiceData[t]['fast_' + s] = (practiceData[t]['fast_' + s] || 0) + v;
+                fastPracticeTotals[s] = (fastPracticeTotals[s] || 0) + v;
+                el.value = ""; queueCloudSync(); renderPracticeTracker(); buildWorkspaces(); buildConsistencyHeatmap(); if(activeOpenViewId === 'progress') renderProgressGraphs();
             }
+        }
+
+        function addSubjectFastPYQ(s) {
+            const el = document.getElementById(`fast-${s}-pyq`), v = parseInt(el.value, 10);
+            if(!isNaN(v) && v > 0) {
+                pyqPracticeTotals[s] = (pyqPracticeTotals[s] || 0) + v;
+                const t = getLocalYYYYMMDD(new Date());
+                if(!practiceData[t]) practiceData[t] = { p: 0, c: 0, m: 0, fast_p: 0, fast_c: 0, fast_m: 0, pyq_p: 0, pyq_c: 0, pyq_m: 0 };
+                practiceData[t]['pyq_' + s] = (practiceData[t]['pyq_' + s] || 0) + v;
+                el.value = ""; queueCloudSync(); renderPracticeTracker(); buildWorkspaces(); buildConsistencyHeatmap(); if(activeOpenViewId === 'progress') renderProgressGraphs();
+            }
+        }
+
+        function toggleTestAttemptState(id) {
+            if(!examScoreDB[id]) examScoreDB[id] = {};
+            examScoreDB[id].attempted = !examScoreDB[id].attempted;
+            queueCloudSync();
+            buildExamAnalyticsView();
         }
 
         function buildExamAnalyticsView() {
-            const w = document.getElementById("testSeriesAccordionWrapper"); if(!w) return; let h = "";
-            const tbody = document.getElementById("testYieldTableBody"); let tableHTML = "";
-            let gC = 0, gI = 0, gT = 0, gCnt = 0, sC = 0, sI = 0, sM = 0;
-
+            const w = document.getElementById("testSeriesAccordionWrapper"); if(!w) return;
+            let h = "";
+            let week = 1, cnt = 0;
+            h += `<div class="timeline-sprint-divider"><div class="sprint-badge">Test Block Track ${week}</div><div class="sprint-line"></div></div>`;
+            
             examManifestDB.forEach((exam, id) => {
-                const r = examScoreDB[id] || { score_ovr: "", score_p: "", score_c: "", score_m: "", corr_ovr: "", corr_p: "", corr_c: "", corr_m: "", inc_ovr: "", inc_p: "", inc_c: "", inc_m: "", time: "" };
-                let ab = `<div style="text-align:center; color:var(--text-muted); grid-column:span 4; font-size:0.8rem;">No stats recorded.</div>`;
-                const cO = parseInt(r.corr_ovr, 10), iO = parseInt(r.inc_ovr, 10), tM = parseInt(r.time, 10), sO = parseInt(r.score_ovr, 10);
-                const pC = parseInt(r.corr_p, 10)||0, pI = parseInt(r.inc_p, 10)||0, pM = parseInt(r.score_p, 10)||0;
-                const cC = parseInt(r.corr_c, 10)||0, cI = parseInt(r.inc_c, 10)||0, cM = parseInt(r.score_c, 10)||0;
-                const mC = parseInt(r.corr_m, 10)||0, mI = parseInt(r.inc_m, 10)||0, mM = parseInt(r.score_m, 10)||0;
-
-                if (!isNaN(cO) && !isNaN(iO)) {
-                    gC += cO; gI += iO; if(!isNaN(tM)) gT += tM; gCnt++;
-                    sC += (currentTestSubjectFilter === "p" ? pC : currentTestSubjectFilter === "c" ? cC : mC);
-                    sI += (currentTestSubjectFilter === "p" ? pI : currentTestSubjectFilter === "c" ? cI : mI);
-                    sM += (currentTestSubjectFilter === "p" ? pM : currentTestSubjectFilter === "c" ? cM : mM);
-                    
-                    const accValue = ((cO / Math.max(1, cO + iO)) * 100);
-                    const acc = currentTestSubjectFilter === "all" ? accValue.toFixed(1) + "%" : (((currentTestSubjectFilter === "p" ? pC : currentTestSubjectFilter === "c" ? cC : mC) / Math.max(1, (currentTestSubjectFilter === "p" ? pC+pI : currentTestSubjectFilter === "c" ? cC+cI : mC+mI))) * 100).toFixed(0) + "%";
-                    ab = `<div style="grid-column:span 4; display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; padding:8px; background:rgba(16,185,129,0.02); border-radius:8px;"><div style="text-align:center;"><small style="color:var(--text-muted); font-weight:700; font-size:0.6rem;">ACCURACY</small><br><strong style="font-size:0.85rem;">${acc}</strong></div><div style="text-align:center;"><small style="color:var(--text-muted); font-weight:700; font-size:0.6rem;">SPEED</small><br><strong style="font-size:0.85rem;">${currentTestSubjectFilter==="all"? (tM>0? ((cO+iO)/tM*60).toFixed(1):"0"): (currentTestSubjectFilter==="p"?pM:currentTestSubjectFilter==="c"?cM:mM)}</strong></div><div style="text-align:center;"><small style="color:var(--text-muted); font-weight:700; font-size:0.6rem;">ERRORS</small><br><strong style="color:var(--accent-red); font-size:0.85rem;">${currentTestSubjectFilter==="all"?iO: (currentTestSubjectFilter==="p"?pI:currentTestSubjectFilter==="c"?cI:mI)}</strong></div></div>`;
-                    
-                    let yieldClass = accValue >= 85 ? 'yield-high' : accValue >= 65 ? 'yield-mid' : 'yield-low';
-                    let yieldText = accValue >= 85 ? 'OPTIMAL' : accValue >= 65 ? 'STABLE' : 'CRITICAL';
-
-                    tableHTML += `<tr><td><strong>${exam.n}</strong><br><small style="color:var(--text-muted);">${exam.d}</small></td><td><span style="color:var(--accent-blue);">${exam.b}</span></td><td><strong>${sO || 0} Marks</strong></td><td><small>${pM}:${cM}:${mM}</small></td><td>${accValue.toFixed(1)}%</td><td><span class="badge-yield ${yieldClass}">${yieldText}</span></td></tr>`;
-                }
+                const r = examScoreDB[id] || { score_ovr: "", score_p: "", score_c: "", score_m: "", corr_ovr: "", corr_p: "", corr_c: "", corr_m: "", inc_ovr: "", inc_p: "", inc_c: "", inc_m: "", time: "", attempted: false };
                 
-                h += `<div class="chapter-node" id="exam-card-${id}"><div class="chapter-node-summary" onclick="toggleAccordionNode(this)"><div><span style="color:var(--accent-blue); font-size:0.7rem; background:rgba(59,130,246,0.08); padding:2px 4px; border-radius:4px; margin-right:6px;">${exam.b}</span><strong style="font-size:0.9rem;">${exam.n}</strong></div><div style="font-size:0.75rem; color:var(--text-muted); white-space:nowrap;">${exam.d}</div></div><div class="chapter-node-details" onclick="event.stopPropagation();"><div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; margin-bottom:12px;">${ab}</div><div class="test-log-form">`;
-                const keys = ['score_ovr','corr_ovr','inc_ovr','time','score_p','score_c','score_m','','corr_p','corr_c','corr_m','','inc_p','inc_c','inc_m'];
-                keys.forEach(k => { if(!k) h += `<div></div>`; else h += `<div class="test-input-group"><label style="font-size:0.58rem;">${k.replace('_',' ')}</label><input type="number" class="test-field" value="${r[k]||''}" onchange="updateExamDataFieldValue(${id},'${k}',this.value)"></div>`; });
-                h += `</div></div></div>`;
-            }); 
-            w.innerHTML = h; if(tbody && tableHTML) tbody.innerHTML = tableHTML;
+                if (currentTestBatchFilter !== "all" && exam.b !== currentTestBatchFilter) return;
+                
+                const isAttempted = !!r.attempted;
+                if (currentTestStateFilter === "attempted" && !isAttempted) return;
+                if (currentTestStateFilter === "unattempted" && isAttempted) return;
 
-            if(gCnt > 0) {
-                if(currentTestSubjectFilter === "all") {
-                    document.getElementById("avg-test-acc").innerText = `${((gC / Math.max(1, gC + gI)) * 100).toFixed(1)}%`;
-                    document.getElementById("avg-test-speed").innerText = `${gT > 0 ? (((gC + gI) / gT) * 60).toFixed(1) : "0.0"} Q/hr`;
-                    document.getElementById("avg-test-neg").innerText = `${gI} errors`;
-                } else {
-                    document.getElementById("avg-test-acc").innerText = `${((sC / Math.max(1, sC + sI)) * 100).toFixed(1)}%`;
-                    document.getElementById("avg-test-speed").innerText = `${(sM / gCnt).toFixed(1)} Avg`;
-                    document.getElementById("avg-test-neg").innerText = `${sI} Errors`;
-                }
-                document.getElementById("total-tests-logged").innerText = gCnt;
-            }
+                if (++cnt > 5) { week++; cnt = 1; h += `<div class="timeline-sprint-divider"><div class="sprint-badge">Test Block Track ${week}</div><div class="sprint-line"></div></div>`; }
+
+                const btnClass = isAttempted ? "off-toggle-btn is-active-state" : "off-toggle-btn";
+                const btnLabel = isAttempted ? "Attempted" : "Mark Attempted";
+                const stateActionBtn = `<button class="${btnClass}" onclick="event.stopPropagation(); toggleTestAttemptState(${id})">${btnLabel}</button>`;
+                
+                h += `
+                <div class="timeline-block" id="exam-card-${id}">
+                    <div class="timeline-node-dot" style="background: ${isAttempted ? 'var(--accent-green)' : 'var(--progress-bg)'};"></div>
+                    <div class="timeline-stamp-header">
+                        <span>${exam.d}</span>
+                        ${stateActionBtn}
+                    </div>
+                    <div class="timeline-card-wrapper">
+                        <div class="timeline-subject-pill" style="border-left: 4px solid var(--accent-orange); opacity: ${isAttempted ? '1' : '0.65'};">
+                            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                <div style="color: var(--accent-orange); font-size: 0.75rem; font-weight: 800;">SERIES BATCH: ${exam.b.toUpperCase()}</div>
+                                <span style="font-size: 0.65rem; background: var(--progress-bg); padding: 2px 6px; border-radius: 4px; font-weight: 700;">MANIFEST ID: #${id}</span>
+                            </div>
+                            <div style="margin: 6px 0; font-weight: 800; font-size: 1.05rem;" onclick="toggleAccordionNode(this)">${exam.n}</div>
+                            
+                            <div class="chapter-node-details" style="margin-top: 10px; border-radius: 8px;">
+                                <div class="test-log-form" style="margin-top: 0;">
+                                    <div class="test-input-group"><label style="font-size:0.58rem;">Score Ovr</label><input type="number" class="test-field" value="${r.score_ovr||''}" onchange="updateExamDataFieldValue(${id},'score_ovr',this.value)"></div>
+                                    <div class="test-input-group"><label style="font-size:0.58rem;">Corr Ovr</label><input type="number" class="test-field" value="${r.corr_ovr||''}" onchange="updateExamDataFieldValue(${id},'corr_ovr',this.value)"></div>
+                                    <div class="test-input-group"><label style="font-size:0.58rem;">Inc Ovr</label><input type="number" class="test-field" value="${r.inc_ovr||''}" onchange="updateExamDataFieldValue(${id},'inc_ovr',this.value)"></div>
+                                    <div class="test-input-group"><label style="font-size:0.58rem;">Duration Mins</label><input type="number" class="test-field" value="${r.time||''}" onchange="updateExamDataFieldValue(${id},'time',this.value)"></div>
+                                    <div class="test-input-group"><label style="font-size:0.58rem;">Score Phys</label><input type="number" class="test-field" value="${r.score_p||''}" onchange="updateExamDataFieldValue(${id},'score_p',this.value)"></div>
+                                    <div class="test-input-group"><label style="font-size:0.58rem;">Score Chem</label><input type="number" class="test-field" value="${r.score_c||''}" onchange="updateExamDataFieldValue(${id},'score_c',this.value)"></div>
+                                    <div class="test-input-group"><label style="font-size:0.58rem;">Score Maths</label><input type="number" class="test-field" value="${r.score_m||''}" onchange="updateExamDataFieldValue(${id},'score_m',this.value)"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            });
+            w.innerHTML = h;
         }
 
         function updateExamDataFieldValue(id, k, v) { if(!examScoreDB[id]) examScoreDB[id] = {}; examScoreDB[id][k] = v; queueCloudSync(); buildExamAnalyticsView(); renderHomeDashboardMetaWidgets(); }
-        function toggleWorkspaceVideo(s, c, v) { const st = getChapterState(s, c), idx = st.w.indexOf(v); if(idx > -1) st.w.splice(idx, 1); else st.w.push(v); queueCloudSync(); buildWorkspaces(); renderTodaySchedule(); }
+        
+        function toggleWorkspaceVideo(s, c, v) { 
+            const expandedIds = Array.from(document.querySelectorAll('.chapter-node.expanded, .today-target-node.expanded')).map(el => el.id).filter(Boolean);
+            const st = getChapterState(s, c), idx = st.w.indexOf(v); 
+            if(idx > -1) st.w.splice(idx, 1); else st.w.push(v); 
+            queueCloudSync(); 
+            buildWorkspaces(); 
+            renderTodaySchedule(); 
+            expandedIds.forEach(id => {
+                const el = document.getElementById(id);
+                if(el) el.classList.add('expanded');
+            });
+        }
         
         function updateGlobalAnalytics() {
             let tP = syllabusDB.p.reduce((s, c) => s + c.l, 0) / 60, tC = syllabusDB.c.reduce((s, c) => s + c.l, 0) / 60, tM = syllabusDB.m.reduce((s, c) => s + c.l, 0) / 60, tA = tP + tC + tM;
             let dP = 0, dC = 0, dM = 0, pS = 0, cS = 0, mS = 0;
-            syllabusDB.p.forEach((chap, i) => { const st = getChapterState('p', i); dP += (st.w.length * (chap.l / chap.v)) / 60; pS += (st.q || 0); });
-            syllabusDB.c.forEach((chap, i) => { const st = getChapterState('c', i); dC += (st.w.length * (chap.l / chap.v)) / 60; cS += (st.q || 0); });
-            syllabusDB.m.forEach((chap, i) => { const st = getChapterState('m', i); dM += (st.w.length * (chap.l / chap.v)) / 60; mS += (st.q || 0); });
+            let totalPYQs = 0;
+            syllabusDB.p.forEach((chap, i) => { const st = getChapterState('p', i); dP += (st.w.length * (chap.l / chap.v)) / 60; pS += (st.q || 0); totalPYQs += (st.pyq || 0); });
+            syllabusDB.c.forEach((chap, i) => { const st = getChapterState('c', i); dC += (st.w.length * (chap.l / chap.v)) / 60; cS += (st.q || 0); totalPYQs += (st.pyq || 0); });
+            syllabusDB.m.forEach((chap, i) => { const st = getChapterState('m', i); dM += (st.w.length * (chap.l / chap.v)) / 60; mS += (st.q || 0); totalPYQs += (st.pyq || 0); });
             let dA = dP + dC + dM;
 
             const setEl = (id, txt) => { const e = document.getElementById(id); if(e) e.innerText = txt; };
             setEl("stat-a-hrs", `${dA.toFixed(1)} / ${tA.toFixed(0)} hrs`);
+            setEl("stat-a-pyqs", `${totalPYQs} Total PYQs Logged`);
             
             setEl("box-stat-global", `${dA.toFixed(1)} / ${tA.toFixed(0)}h`);
             setEl("box-stat-physics", `${dP.toFixed(1)} / ${tP.toFixed(0)}h`);
@@ -1439,10 +1628,22 @@
 
             const setBar = (id, p) => { const e = document.getElementById(id); if(e) e.style.width = `${Math.min(p, 100)}%`; };
             setBar("bar-a-hrs", (dA/tA)*100);
-            setEl("tot-p-q", pS); setEl("tot-c-q", cS); setEl("tot-m-q", mS); setEl("tot-a-q", pS + cS + mS);
-            setEl("p-sub-stats", `Progress Matrix: ${dP.toFixed(1)} / ${tP.toFixed(0)} Hours | Numericals Logged: ${pS}`); 
-            setEl("c-sub-stats", `Progress Matrix: ${dC.toFixed(1)} / ${tC.toFixed(0)} Hours | Numericals Logged: ${cS}`); 
-            setEl("m-sub-stats", `Progress Matrix: ${dM.toFixed(1)} / ${tM.toFixed(0)} Hours | Numericals Logged: ${mS}`);
+            setBar("bar-a-pyqs", Math.min(totalPYQs / 5, 100)); // Dynamic scaling
+            setEl("tot-p-q", pS + (fastPracticeTotals.p || 0)); 
+            setEl("tot-c-q", cS + (fastPracticeTotals.c || 0)); 
+            setEl("tot-m-q", mS + (fastPracticeTotals.m || 0)); 
+            setEl("tot-a-q", pS + cS + mS + (fastPracticeTotals.p || 0) + (fastPracticeTotals.c || 0) + (fastPracticeTotals.m || 0));
+            setEl("p-sub-stats", `Progress Matrix: ${dP.toFixed(1)} / ${tP.toFixed(0)} Hours | Numericals: ${pS} | PYQs: ${pyqPracticeTotals.p || 0}`); 
+            setEl("c-sub-stats", `Progress Matrix: ${dC.toFixed(1)} / ${tC.toFixed(0)} Hours | Numericals: ${cS} | PYQs: ${pyqPracticeTotals.c || 0}`); 
+            setEl("m-sub-stats", `Progress Matrix: ${dM.toFixed(1)} / ${tM.toFixed(0)} Hours | Numericals: ${mS} | PYQs: ${pyqPracticeTotals.m || 0}`);
+            
+            setEl("home-pyq-p-txt", `${pyqPracticeTotals.p || 0} PYQs`);
+            setEl("home-pyq-c-txt", `${pyqPracticeTotals.c || 0} PYQs`);
+            setEl("home-pyq-m-txt", `${pyqPracticeTotals.m || 0} PYQs`);
+            setBar("home-pyq-p-bar", Math.min(((pyqPracticeTotals.p || 0) / 100) * 100, 100));
+            setBar("home-pyq-c-bar", Math.min(((pyqPracticeTotals.c || 0) / 100) * 100, 100));
+            setBar("home-pyq-m-bar", Math.min(((pyqPracticeTotals.m || 0) / 100) * 100, 100));
+            
             calculateVelocityForecast(dA, tA);
         }
 
@@ -1459,11 +1660,11 @@
 
         function buildConsistencyHeatmap() {
             const g = document.getElementById("consistencyHeatmap"); if(!g) return; g.innerHTML = "";
-            let d = new Date(); d.setDate(d.getDate() - 188); 
+            let d = new Date(); d.setDate(d.getDate() - 19); 
             const startLabelEl = document.getElementById("heatmapStartLabel");
-            if(startLabelEl) startLabelEl.innerText = `Started: ${d.toLocaleDateString('en-IN', {month:'short'})}`;
-            for (let i = 0; i < 189; i++) {
-                const s = getLocalYYYYMMDD(d), log = practiceData[s] || {p:0,c:0,m:0}, tot = (log.p||0)+(log.c||0)+(log.m||0);
+            if(startLabelEl) startLabelEl.innerText = `Started: ${d.toLocaleDateString('en-IN', {month:'short', day:'numeric'})}`;
+            for (let i = 0; i < 20; i++) {
+                const s = getLocalYYYYMMDD(d), log = practiceData[s] || {p:0,c:0,m:0,fast_p:0,fast_c:0,fast_m:0,pyq_p:0,pyq_c:0,pyq_m:0}, tot = (log.p||0)+(log.c||0)+(log.m||0)+(log.fast_p||0)+(log.fast_c||0)+(log.fast_m||0)+(log.pyq_p||0)+(log.pyq_c||0)+(log.pyq_m||0);
                 let lvl = tot > 80 ? 4 : tot > 40 ? 3 : tot > 15 ? 2 : tot > 0 ? 1 : 0;
                 const cell = document.createElement('div'); cell.className = `heatmap-cell level-${lvl}`; cell.setAttribute('data-tooltip', `${d.toDateString()}: ${tot} Qs`);
                 g.appendChild(cell); d.setDate(d.getDate() + 1);
@@ -1471,12 +1672,27 @@
         }
 
         function addPractice(s) {
-            const el = document.getElementById(`${s}QInp`), v = parseInt(el.value, 10), t = getLocalYYYYMMDD(new Date()); if(!practiceData[t]) practiceData[t] = {p:0,c:0,m:0};
-            if(!isNaN(v) && v > 0) { practiceData[t][s] = (practiceData[t][s]||0) + v; el.value = ""; queueCloudSync(); renderPracticeTracker(); buildWorkspaces(); buildConsistencyHeatmap(); }
+            const el = document.getElementById(`${s}QInp`), v = parseInt(el.value, 10), t = getLocalYYYYMMDD(new Date()); if(!practiceData[t]) practiceData[t] = {p:0,c:0,m:0,fast_p:0,fast_c:0,fast_m:0,pyq_p:0,pyq_c:0,pyq_m:0};
+            if(!isNaN(v) && v > 0) { practiceData[t][s] = (practiceData[t][s]||0) + v; el.value = ""; queueCloudSync(); renderPracticeTracker(); buildWorkspaces(); buildConsistencyHeatmap(); if(activeOpenViewId === 'progress') renderProgressGraphs(); }
         }
         function renderPracticeTracker() {
-            const t = getLocalYYYYMMDD(new Date()), d = practiceData[t] || {p:0,c:0,m:0};
+            const t = getLocalYYYYMMDD(new Date()), d = practiceData[t] || {p:0,c:0,m:0,fast_p:0,fast_c:0,fast_m:0,pyq_p:0,pyq_c:0,pyq_m:0};
             ['p','c','m'].forEach(s => { const done = d[s]||0; const txtEl = document.getElementById(`${s}QTxt`); if(txtEl) txtEl.innerText = `${done}/${pracTargets[s]}`; const b = document.getElementById(`${s}QBar`); if(b) b.style.width = `${Math.min(done/pracTargets[s]*100, 100)}%`; });
+            
+            const fastP = fastPracticeTotals.p || 0;
+            const fastC = fastPracticeTotals.c || 0;
+            const fastM = fastPracticeTotals.m || 0;
+            
+            const setEl = (id, txt) => { const e = document.getElementById(id); if(e) e.innerText = txt; };
+            setEl("pFastQTxt", fastP + " Qs");
+            setEl("cFastQTxt", fastC + " Qs");
+            setEl("mFastQTxt", fastM + " Qs");
+
+            const maxFastTarget = 100; 
+            const setBar = (id, p) => { const e = document.getElementById(id); if(e) e.style.width = `${Math.min(p, 100)}%`; };
+            setBar("pFastQBar", (fastP / maxFastTarget) * 100);
+            setBar("cFastQBar", (fastC / maxFastTarget) * 100);
+            setBar("mFastQBar", (fastM / maxFastTarget) * 100);
         }
         function initCountdown() {
             const target = new Date("January 15, 2027 09:00:00").getTime();
@@ -1526,13 +1742,47 @@
             let cData = periods.map(p => {
                 let prob = {p:0,c:0,m:0}, hrs = 0;
                 if (activeGraphTimeframe === "monthly") {
-                    Object.keys(practiceData).forEach(s => { const dObj = new Date(s); if(dObj.getFullYear()===p.y && dObj.getMonth()===p.m) { const l = practiceData[s]||{p:0,c:0,m:0}; if(graphSubjectFilter==='all'||graphSubjectFilter==='p') prob.p+=l.p||0; if(graphSubjectFilter==='all'||graphSubjectFilter==='c') prob.c+=l.c||0; if(graphSubjectFilter==='all'||graphSubjectFilter==='m') prob.m+=l.m||0; } });
-                    generatedTimeline.forEach(sched => { const dObj = new Date(sched.date); if(dObj.getFullYear()===p.y && dObj.getMonth()===p.m) { ['p','c','m'].forEach(s => { if(sched[s] && (graphSubjectFilter==='all'||graphSubjectFilter=='all'||graphSubjectFilter===s)) { const cIdx = syllabusDB[s].findIndex(ch => ch.n.toLowerCase() === sched[s].toLowerCase()); if(cIdx!==-1) hrs += ((getChapterState(s,cIdx).w?.length||0) * (syllabusDB[s][cIdx].l/syllabusDB[s][cIdx].v))/60; } }); } });
+                    Object.keys(practiceData).forEach(s => { 
+                        const dObj = new Date(s); 
+                        if(dObj.getFullYear()===p.y && dObj.getMonth()===p.m) { 
+                            const l = practiceData[s]||{p:0,c:0,m:0,fast_p:0,fast_c:0,fast_m:0,pyq_p:0,pyq_c:0,pyq_m:0}; 
+                            if(graphMetricFilter === 'total' || graphMetricFilter === 'standard') {
+                                if(graphSubjectFilter==='all'||graphSubjectFilter==='p') prob.p+=l.p||0; 
+                                if(graphSubjectFilter==='all'||graphSubjectFilter==='c') prob.c+=l.c||0; 
+                                if(graphSubjectFilter==='all'||graphSubjectFilter==='m') prob.m+=l.m||0; 
+                            }
+                            if(graphMetricFilter === 'total' || graphMetricFilter === 'quick') {
+                                if(graphSubjectFilter==='all'||graphSubjectFilter==='p') prob.p+=l.fast_p||0; 
+                                if(graphSubjectFilter==='all'||graphSubjectFilter==='c') prob.c+=l.fast_c||0; 
+                                if(graphSubjectFilter==='all'||graphSubjectFilter==='m') prob.m+=l.fast_m||0; 
+                            }
+                            if(graphMetricFilter === 'total' || graphMetricFilter === 'pyqs') {
+                                if(graphSubjectFilter==='all'||graphSubjectFilter==='p') prob.p+=l.pyq_p||0; 
+                                if(graphSubjectFilter==='all'||graphSubjectFilter==='c') prob.c+=l.pyq_c||0; 
+                                if(graphSubjectFilter==='all'||graphSubjectFilter==='m') prob.m+=l.pyq_m||0; 
+                            }
+                        } 
+                    });
+                    generatedTimeline.forEach(sched => { const dObj = new Date(sched.date); if(dObj.getFullYear()===p.y && dObj.getMonth()===p.m) { ['p','c','m'].forEach(s => { if(sched[s] && (graphSubjectFilter==='all'||graphSubjectFilter===s)) { const cIdx = syllabusDB[s].findIndex(ch => ch.n.toLowerCase() === sched[s].toLowerCase()); if(cIdx!==-1) hrs += ((getChapterState(s,cIdx).w?.length||0) * (syllabusDB[s][cIdx].l/syllabusDB[s][cIdx].v))/60; } }); } });
                 } else {
                     let loop = new Date(p.start.getTime());
                     while(loop <= p.end) {
-                        const s = getLocalYYYYMMDD(loop), l = practiceData[s]||{p:0,c:0,m:0};
-                        if(graphSubjectFilter==='all'||graphSubjectFilter==='p') prob.p+=l.p||0; if(graphSubjectFilter==='all'||graphSubjectFilter==='c') prob.c+=l.c||0; if(graphSubjectFilter==='all'||graphSubjectFilter==='m') prob.m+=l.m||0;
+                        const s = getLocalYYYYMMDD(loop), l = practiceData[s]||{p:0,c:0,m:0,fast_p:0,fast_c:0,fast_m:0,pyq_p:0,pyq_c:0,pyq_m:0};
+                        if(graphMetricFilter === 'total' || graphMetricFilter === 'standard') {
+                            if(graphSubjectFilter==='all'||graphSubjectFilter==='p') prob.p+=l.p||0; 
+                            if(graphSubjectFilter==='all'||graphSubjectFilter==='c') prob.c+=l.c||0; 
+                            if(graphSubjectFilter==='all'||graphSubjectFilter==='m') prob.m+=l.m||0;
+                        }
+                        if(graphMetricFilter === 'total' || graphMetricFilter === 'quick') {
+                            if(graphSubjectFilter==='all'||graphSubjectFilter==='p') prob.p+=l.fast_p||0; 
+                            if(graphSubjectFilter==='all'||graphSubjectFilter==='c') prob.c+=l.fast_c||0; 
+                            if(graphSubjectFilter==='all'||graphSubjectFilter==='m') prob.m+=l.fast_m||0;
+                        }
+                        if(graphMetricFilter === 'total' || graphMetricFilter === 'pyqs') {
+                            if(graphSubjectFilter==='all'||graphSubjectFilter==='p') prob.p+=l.pyq_p||0; 
+                            if(graphSubjectFilter==='all'||graphSubjectFilter==='c') prob.c+=l.pyq_c||0; 
+                            if(graphSubjectFilter==='all'||graphSubjectFilter==='m') prob.m+=l.pyq_m||0;
+                        }
                         const sched = generatedTimeline.find(t => t.date === s); if(sched) { ['p','c','m'].forEach(sub => { if(sched[sub] && (graphSubjectFilter==='all'||graphSubjectFilter===sub)) { const cIdx = syllabusDB[sub].findIndex(ch => ch.n.toLowerCase() === sched[sub].toLowerCase()); if(cIdx!==-1) hrs += ((getChapterState(sub,cIdx).w?.length||0) * (syllabusDB[sub][cIdx].l/syllabusDB[sub][cIdx].v))/60; } }); }
                         loop.setDate(loop.getDate()+1);
                     }
@@ -1561,6 +1811,7 @@
                         <div class="chart-segment-layer" style="background:#b180ff; height:${mathHeight}%;"></div>
                         <div class="chart-segment-layer" style="background:#ff0844; height:${chemHeight}%;"></div>
                         <div class="chart-segment-layer" style="background:#4facfe; height:${physHeight}%;"></div>
+                        <div class="chart-value-label">${item.tot}</div>
                     </div>
                     <div class="chart-axis-label">${item.label}</div>`;
                 pCanvas.appendChild(pillar);
@@ -1569,6 +1820,7 @@
                 wPillar.innerHTML = `
                     <div class="chart-segment-stack" style="height:${Math.max(4, (item.hrs/maxW)*100)}%;">
                         <div class="chart-segment-layer" style="background:var(--grad-physics); height:100%;"></div>
+                        <div class="chart-value-label">${item.hrs.toFixed(1)}h</div>
                     </div>
                     <div class="chart-axis-label">${item.label}</div>`;
                 wCanvas.appendChild(wPillar);
