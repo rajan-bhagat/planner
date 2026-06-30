@@ -371,7 +371,7 @@
                 display: flex !important; 
             }
             .topbar { grid-row: 1; grid-column: 2; padding: 0 40px; height: 75px; }
-            .workspace { grid-row: 2; grid-column: 2; padding: 40px 40px 120px 40px; height: calc(100vh - 75px); }
+            .workspace { grid-row: 2; grid-column: 2; padding: 40px 40px 120px 40px; height: calc(100vh - 75px); height: calc(100vh - 75px); }
             .floating-menu-toggle { display: none; }
             .grid-md-4 { grid-column: span 4; }
             .grid-md-6 { grid-column: span 6; }
@@ -887,6 +887,13 @@
         const timelineStartDate = new Date("2026-06-12T00:00:00"); let generatedTimeline = []; const pracTargets = { p: 30, c: 40, m: 30 };
 
         window.onload = function() {
+            // Activate PWA Installation Engine
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('./sw.js')
+                .then(() => console.log("PWA Engine Active"))
+                .catch((err) => console.log("PWA Engine Halted", err));
+            }
+
             document.getElementById('headerDateDisplay').innerText = new Date().toDateString();
             document.body.setAttribute('data-theme', localStorage.getItem('jee_system_theme_preference') || 'amoled-dark');
             initCountdown();
