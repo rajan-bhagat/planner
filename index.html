@@ -490,7 +490,6 @@
     <aside class="sidebar" id="sidebarMenu">
         <h2>JEE <span>2027</span></h2>
         
-        <!-- Profile Section Mapped Area -->
         <div class="sidebar-profile-card">
             <div class="profile-card-title">Active Sync Profile</div>
             <div class="profile-card-email" id="sidebarProfileEmailDisplay">Guest Sandbox Session</div>
@@ -618,7 +617,7 @@
                 
                 <div class="card grid-md-4" style="border-left: 4px solid #a855f7;">
                     <div class="card-title" style="color: var(--accent-purple);">Today's Target Hub</div>
-                    <div id="todayScheduleContainer" style="max-height:360px; overflow-y:auto; padding-right:4px;"></div>
+                    <div id="todayScheduleContainer" style="max-height:480px; overflow-y:auto; padding-right:4px;"></div>
                 </div>
                 
                 <div class="card grid-md-8">
@@ -1340,7 +1339,8 @@
 
         function renderVerticalTimeline() {
             const w = document.getElementById('verticalTimelineWrapper'); if(!w) return;
-            let h = "", week = 1, cnt = 0; h += `<div class="timeline-sprint-divider"><div class="sprint-badge">Week Sprint ${week}</div><div class="sprint-line"></div></div>`;
+            let h = "";
+            let week = 1, cnt = 0; h += `<div class="timeline-sprint-divider"><div class="sprint-badge">Week Sprint ${week}</div><div class="sprint-line"></div></div>`;
             const today = getLocalYYYYMMDD(new Date());
             
             let timelineIndex = 0, o = 0;
@@ -1387,19 +1387,81 @@
             const todayData = generatedTimeline.find(d => d.date === getLocalYYYYMMDD(new Date())), w = document.getElementById("todayScheduleContainer"); if(!w) return;
             if (!todayData) { w.innerHTML = `<div style="text-align:center; color:var(--text-muted); font-size:0.85rem; padding: 20px;">Rest Matrix Enforced.</div>`; return; }
             let h = "";
+            
             ['p', 'c', 'm'].forEach(s => {
                 if(todayData[s]) {
                     const idx = syllabusDB[s].findIndex(c => c.n.toLowerCase() === todayData[s].toLowerCase());
                     if(idx !== -1) {
-                        const st = getChapterState(s, idx); let cb = ""; const pct = Math.round((st.w.length / syllabusDB[s][idx].v) * 100);
-                        for(let i=0; i<syllabusDB[s][idx].v; i++) { cb += `<div class="video-checkbox ${st.w.includes(i)?'watched':''}" onclick="event.stopPropagation(); toggleWorkspaceVideo('${s}', ${idx}, ${i})">${i + 1}</div>`; }
+                        const chap = syllabusDB[s][idx];
+                        const st = getChapterState(s, idx); 
+                        let cb = ""; 
+                        const pct = Math.round((st.w.length / chap.v) * 100);
+                        
+                        // Map checklist inputs safely
+                        for(let i=0; i<chap.v; i++) { 
+                            cb += `<div class="video-checkbox ${st.w.includes(i)?'watched':''}" onclick="event.stopPropagation(); toggleWorkspaceVideo('${s}', ${idx}, ${i})">${i + 1}</div>`; 
+                        }
+                        
+                        // Look up the actual calendar completion context via generated master timeline path
+                        let deadlineDateStr = st.rd; 
+                        if(!deadlineDateStr) {
+                            // Automatically fetch fallback blueprint date bounds from final tracked node entry
+                            const timelineNodes = generatedTimeline.filter(node => node[s]?.toLowerCase() === chap.n.toLowerCase());
+                            if(timelineNodes.length > 0) {
+                                deadlineDateStr = timelineNodes[timelineNodes.length - 1].date;
+                            }
+                        }
+
+                        // Compute Velocity Window Duration & Minutes Required Matrix
+                        let deadlineMeta = `<span style="color:var(--text-muted)">No Target Limit</span>`;
+                        let minPerDayTxt = "0 min/d";
+                        
+                        if(deadlineDateStr) {
+                            const todayStart = new Date(); todayStart.setHours(0,0,0,0);
+                            const deadlineTarget = new Date(deadlineDateStr + "T00:00:00");
+                            let diffTime = deadlineTarget.getTime() - todayStart.getTime();
+                            let remainingDays = Math.ceil(diffTime / 86400000) + 1; // inclusive window context
+                            
+                            let displayDeadlineToDate = new Date(deadlineDateStr).toLocaleDateString('en-IN', {day:'numeric', month:'short'});
+                            deadlineMeta = `<span style="color:var(--accent-purple); font-weight:700;">Rev Limit: ${displayDeadlineToDate}</span>`;
+                            
+                            let remainingLectures = chap.v - st.w.length;
+                            if(remainingLectures > 0) {
+                                let singleLectureLen = chap.l / chap.v;
+                                let remainingMinutes = remainingLectures * singleLectureLen;
+                                
+                                if(remainingDays > 0) {
+                                    minPerDayTxt = `${Math.ceil(remainingMinutes / remainingDays)} min/d`;
+                                } else if(remainingDays === 0) {
+                                    minPerDayTxt = `${Math.ceil(remainingMinutes)} min today`;
+                                } else {
+                                    minPerDayTxt = "Overdue Limit";
+                                }
+                            } else {
+                                minPerDayTxt = "Completed";
+                            }
+                        }
+
                         h += `
-                        <div class="today-target-node" id="today-node-${s}">
-                            <div class="today-target-summary" onclick="this.parentElement.classList.toggle('expanded')">
-                                <div><span style="color:${colorMap[s]}; font-size:0.68rem; font-weight:900; letter-spacing:1px; display:block;">${subjMap[s].toUpperCase()}</span><span style="font-weight:700; font-size:0.9rem;">${todayData[s]}</span></div>
-                                <div style="font-weight:800; font-size:0.8rem; color:var(--text-muted); text-align:right;"><span style="color:var(--text-main);">${st.w.length}/${syllabusDB[s][idx].v}</span> (${pct}%)</div>
+                        <div class="today-target-node" id="today-node-${s}" style="margin-bottom: 8px;">
+                            <div class="today-target-summary" onclick="this.parentElement.classList.toggle('expanded')" style="flex-direction: column; align-items: stretch; gap: 6px; padding: 10px 12px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <span style="color:${colorMap[s]}; font-size:0.65rem; font-weight:900; letter-spacing:1px; display:block; text-transform:uppercase;">${subjMap[s]} Tracker</span>
+                                        <span style="font-weight:700; font-size:0.88rem; color:var(--text-main);">${chap.n}</span>
+                                    </div>
+                                    <div style="font-weight:800; font-size:0.75rem; color:var(--text-muted); text-align:right;">
+                                        <span style="color:var(--text-main); font-size:0.85rem;">${st.w.length}/${chap.v}</span> (${pct}%)
+                                    </div>
+                                </div>
+                                <div style="display:flex; justify-content:space-between; font-size:0.72rem; font-weight:700; background:rgba(2,4,10,0.3); padding:4px 8px; border-radius:6px; border:1px solid var(--border-color);">
+                                    ${deadlineMeta}
+                                    <span style="color:${minPerDayTxt === 'Overdue Limit' ? 'var(--accent-red)' : 'var(--accent-green)'}">${minPerDayTxt}</span>
+                                </div>
                             </div>
-                            <div class="today-target-details"><div class="video-grid is-compact">${cb}</div></div>
+                            <div class="today-target-details" style="padding: 0 10px 10px 10px;">
+                                <div class="video-grid is-compact" style="margin-top: 6px;">${cb}</div>
+                            </div>
                         </div>`;
                     }
                 }
@@ -1445,6 +1507,7 @@
         function toggleAccordionNode(e) { e.parentElement.classList.toggle('expanded'); }
 
         function buildWorkspaces() {
+            const expandedIds = Array.from(document.querySelectorAll('.chapter-node.expanded')).map(el => el.id).filter(Boolean);
             let subLectureStats = { p: { t: 0, w: 0 }, c: { t: 0, w: 0 }, m: { t: 0, w: 0 } };
             ['p','c','m'].forEach(s => {
                 const w = document.getElementById(`accordion-${s}`); if(!w) return; let h = "";
@@ -1468,6 +1531,11 @@
                     
                     h += `<div class="chapter-node" id="node-${s}-${idx}"><div class="chapter-node-summary" onclick="toggleAccordionNode(this)"><div style="flex-grow:1;"><h4 style="font-weight:700; font-size:1rem; display:flex; align-items:center; flex-wrap:wrap; gap:6px;"><span>${chap.n}</span> <span style="font-size:0.75rem; color:var(--text-muted); font-weight:500;">(${(chap.l/60).toFixed(1)}h total)</span>${st.rd ? `<span style="font-size:0.7rem; background:rgba(168,85,247,0.12); color:#c084fc; padding:2px 6px; border-radius:6px;">Rev: ${st.rd}</span>` : ''}</h4><div style="display:flex; gap:12px; font-size:0.78rem; color:var(--text-muted); margin-top:4px;"><span>Modules: ${st.w.length}/${chap.v}</span><span>Problems: <span style="color:var(--text-main); font-weight:700;">${st.q || 0}/${st.target_q || 0}</span></span><span style="color:var(--accent-yellow); font-weight:700;">PYQs: ${st.pyq || 0}</span></div></div><div style="text-align:right;"><div style="font-weight:900; font-size:0.9rem; color:${pct===100?'var(--accent-green)':'var(--text-main)'}">${pct}%</div></div></div><div class="chapter-node-details" onclick="event.stopPropagation();"><div class="inline-meta-panel"><div><div style="font-size:0.65rem; color:var(--text-muted);">Goal Blueprint Date</div><div style="font-size:0.85rem; font-weight:700; margin-top:2px;">${dStr}</div></div><div><div style="font-size:0.65rem; color:var(--text-muted); margin-bottom:4px;">Bind Calendar</div><div class="revision-date-setter"><input type="date" value="${st.rd || ''}" onchange="setChapterRevisionDate('${s}', ${idx}, this.value)"></div></div><div><div style="font-size:0.65rem; color:var(--text-muted); margin-bottom:4px;">Target Problems Pool</div><div style="display:flex; gap:4px;"><input type="number" id="inline-target-q-${s}-${idx}" class="prac-input" placeholder="Goal Qs" value="${st.target_q || ''}" onchange="setChapterTargetPractice('${s}', ${idx}, this.value)"></div></div><div><div style="font-size:0.65rem; color:var(--text-muted); margin-bottom:4px;">Add Numericals</div><div style="display:flex; gap:4px;"><input type="number" id="inline-q-${s}-${idx}" class="prac-input" placeholder="+"><button class="prac-btn" style="background:${colorMap[s]}; border:none; color:#020617; font-weight:900;" onclick="addInlineChapterPractice('${s}', ${idx})">Log</button></div></div><div><div style="font-size:0.65rem; color:var(--accent-yellow); margin-bottom:4px;">Add PYQs</div><div style="display:flex; gap:4px;"><input type="number" id="inline-pyq-${s}-${idx}" class="prac-input" placeholder="+"><button class="prac-btn" style="background:var(--grad-pyq); border:none; color:#020617; font-weight:900;" onclick="addInlineChapterPYQ('${s}', ${idx})">Log</button></div></div></div><div class="video-grid ${compactLayoutActive ? 'is-compact' : ''}">${cb}</div>${revHistoryHtml}</div></div>`;
                 }); w.innerHTML = h;
+            });
+
+            expandedIds.forEach(id => {
+                const el = document.getElementById(id);
+                if(el) el.classList.add('expanded');
             });
 
             ['p','c','m'].forEach(s => {
@@ -1658,11 +1726,13 @@
         function updateGlobalAnalytics() {
             let tP = syllabusDB.p.reduce((s, c) => s + c.l, 0) / 60, tC = syllabusDB.c.reduce((s, c) => s + c.l, 0) / 60, tM = syllabusDB.m.reduce((s, c) => s + c.l, 0) / 60, tA = tP + tC + tM;
             let dP = 0, dC = 0, dM = 0, pS = 0, cS = 0, mS = 0;
-            let totalPYQs = 0;
-            syllabusDB.p.forEach((chap, i) => { const st = getChapterState('p', i); dP += (st.w.length * (chap.l / chap.v)) / 60; pS += (st.q || 0); totalPYQs += (st.pyq || 0); });
-            syllabusDB.c.forEach((chap, i) => { const st = getChapterState('c', i); dC += (st.w.length * (chap.l / chap.v)) / 60; cS += (st.q || 0); totalPYQs += (st.pyq || 0); });
-            syllabusDB.m.forEach((chap, i) => { const st = getChapterState('m', i); dM += (st.w.length * (chap.l / chap.v)) / 60; mS += (st.q || 0); totalPYQs += (st.pyq || 0); });
+            
+            syllabusDB.p.forEach((chap, i) => { const st = getChapterState('p', i); dP += (st.w.length * (chap.l / chap.v)) / 60; pS += (st.q || 0); });
+            syllabusDB.c.forEach((chap, i) => { const st = getChapterState('c', i); dC += (st.w.length * (chap.l / chap.v)) / 60; cS += (st.q || 0); });
+            syllabusDB.m.forEach((chap, i) => { const st = getChapterState('m', i); dM += (st.w.length * (chap.l / chap.v)) / 60; mS += (st.q || 0); });
             let dA = dP + dC + dM;
+
+            let totalPYQs = (pyqPracticeTotals.p || 0) + (pyqPracticeTotals.c || 0) + (pyqPracticeTotals.m || 0);
 
             const setEl = (id, txt) => { const e = document.getElementById(id); if(e) e.innerText = txt; };
             setEl("stat-a-hrs", `${dA.toFixed(1)} / ${tA.toFixed(0)} hrs`);
@@ -1810,7 +1880,21 @@
                             }
                         } 
                     });
-                    generatedTimeline.forEach(sched => { const dObj = new Date(sched.date); if(dObj.getFullYear()===p.y && dObj.getMonth()===p.m) { ['p','c','m'].forEach(s => { if(sched[s] && (graphSubjectFilter==='all'||graphSubjectFilter===s)) { const cIdx = syllabusDB[s].findIndex(ch => ch.n.toLowerCase() === sched[s].toLowerCase()); if(cIdx!==-1) hrs += ((getChapterState(s,cIdx).w?.length||0) * (syllabusDB[s][cIdx].l/syllabusDB[s][cIdx].v))/60; } }); } });
+                    
+                    generatedTimeline.forEach(sched => { 
+                        const dObj = new Date(sched.date); 
+                        if(dObj.getFullYear()===p.y && dObj.getMonth()===p.m) { 
+                            ['p','c','m'].forEach(s => { 
+                                if(sched[s] && (graphSubjectFilter=='all' || graphSubjectFilter==s)) { 
+                                    const cIdx = syllabusDB[s].findIndex(ch => ch.n.toLowerCase() === sched[s].toLowerCase()); 
+                                    if(cIdx!==-1) {
+                                        let targetProgress = internalProgress[s]?.[cIdx]?.w?.length || 0;
+                                        hrs += (targetProgress * (syllabusDB[s][cIdx].l / syllabusDB[s][cIdx].v)) / 60;
+                                    } 
+                                } 
+                            }); 
+                        } 
+                    });
                 } else {
                     let loop = new Date(p.start.getTime());
                     while(loop <= p.end) {
@@ -1830,7 +1914,18 @@
                             if(graphSubjectFilter==='all'||graphSubjectFilter==='c') prob.c+=l.pyq_c||0; 
                             if(graphSubjectFilter==='all'||graphSubjectFilter==='m') prob.m+=l.pyq_m||0;
                         }
-                        const sched = generatedTimeline.find(t => t.date === s); if(sched) { ['p','c','m'].forEach(sub => { if(sched[sub] && (graphSubjectFilter==='all'||graphSubjectFilter===sub)) { const cIdx = syllabusDB[sub].findIndex(ch => ch.n.toLowerCase() === sched[sub].toLowerCase()); if(cIdx!==-1) hrs += ((getChapterState(sub,cIdx).w?.length||0) * (syllabusDB[sub][cIdx].l/syllabusDB[sub][cIdx].v))/60; } }); }
+                        const sched = generatedTimeline.find(t => t.date === s); 
+                        if(sched) { 
+                            ['p','c','m'].forEach(sub => { 
+                                if(sched[sub] && (graphSubjectFilter==='all' || graphSubjectFilter===sub)) { 
+                                    const cIdx = syllabusDB[sub].findIndex(ch => ch.n.toLowerCase() === sched[sub].toLowerCase()); 
+                                    if(cIdx!==-1) {
+                                        let targetProgress = internalProgress[sub]?.[cIdx]?.w?.length || 0;
+                                        hrs += (targetProgress * (syllabusDB[sub][cIdx].l / syllabusDB[sub][cIdx].v)) / 60;
+                                    } 
+                                } 
+                            }); 
+                        }
                         loop.setDate(loop.getDate()+1);
                     }
                 }
