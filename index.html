@@ -504,6 +504,7 @@
             <li onclick="switchView('mathematics')">Maths Workspace</li>
             <li onclick="switchView('tests')">Test Analytics Hub</li>
             <li onclick="switchView('progress')">Progress Analysis Hub</li>
+            <li onclick="switchView('streaks')">Streak Matrix</li>
         </ul></nav>
         
         <div class="sidebar-actions-panel">
@@ -792,6 +793,24 @@
                 <div class="chart-panel-card">
                     <div style="display:flex; justify-content:space-between; align-items:center;"><h4>Module Mastery Core Duration (Hours)</h4></div>
                     <div class="chart-layout-wrapper"><div class="chart-y-axis-legend" id="yAxisWatchLegend"></div><div class="chart-canvas-container" id="watchMinutesChartCanvas"></div></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-streaks" class="view-section">
+            <div class="header-routing-group">
+                <h3 style="font-size: 1.4rem; font-weight: 800; color: var(--accent-orange);">Consistency Streaks</h3>
+            </div>
+            <div class="home-grid">
+                <div class="card grid-md-12">
+                    <div class="card-title">Problem Practice Streaks</div>
+                    <div class="big-stat-grid" id="streak-q-grid">
+                        </div>
+                </div>
+                <div class="card grid-md-12">
+                    <div class="card-title">Module Mastery Streaks (Watch Time)</div>
+                    <div class="big-stat-grid" id="streak-w-grid">
+                        </div>
                 </div>
             </div>
         </section>
@@ -1165,7 +1184,7 @@
         }
 
         function runCoreGenerationPipeline() {
-            generateDynamicTimeline(); buildWorkspaces(); renderPracticeTracker(); buildConsistencyHeatmap(); buildExamAnalyticsView(); buildMasterRevisionHub(); renderHomeDashboardMetaWidgets();
+            generateDynamicTimeline(); buildWorkspaces(); renderPracticeTracker(); buildConsistencyHeatmap(); buildExamAnalyticsView(); buildMasterRevisionHub(); renderHomeDashboardMetaWidgets(); renderStreaks();
         }
         function setSyncBadge(t, c) { const e = document.getElementById('syncStatus'); if(e) { e.innerText = t; e.style.color = c; } }
         
@@ -1200,7 +1219,7 @@
         
         function switchView(v) {
             activeOpenViewId = v;
-            document.querySelectorAll('#navMenu li').forEach((item, i) => item.classList.toggle('active', ['home', 'schedule', 'revision', 'physics', 'chemistry', 'mathematics', 'tests', 'progress'][i] === v));
+            document.querySelectorAll('#navMenu li').forEach((item, i) => item.classList.toggle('active', ['home', 'schedule', 'revision', 'physics', 'chemistry', 'mathematics', 'tests', 'progress', 'streaks'][i] === v));
             document.querySelectorAll('.view-section').forEach(s => s.classList.toggle('active', s.id === `view-${v}`));
             toggleSidebarMenu(false); 
             
@@ -1208,6 +1227,7 @@
             if(v === 'schedule') { setTimeout(() => { jumpToActiveTimelineDayNode(); }, 50); }
             if(v === 'revision') { buildMasterRevisionHub(); jumpToNearestActiveRevisionNode(); }
             if(v === 'tests') buildExamAnalyticsView();
+            if(v === 'streaks') renderStreaks();
         }
         
         function getLocalYYYYMMDD(d) { return (new Date(d.getTime() - d.getTimezoneOffset() * 60000)).toISOString().split('T')[0]; }
@@ -1607,9 +1627,9 @@
             const el = document.getElementById(`inline-q-${s}-${i}`), v = parseInt(el.value, 10);
             if (!isNaN(v) && v > 0) {
                 getChapterState(s, i).q = (getChapterState(s, i).q || 0) + v; const t = getLocalYYYYMMDD(new Date());
-                if(!practiceData[t]) practiceData[t] = { p: 0, c: 0, m: 0, fast_p: 0, fast_c: 0, fast_m: 0, pyq_p: 0, pyq_c: 0, pyq_m: 0 }; 
+                if(!practiceData[t]) practiceData[t] = { p: 0, c: 0, m: 0, fast_p: 0, fast_c: 0, fast_m: 0, pyq_p: 0, pyq_c: 0, pyq_m: 0, watch_p: 0, watch_c: 0, watch_m: 0 }; 
                 practiceData[t][s] = (practiceData[t][s] || 0) + v;
-                el.value = ""; queueCloudSync(); buildWorkspaces(); renderPracticeTracker(); buildConsistencyHeatmap(); if(activeOpenViewId === 'progress') renderProgressGraphs();
+                el.value = ""; queueCloudSync(); buildWorkspaces(); renderPracticeTracker(); buildConsistencyHeatmap(); if(activeOpenViewId === 'progress') renderProgressGraphs(); if(activeOpenViewId === 'streaks') renderStreaks();
             }
         }
 
@@ -1619,9 +1639,9 @@
                 getChapterState(s, i).pyq = (getChapterState(s, i).pyq || 0) + v;
                 pyqPracticeTotals[s] = (pyqPracticeTotals[s] || 0) + v;
                 const t = getLocalYYYYMMDD(new Date());
-                if(!practiceData[t]) practiceData[t] = { p: 0, c: 0, m: 0, fast_p: 0, fast_c: 0, fast_m: 0, pyq_p: 0, pyq_c: 0, pyq_m: 0 };
+                if(!practiceData[t]) practiceData[t] = { p: 0, c: 0, m: 0, fast_p: 0, fast_c: 0, fast_m: 0, pyq_p: 0, pyq_c: 0, pyq_m: 0, watch_p: 0, watch_c: 0, watch_m: 0 };
                 practiceData[t]['pyq_' + s] = (practiceData[t]['pyq_' + s] || 0) + v;
-                el.value = ""; queueCloudSync(); buildWorkspaces(); renderPracticeTracker(); buildConsistencyHeatmap(); if(activeOpenViewId === 'progress') renderProgressGraphs();
+                el.value = ""; queueCloudSync(); buildWorkspaces(); renderPracticeTracker(); buildConsistencyHeatmap(); if(activeOpenViewId === 'progress') renderProgressGraphs(); if(activeOpenViewId === 'streaks') renderStreaks();
             }
         }
         
@@ -1629,10 +1649,10 @@
             const el = document.getElementById(`fast-${s}-inp`), v = parseInt(el.value, 10);
             if(!isNaN(v) && v > 0) {
                 const t = getLocalYYYYMMDD(new Date()); 
-                if(!practiceData[t]) practiceData[t] = { p: 0, c: 0, m: 0, fast_p: 0, fast_c: 0, fast_m: 0, pyq_p: 0, pyq_c: 0, pyq_m: 0 };
+                if(!practiceData[t]) practiceData[t] = { p: 0, c: 0, m: 0, fast_p: 0, fast_c: 0, fast_m: 0, pyq_p: 0, pyq_c: 0, pyq_m: 0, watch_p: 0, watch_c: 0, watch_m: 0 };
                 practiceData[t]['fast_' + s] = (practiceData[t]['fast_' + s] || 0) + v;
                 fastPracticeTotals[s] = (fastPracticeTotals[s] || 0) + v;
-                el.value = ""; queueCloudSync(); renderPracticeTracker(); buildWorkspaces(); buildConsistencyHeatmap(); if(activeOpenViewId === 'progress') renderProgressGraphs();
+                el.value = ""; queueCloudSync(); renderPracticeTracker(); buildWorkspaces(); buildConsistencyHeatmap(); if(activeOpenViewId === 'progress') renderProgressGraphs(); if(activeOpenViewId === 'streaks') renderStreaks();
             }
         }
 
@@ -1641,9 +1661,9 @@
             if(!isNaN(v) && v > 0) {
                 pyqPracticeTotals[s] = (pyqPracticeTotals[s] || 0) + v;
                 const t = getLocalYYYYMMDD(new Date());
-                if(!practiceData[t]) practiceData[t] = { p: 0, c: 0, m: 0, fast_p: 0, fast_c: 0, fast_m: 0, pyq_p: 0, pyq_c: 0, pyq_m: 0 };
+                if(!practiceData[t]) practiceData[t] = { p: 0, c: 0, m: 0, fast_p: 0, fast_c: 0, fast_m: 0, pyq_p: 0, pyq_c: 0, pyq_m: 0, watch_p: 0, watch_c: 0, watch_m: 0 };
                 practiceData[t]['pyq_' + s] = (practiceData[t]['pyq_' + s] || 0) + v;
-                el.value = ""; queueCloudSync(); renderPracticeTracker(); buildWorkspaces(); buildConsistencyHeatmap(); if(activeOpenViewId === 'progress') renderProgressGraphs();
+                el.value = ""; queueCloudSync(); renderPracticeTracker(); buildWorkspaces(); buildConsistencyHeatmap(); if(activeOpenViewId === 'progress') renderProgressGraphs(); if(activeOpenViewId === 'streaks') renderStreaks();
             }
         }
 
@@ -1713,10 +1733,26 @@
         function toggleWorkspaceVideo(s, c, v) { 
             const expandedIds = Array.from(document.querySelectorAll('.chapter-node.expanded, .today-target-node.expanded')).map(el => el.id).filter(Boolean);
             const st = getChapterState(s, c), idx = st.w.indexOf(v); 
-            if(idx > -1) st.w.splice(idx, 1); else st.w.push(v); 
+            const todayStr = getLocalYYYYMMDD(new Date());
+            
+            if(!practiceData[todayStr]) practiceData[todayStr] = { p: 0, c: 0, m: 0, fast_p: 0, fast_c: 0, fast_m: 0, pyq_p: 0, pyq_c: 0, pyq_m: 0, watch_p: 0, watch_c: 0, watch_m: 0 };
+            if(practiceData[todayStr]['watch_' + s] === undefined) practiceData[todayStr]['watch_' + s] = 0;
+            
+            const durationMinutes = (syllabusDB[s][c].l / syllabusDB[s][c].v);
+
+            if(idx > -1) { 
+                st.w.splice(idx, 1); 
+                practiceData[todayStr]['watch_' + s] = Math.max(0, practiceData[todayStr]['watch_' + s] - durationMinutes);
+            } else { 
+                st.w.push(v); 
+                practiceData[todayStr]['watch_' + s] += durationMinutes;
+            } 
+            
             queueCloudSync(); 
             buildWorkspaces(); 
             renderTodaySchedule(); 
+            if(activeOpenViewId === 'streaks') renderStreaks();
+            
             expandedIds.forEach(id => {
                 const el = document.getElementById(id);
                 if(el) el.classList.add('expanded');
@@ -1789,8 +1825,8 @@
         }
 
         function addPractice(s) {
-            const el = document.getElementById(`${s}QInp`), v = parseInt(el.value, 10), t = getLocalYYYYMMDD(new Date()); if(!practiceData[t]) practiceData[t] = {p:0,c:0,m:0,fast_p:0,fast_c:0,fast_m:0,pyq_p:0,pyq_c:0,pyq_m:0};
-            if(!isNaN(v) && v > 0) { practiceData[t][s] = (practiceData[t][s]||0) + v; el.value = ""; queueCloudSync(); renderPracticeTracker(); buildWorkspaces(); buildConsistencyHeatmap(); if(activeOpenViewId === 'progress') renderProgressGraphs(); }
+            const el = document.getElementById(`${s}QInp`), v = parseInt(el.value, 10), t = getLocalYYYYMMDD(new Date()); if(!practiceData[t]) practiceData[t] = {p:0,c:0,m:0,fast_p:0,fast_c:0,fast_m:0,pyq_p:0,pyq_c:0,pyq_m:0, watch_p: 0, watch_c: 0, watch_m: 0};
+            if(!isNaN(v) && v > 0) { practiceData[t][s] = (practiceData[t][s]||0) + v; el.value = ""; queueCloudSync(); renderPracticeTracker(); buildWorkspaces(); buildConsistencyHeatmap(); if(activeOpenViewId === 'progress') renderProgressGraphs(); if(activeOpenViewId === 'streaks') renderStreaks(); }
         }
         function renderPracticeTracker() {
             const t = getLocalYYYYMMDD(new Date()), d = practiceData[t] || {p:0,c:0,m:0,fast_p:0,fast_c:0,fast_m:0,pyq_p:0,pyq_c:0,pyq_m:0};
@@ -1811,6 +1847,76 @@
             setBar("cFastQBar", (fastC / maxFastTarget) * 100);
             setBar("mFastQBar", (fastM / maxFastTarget) * 100);
         }
+
+        function getDailyStats(dateStr) {
+            let log = practiceData[dateStr] || {};
+            let pQ = (log.p||0) + (log.fast_p||0) + (log.pyq_p||0);
+            let cQ = (log.c||0) + (log.fast_c||0) + (log.pyq_c||0);
+            let mQ = (log.m||0) + (log.fast_m||0) + (log.pyq_m||0);
+            let tQ = pQ + cQ + mQ;
+
+            let pW = log.watch_p || 0;
+            let cW = log.watch_c || 0;
+            let mW = log.watch_m || 0;
+            let tW = pW + cW + mW;
+
+            return { pQ, cQ, mQ, tQ, pW, cW, mW, tW };
+        }
+
+        function calculateStreak(metric, target) {
+            let currentStreak = 0;
+            let checkDate = new Date();
+            let todayStr = getLocalYYYYMMDD(checkDate);
+            let todayStats = getDailyStats(todayStr);
+            let todayMet = todayStats[metric] >= target;
+
+            if (!todayMet) {
+                checkDate.setDate(checkDate.getDate() - 1);
+            }
+
+            while(true) {
+                let dateStr = getLocalYYYYMMDD(checkDate);
+                let stats = getDailyStats(dateStr);
+                if (stats[metric] >= target) {
+                    currentStreak++;
+                    checkDate.setDate(checkDate.getDate() - 1);
+                } else {
+                    break;
+                }
+            }
+            return { streak: currentStreak, todayVal: todayStats[metric], target: target };
+        }
+
+        function renderStreaks() {
+            const streaks = {
+                tQ: calculateStreak('tQ', 80), pQ: calculateStreak('pQ', 25), cQ: calculateStreak('cQ', 25), mQ: calculateStreak('mQ', 25),
+                tW: calculateStreak('tW', 240), pW: calculateStreak('pW', 70), cW: calculateStreak('cW', 70), mW: calculateStreak('mW', 70)
+            };
+
+            const buildCard = (title, data, color) => `
+                <div class="big-stat-box" style="border-left: 3px solid ${color};">
+                    <div class="big-stat-label">${title}</div>
+                    <div class="big-stat-num" style="color: ${color}; font-size: 1.8rem; margin: 8px 0;">${data.streak} <span style="font-size:0.8rem; color:var(--text-muted)">Days</span></div>
+                    <div style="font-size: 0.75rem; color: var(--text-main); font-weight: 700;">
+                        Today: ${Math.round(data.todayVal)} / ${data.target}
+                    </div>
+                    <div class="stat-bar-bg" style="margin-top: 6px; height: 4px;">
+                        <div class="stat-bar-fill" style="background: ${color}; width: ${Math.min(100, (data.todayVal/data.target)*100)}%;"></div>
+                    </div>
+                </div>
+            `;
+
+            const qGrid = document.getElementById('streak-q-grid');
+            if(qGrid) {
+                qGrid.innerHTML = buildCard('Global (80 Qs)', streaks.tQ, 'var(--accent-green)') + buildCard('Physics (25 Qs)', streaks.pQ, '#4facfe') + buildCard('Chemistry (25 Qs)', streaks.cQ, '#ff0844') + buildCard('Maths (25 Qs)', streaks.mQ, '#b180ff');
+            }
+
+            const wGrid = document.getElementById('streak-w-grid');
+            if(wGrid) {
+                wGrid.innerHTML = buildCard('Global (240 Mins)', streaks.tW, 'var(--accent-orange)') + buildCard('Physics (70 Mins)', streaks.pW, '#4facfe') + buildCard('Chemistry (70 Mins)', streaks.cW, '#ff0844') + buildCard('Maths (70 Mins)', streaks.mW, '#b180ff');
+            }
+        }
+
         function initCountdown() {
             const target = new Date("January 15, 2027 09:00:00").getTime();
             setInterval(() => {
