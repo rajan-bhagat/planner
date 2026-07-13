@@ -5,51 +5,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>JEE 2027 Master Planner Pro</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#070a13">
+    <meta name="theme-color" content="#ffffff">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <style>
+        /* Professional UI Theme Definitions */
         :root, [data-theme="amoled-dark"] {
-            --bg-dark: #05070f; --bg-panel: #0b1122; --bg-card: rgba(13, 22, 42, 0.65);
-            --text-main: #f8fafc; --text-muted: #94a3b8; --border-color: rgba(255, 255, 255, 0.06);
-            --progress-bg: #02040a; --input-bg: #03060d;
-            --accordion-bg: linear-gradient(145deg, #0e1628 0%, #080d1a 100%);
-            --panel-header: linear-gradient(135deg, rgba(16, 26, 48, 0.6) 0%, rgba(6, 10, 20, 0.4) 100%);
-            --grad-physics: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
-            --grad-chemistry: linear-gradient(135deg, #ff0844 0%, #ffb199 100%);
-            --grad-maths: linear-gradient(135deg, #b180ff 0%, #d2bbff 100%);
-            --grad-green: linear-gradient(135deg, #05f8a6 0%, #06b6d4 100%);
-            --grad-pyq: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
-            --accent-blue: #3b82f6; --accent-orange: #f97316; --accent-purple: #a855f7;
-            --accent-green: #10b981; --accent-red: #ef4444; --accent-yellow: #eab308; --glow-blue: rgba(59, 130, 246, 0.25);
-            --shadow-matrix: rgba(0,0,0,0.4); --card-hover-border: rgba(255,255,255,0.12);
-            --glass-sheen: rgba(255, 255, 255, 0.03);
-            --box-stat-bg: rgba(2, 4, 10, 0.4);
+            --bg-dark: #0f172a; 
+            --bg-panel: #1e293b; 
+            --bg-card: #1e293b;
+            --text-main: #f8fafc; 
+            --text-muted: #94a3b8; 
+            --border-color: #334155;
+            --progress-bg: #334155; 
+            --input-bg: #0f172a;
+            --accordion-bg: #1e293b;
+            --panel-header: #1e293b;
+            --grad-physics: #3b82f6;
+            --grad-chemistry: #ef4444;
+            --grad-maths: #f59e0b;
+            --grad-green: #10b981;
+            --grad-pyq: #8b5cf6;
+            --accent-blue: #3b82f6; 
+            --accent-orange: #f59e0b; 
+            --accent-purple: #8b5cf6;
+            --accent-green: #10b981; 
+            --accent-red: #ef4444; 
+            --accent-yellow: #f59e0b; 
+            --glow-blue: transparent;
+            --shadow-matrix: rgba(0,0,0,0.2); 
+            --card-hover-border: #475569;
+            --glass-sheen: transparent;
+            --box-stat-bg: #0f172a;
         }
+        
         [data-theme="cyber-light"] {
-            --bg-dark: #f1f5f9; --bg-panel: #ffffff; --bg-card: rgba(255, 255, 255, 0.9);
-            --text-main: #0f172a; --text-muted: #64748b; --border-color: rgba(15, 23, 42, 0.12);
-            --progress-bg: #e2e8f0; --input-bg: #f8fafc;
-            --accordion-bg: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
-            --panel-header: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            --grad-physics: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
-            --grad-chemistry: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-            --grad-maths: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
-            --grad-green: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
-            --grad-pyq: linear-gradient(135deg, #ca8a04 0%, #a16207 100%);
-            --accent-blue: #2563eb; --accent-orange: #ea580c; --accent-purple: #9333ea;
-            --accent-green: #16a34a; --accent-red: #dc2626; --accent-yellow: #ca8a04; --glow-blue: rgba(37, 99, 235, 0.15);
-            --shadow-matrix: rgba(148, 163, 184, 0.15); --card-hover-border: rgba(37, 99, 235, 0.4);
-            --glass-sheen: rgba(15, 23, 42, 0.04);
+            --bg-dark: #f8fafc; 
+            --bg-panel: #ffffff; 
+            --bg-card: #ffffff;
+            --text-main: #0f172a; 
+            --text-muted: #64748b; 
+            --border-color: #e2e8f0;
+            --progress-bg: #f1f5f9; 
+            --input-bg: #ffffff;
+            --accordion-bg: #ffffff;
+            --panel-header: #ffffff;
+            --grad-physics: #2563eb;
+            --grad-chemistry: #dc2626;
+            --grad-maths: #d97706;
+            --grad-green: #16a34a;
+            --grad-pyq: #7c3aed;
+            --accent-blue: #2563eb; 
+            --accent-orange: #ea580c; 
+            --accent-purple: #9333ea;
+            --accent-green: #16a34a; 
+            --accent-red: #dc2626; 
+            --accent-yellow: #ca8a04; 
+            --glow-blue: transparent;
+            --shadow-matrix: rgba(0, 0, 0, 0.04); 
+            --card-hover-border: #cbd5e1;
+            --glass-sheen: transparent;
             --box-stat-bg: #f8fafc;
         }
+        
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, sans-serif; }
         
         body { 
             display: grid; 
-            grid-template-rows: 70px 1fr; 
+            grid-template-rows: 64px 1fr; 
             height: 100vh; 
             background-color: var(--bg-dark); 
             color: var(--text-main); 
@@ -58,52 +83,49 @@
         
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg-dark); }
-        ::-webkit-scrollbar-thumb { background: var(--progress-bg); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent-blue); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 8px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
         
         .sidebar { 
             position: fixed; 
             top: 0; 
             left: -290px; 
-            width: 280px; 
+            width: 260px; 
             height: 100vh; 
             background: var(--bg-panel); 
             border-right: 1px solid var(--border-color); 
-            padding: 30px 24px; 
+            padding: 24px 20px; 
             display: flex; 
             flex-direction: column; 
             z-index: 100; 
-            transition: left 0.25s cubic-bezier(0.16, 1, 0.3, 1); 
-            box-shadow: 15px 0 30px var(--shadow-matrix); 
+            transition: left 0.3s ease; 
+            box-shadow: 4px 0 15px var(--shadow-matrix); 
         }
         .sidebar.open { left: 0; }
-        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(2, 4, 10, 0.6); backdrop-filter: blur(4px); z-index: 99; display: none; }
+        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); z-index: 99; display: none; }
         .sidebar-overlay.open { display: block; }
-        .sidebar h2 { color: var(--text-main); margin-bottom: 20px; font-size: 1.6rem; font-weight: 800; text-align: center; }
-        .sidebar h2 span { color: #00f2fe; text-shadow: 0 0 15px rgba(0, 242, 254, 0.3); }
-        [data-theme="cyber-light"] .sidebar h2 span { text-shadow: none; color: var(--accent-blue); }
+        .sidebar h2 { color: var(--text-main); margin-bottom: 24px; font-size: 1.4rem; font-weight: 800; text-align: left; padding-left: 10px; }
+        .sidebar h2 span { color: var(--accent-blue); }
         
-        /* Profile Matrix Node */
         .sidebar-profile-card {
-            background: var(--box-stat-bg);
+            background: var(--bg-dark);
             border: 1px solid var(--border-color);
-            padding: 12px;
-            border-radius: 14px;
-            margin-bottom: 20px;
+            padding: 14px;
+            border-radius: 8px;
+            margin-bottom: 24px;
             display: flex;
             flex-direction: column;
             gap: 4px;
-            text-align: left;
         }
         .profile-card-title {
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             color: var(--text-muted);
-            font-weight: 800;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
         .profile-card-email {
-            font-size: 0.82rem;
+            font-size: 0.85rem;
             font-weight: 600;
             color: var(--text-main);
             overflow: hidden;
@@ -111,29 +133,27 @@
             white-space: nowrap;
         }
 
-        .sidebar ul { list-style: none; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; flex-grow: 1; padding-bottom: 40px; }
-        .sidebar li { padding: 14px 18px; color: var(--text-muted); cursor: pointer; border-radius: 12px; transition: all 0.2s; font-weight: 600; font-size: 0.95rem; }
-        .sidebar li:hover { background: rgba(255, 255, 255, 0.04); color: var(--text-main); transform: translateX(4px); }
-        [data-theme="cyber-light"] .sidebar li:hover { background: rgba(15, 23, 42, 0.05); }
-        .sidebar li.active { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: #fff; box-shadow: 0 8px 25px rgba(59, 130, 246, 0.25); }
+        .sidebar ul { list-style: none; display: flex; flex-direction: column; gap: 4px; overflow-y: auto; flex-grow: 1; padding-bottom: 40px; }
+        .sidebar li { padding: 12px 14px; color: var(--text-muted); cursor: pointer; border-radius: 6px; transition: all 0.2s; font-weight: 600; font-size: 0.9rem; }
+        .sidebar li:hover { background: var(--progress-bg); color: var(--text-main); }
+        .sidebar li.active { background: var(--accent-blue); color: #ffffff; font-weight: 700; }
         
         .sidebar-actions-panel {
             margin-top: auto;
-            padding-top: 20px;
+            padding-top: 16px;
             border-top: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
         .sidebar-utility-row {
             display: flex;
             gap: 8px;
             justify-content: space-between;
         }
-        .sidebar-utility-row .theme-toggle-btn {
-            flex-grow: 1;
-        }
-
+        .btn-backup { background: var(--bg-dark); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+        .btn-backup:hover { border-color: var(--text-muted); background: var(--progress-bg); }
+        
         .topbar { 
             grid-row: 1; 
             grid-column: 1 / -1; 
@@ -142,293 +162,202 @@
             display: flex; 
             align-items: center; 
             justify-content: space-between; 
-            padding: 0 20px; 
+            padding: 0 24px; 
             z-index: 10; 
             gap: 10px; 
-            height: 70px;
+            height: 64px;
         }
-        .topbar-left { display: flex; align-items: center; gap: 15px; }
         
         .floating-menu-toggle {
             position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: var(--bg-panel);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
+            bottom: 24px;
+            right: 24px;
+            background: var(--accent-blue);
+            color: #ffffff;
+            border: none;
             font-size: 1.5rem;
             cursor: pointer;
-            width: 50px;
-            height: 50px;
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 90;
-            box-shadow: 0 4px 20px var(--shadow-matrix);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
             transition: transform 0.2s;
         }
-        .floating-menu-toggle:hover {
-            transform: scale(1.05);
-            border-color: var(--accent-blue);
-        }
+        .floating-menu-toggle:hover { transform: scale(1.05); }
 
-        .topbar-actions { display: flex; align-items: center; gap: 10px; overflow-x: auto; max-width: 85%; padding: 5px 0; -webkit-overflow-scrolling: touch; }
-        .topbar-actions::-webkit-scrollbar { display: none; }
-        .btn-backup { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); color: var(--text-main); padding: 8px 14px; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
-        [data-theme="cyber-light"] .btn-backup { background: rgba(15, 23, 42, 0.03); }
-        .btn-backup:hover { border-color: var(--accent-blue); background: rgba(59, 130, 246, 0.12); }
-        .compact-toggle-wrap { display: flex; align-items: center; gap: 6px; color: var(--text-muted); font-size: 0.82rem; font-weight: 600; white-space: nowrap; }
-        .theme-toggle-btn { background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); color: var(--text-main); font-size: 1.1rem; width: 36px; height: 36px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        
         .workspace { 
             grid-row: 2; 
             grid-column: 1 / -1; 
-            padding: 20px 20px 120px 20px; 
+            padding: 24px 24px 120px 24px; 
             overflow-y: auto; 
             background-color: var(--bg-dark); 
             scroll-behavior: smooth; 
             -webkit-overflow-scrolling: touch; 
-            height: calc(100vh - 70px);
+            height: calc(100vh - 64px);
         }
-        .view-section { display: none; content-visibility: auto; }
-        .view-section.active { display: block; animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
         
-        .home-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; max-width: 1600px; margin: 0 auto; }
-        .countdown-card { grid-column: span 12; background: var(--accordion-bg); border: 1px solid var(--border-color); padding: 20px; border-radius: 20px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px; box-shadow: 0 15px 35px var(--shadow-matrix); }
-        .timer-display { display: flex; justify-content: center; gap: 8px; width: 100%; overflow-x: auto; }
-        .time-box { background: var(--progress-bg); padding: 10px 14px; border-radius: 12px; min-width: 70px; flex-grow: 1; max-width: 100px; text-align: center; border-bottom: 3px solid #00f2fe; }
-        [data-theme="cyber-light"] .time-box { border-bottom: 3px solid var(--accent-blue); }
-        .time-val { font-size: 1.5rem; font-weight: 900; color: var(--text-main); }
-        .time-label { font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; margin-top: 2px; font-weight: 700; }
+        .home-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; max-width: 1400px; margin: 0 auto; }
+        
+        .countdown-card { 
+            grid-column: span 12; 
+            background: var(--bg-panel); 
+            border: 1px solid var(--border-color); 
+            padding: 24px; 
+            border-radius: 12px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            text-align: center; 
+            gap: 16px; 
+            box-shadow: 0 4px 6px var(--shadow-matrix); 
+        }
+        .timer-display { display: flex; justify-content: center; gap: 12px; width: 100%; overflow-x: auto; }
+        .time-box { background: var(--bg-dark); padding: 12px 16px; border-radius: 8px; min-width: 80px; flex-grow: 1; max-width: 110px; text-align: center; border: 1px solid var(--border-color); }
+        .time-val { font-size: 1.8rem; font-weight: 800; color: var(--text-main); }
+        .time-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; margin-top: 4px; font-weight: 700; }
         
         .grid-md-4 { grid-column: span 12; }
         .grid-md-6 { grid-column: span 12; }
         .grid-md-8 { grid-column: span 12; }
         .grid-md-12 { grid-column: span 12; }
         
-        .card { background: var(--bg-card); backdrop-filter: blur(12px); padding: 20px; border-radius: 20px; border: 1px solid var(--border-color); box-shadow: 0 12px 30px var(--shadow-matrix); display: flex; flex-direction: column; transition: border-color 0.2s, transform 0.2s; position: relative; height: 100%; }
-        .card:hover { border-color: var(--card-hover-border); }
-        .card-title { font-size: 1.05rem; font-weight: 800; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .card { 
+            background: var(--bg-panel); 
+            padding: 20px; 
+            border-radius: 12px; 
+            border: 1px solid var(--border-color); 
+            box-shadow: 0 2px 4px var(--shadow-matrix); 
+            display: flex; 
+            flex-direction: column; 
+            position: relative; 
+            height: 100%; 
+        }
         
-        .velocity-banner { display: flex; flex-direction: column; gap: 6px; background: rgba(5, 248, 166, 0.04); border: 1px dashed rgba(5, 248, 166, 0.2); padding: 12px 16px; border-radius: 12px; margin-bottom: 16px; }
-        .velocity-metric { font-weight: 800; color: var(--accent-green); font-size: 0.95rem; }
+        .card-title { font-size: 1rem; font-weight: 700; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; gap: 10px; }
         
-        .heatmap-container { display: flex; flex-direction: column; gap: 8px; width: 100%; overflow-x: auto; }
-        .heatmap-grid { display: grid; grid-template-columns: repeat(20, minmax(12px, 1fr)); gap: 4px; background: rgba(0,0,0,0.15); padding: 10px; border-radius: 12px; border: 1px solid var(--border-color); min-width: 320px; }
-        .heatmap-cell { width: 100%; aspect-ratio: 1; background-color: var(--progress-bg); border-radius: 2px; position: relative; cursor: pointer; }
-        .heatmap-labels { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-muted); font-weight: 700; min-width: 320px; }
+        .velocity-banner { display: flex; flex-direction: column; gap: 4px; background: var(--bg-dark); border: 1px solid var(--border-color); padding: 14px; border-radius: 8px; margin-bottom: 16px; }
+        .velocity-metric { font-weight: 700; color: var(--accent-green); font-size: 0.95rem; }
         
-        .prac-row-isolated { display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; gap: 12px; }
-        .stat-labels { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px; font-weight: 700; }
-        .stat-bar-bg { background-color: var(--progress-bg); height: 8px; border-radius: 10px; overflow: hidden; position: relative; border: 1px solid var(--border-color); }
-        .stat-bar-fill { height: 100%; transition: width 0.4s ease-out; border-radius: 10px; }
-        .prac-input-group { display: flex; gap: 8px; margin-top: 8px; }
-        .prac-input { flex-grow: 1; width: 50%; background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-main); padding: 10px; text-align: center; font-weight: 800; outline: none; font-size: 0.9rem; }
-        .prac-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px 16px; border-radius: 10px; cursor: pointer; font-weight: 700; transition: all 0.2s; font-size: 0.9rem; }
-        .prac-btn:hover { background: var(--accent-blue); color: white; }
+        .heatmap-grid { display: grid; grid-template-columns: repeat(20, minmax(12px, 1fr)); gap: 4px; background: var(--bg-dark); padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); min-width: 320px; }
+        .heatmap-cell { width: 100%; aspect-ratio: 1; background-color: var(--progress-bg); border-radius: 2px; }
+        .heatmap-cell.level-1 { background-color: rgba(16, 185, 129, 0.3); }
+        .heatmap-cell.level-2 { background-color: rgba(16, 185, 129, 0.5); }
+        .heatmap-cell.level-3 { background-color: rgba(16, 185, 129, 0.75); }
+        .heatmap-cell.level-4 { background-color: rgb(16, 185, 129); }
         
-        .big-stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; }
-        .big-stat-box { background: rgba(2, 4, 10, 0.2); padding: 12px; border-radius: 14px; text-align: center; border: 1px solid var(--border-color); }
-        .big-stat-num { font-size: 1.35rem; font-weight: 900; }
-        .big-stat-label { font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; margin-top: 4px; font-weight: 700; }
+        .stat-labels { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px; font-weight: 600; }
+        .stat-bar-bg { background-color: var(--progress-bg); height: 6px; border-radius: 4px; overflow: hidden; position: relative; }
+        .stat-bar-fill { height: 100%; transition: width 0.4s ease-out; border-radius: 4px; }
         
-        .premium-box-stat-layout { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; width: 100%; }
-        .premium-time-card { background: var(--box-stat-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; justify-content: space-between; }
-        .premium-time-card-title { font-size: 0.68rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase; }
-        .premium-time-card-value { font-size: 1.1rem; font-weight: 900; margin-top: 4px; color: var(--text-main); white-space: nowrap; }
+        .prac-input-group { display: flex; gap: 8px; margin-top: 10px; }
+        .prac-input { flex-grow: 1; background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-main); padding: 10px; text-align: center; font-weight: 600; outline: none; font-size: 0.9rem; }
+        .prac-btn { background: var(--progress-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.2s; font-size: 0.9rem; }
+        .prac-btn:hover { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
         
-        .subject-dashboard-header { display: flex; flex-direction: column; gap: 16px; margin-bottom: 20px; }
-        .subject-headline-box { background: var(--panel-header); border: 1px solid var(--border-color); padding: 18px; border-radius: 20px; flex-grow: 1; }
-        .chapter-accordion-wrapper { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
+        .big-stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; width: 100%; }
+        .big-stat-box { background: var(--bg-dark); padding: 16px; border-radius: 8px; text-align: center; border: 1px solid var(--border-color); }
+        .big-stat-num { font-size: 1.5rem; font-weight: 800; }
+        .big-stat-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; margin-top: 4px; font-weight: 600; }
         
-        .chapter-node { background: var(--accordion-bg); border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden; transition: all 0.2s; scroll-margin-top: 15px; }
-        .chapter-node.expanded { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25); border-color: rgba(255, 255, 255, 0.12); }
-        .chapter-node-summary { padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; gap: 10px; }
-        .chapter-node-details { display: none; padding: 16px; background: rgba(2, 4, 10, 0.4); border-top: 1px solid var(--border-color); }
+        .premium-box-stat-layout { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 12px; width: 100%; }
+        .premium-time-card { background: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between; }
+        .premium-time-card-title { font-size: 0.7rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
+        .premium-time-card-value { font-size: 1.15rem; font-weight: 800; margin-top: 6px; color: var(--text-main); }
+        
+        .chapter-node { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; transition: all 0.2s; margin-bottom: 8px; }
+        .chapter-node-summary { padding: 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; gap: 12px; }
+        .chapter-node-details { display: none; padding: 16px; background: var(--bg-dark); border-top: 1px solid var(--border-color); }
         .chapter-node.expanded .chapter-node-details { display: block; }
         
-        .today-target-node { background: var(--glass-sheen); border: 1px solid var(--border-color); border-radius: 14px; margin-bottom: 10px; overflow: hidden; }
-        .today-target-summary { padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; gap: 10px; }
-        .today-target-details { display: none; padding: 12px; background: rgba(0,0,0,0.2); border-top: 1px solid var(--border-color); }
+        .today-target-node { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 12px; overflow: hidden; }
+        .today-target-summary { padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; gap: 10px; }
+        .today-target-details { display: none; padding: 14px; background: var(--bg-dark); border-top: 1px solid var(--border-color); }
         .today-target-node.expanded .today-target-details { display: block; }
         
-        .inline-meta-panel { display: grid; grid-template-columns: 1fr; gap: 14px; margin-bottom: 16px; background: rgba(11, 17, 32, 0.4); padding: 14px; border-radius: 14px; border: 1px solid var(--border-color); }
-        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(42px, 1fr)); gap: 8px; margin-top: 12px; background: rgba(2, 4, 10, 0.2); padding: 12px; border-radius: 14px; border: 1px solid rgba(255, 255, 255, 0.03); }
-        .video-checkbox { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 42px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 10px; cursor: pointer; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); user-select: none; }
+        .inline-meta-panel { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 16px; background: var(--bg-panel); padding: 16px; border-radius: 8px; border: 1px solid var(--border-color); }
+        
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); gap: 8px; margin-top: 12px; background: var(--bg-panel); padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); }
+        .video-checkbox { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 40px; background: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
         .video-checkbox:hover { border-color: var(--accent-blue); color: var(--text-main); }
-        .video-checkbox.watched { background: var(--grad-green); color: #020617; font-weight: 900; border-color: transparent; }
-        .video-grid.is-compact { grid-template-columns: repeat(auto-fill, minmax(36px, 1fr)); gap: 6px; padding: 0; background: transparent; border: none; }
-        .video-grid.is-compact .video-checkbox { height: 34px; border-radius: 8px; font-size: 0.75rem; }
+        .video-checkbox.watched { background: var(--accent-green); color: #ffffff; font-weight: 700; border-color: var(--accent-green); }
         
-        .dashboard-meta-widget-scroller { display: flex; flex-direction: column; gap: 10px; max-height: 320px; overflow-y: auto; }
-        .meta-dynamic-strip { background: rgba(2, 4, 10, 0.25); border: 1px solid var(--border-color); padding: 12px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; gap: 10px; scroll-margin-top: 10px; }
+        .meta-dynamic-strip { background: var(--bg-dark); border: 1px solid var(--border-color); padding: 14px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 8px; }
         
-        .header-routing-group { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
-        .btn-jump-portal { background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(37, 99, 235, 0.2) 100%); border: 1px dashed var(--accent-blue); color: var(--text-main); padding: 8px 14px; border-radius: 10px; font-size: 0.82rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
+        .header-routing-group { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+        .btn-jump-portal { background: var(--bg-panel); border: 1px solid var(--border-color); color: var(--text-main); padding: 8px 16px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap; transition: background 0.2s; }
+        .btn-jump-portal:hover { background: var(--progress-bg); }
         
-        .test-log-form { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; background: rgba(2, 4, 10, 0.3); padding: 12px; border-radius: 12px; margin-top: 12px; border: 1px solid var(--border-color); }
-        .test-input-group { display: flex; flex-direction: column; gap: 4px; }
-        .test-input-group label { font-size: 0.65rem; text-transform: uppercase; color: var(--text-muted); font-weight: 800; }
-        .test-field { background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 8px; color: var(--text-main); font-size: 0.8rem; outline: none; width: 100%; }
+        .test-log-form { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; background: var(--bg-panel); padding: 16px; border-radius: 8px; margin-top: 12px; border: 1px solid var(--border-color); }
+        .test-input-group { display: flex; flex-direction: column; gap: 6px; }
+        .test-input-group label { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
+        .test-field { background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 10px; color: var(--text-main); font-size: 0.85rem; outline: none; width: 100%; }
         
-        .test-metrics-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 16px; }
-        .metric-banner { background: rgba(11, 17, 32, 0.4); border: 1px solid var(--border-color); padding: 12px; border-radius: 12px; text-align: center; }
-        .metric-banner-val { font-size: 1.2rem; font-weight: 800; margin-top: 4px; }
-        
-        .timeline-filter-bar { display: flex; gap: 6px; margin-bottom: 16px; background: var(--bg-card); padding: 6px; border-radius: 14px; width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-        .timeline-filter-bar::-webkit-scrollbar { display: none; }
-        .filter-chip { padding: 8px 14px; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); background: transparent; border: none; border-radius: 10px; cursor: pointer; white-space: nowrap; flex-grow: 1; text-align: center; }
-        .filter-chip.active { background: var(--progress-bg); color: var(--text-main); border: 1px solid var(--border-color); }
-        [data-theme="cyber-light"] .filter-chip.active { background: #fff; color: var(--accent-blue); }
+        .timeline-filter-bar { display: flex; gap: 8px; margin-bottom: 20px; background: var(--bg-panel); padding: 8px; border-radius: 8px; width: 100%; overflow-x: auto; border: 1px solid var(--border-color); }
+        .filter-chip { padding: 8px 16px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); background: transparent; border: 1px solid transparent; border-radius: 6px; cursor: pointer; white-space: nowrap; flex-grow: 1; text-align: center; }
+        .filter-chip.active { background: var(--accent-blue); color: #ffffff; }
         
         .vertical-timeline-container { position: relative; padding-left: 20px; margin-left: 10px; border-left: 2px solid var(--border-color); }
         .timeline-sprint-divider { margin: 30px 0 20px -20px; display: flex; align-items: center; }
-        .sprint-badge { background: var(--accordion-bg); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 30px; font-size: 0.75rem; font-weight: 800; color: #00f2fe; text-transform: uppercase; }
-        .sprint-line { flex-grow: 1; height: 1px; background: linear-gradient(90deg, var(--border-color) 0%, transparent 100%); margin-left: 10px; }
+        .sprint-badge { background: var(--bg-dark); border: 1px solid var(--border-color); padding: 6px 14px; border-radius: 16px; font-size: 0.75rem; font-weight: 700; color: var(--text-main); text-transform: uppercase; }
+        .sprint-line { flex-grow: 1; height: 1px; background: var(--border-color); margin-left: 12px; }
+        
         .timeline-block { position: relative; margin-bottom: 24px; scroll-margin-top: 20px; }
-        .timeline-block.is-today-marker { background: rgba(5, 248, 166, 0.04); border-radius: 16px; padding: 12px; margin-left: -12px; border: 1px dashed var(--accent-green); }
-        .timeline-node-dot { position: absolute; left: -29px; top: 4px; width: 14px; height: 14px; border-radius: 50%; background: var(--progress-bg); border: 3px solid var(--bg-dark); }
-        .timeline-block.is-today-marker .timeline-node-dot { background: var(--accent-green) !important; }
-        .timeline-stamp-header { font-size: 0.88rem; font-weight: 800; color: var(--text-muted); margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .timeline-block.is-today-marker { background: var(--bg-dark); border-radius: 8px; padding: 16px; margin-left: -12px; border: 1px solid var(--accent-blue); }
+        .timeline-node-dot { position: absolute; left: -29px; top: 6px; width: 14px; height: 14px; border-radius: 50%; background: var(--border-color); border: 3px solid var(--bg-dark); }
+        .timeline-block.is-today-marker .timeline-node-dot { background: var(--accent-blue) !important; }
+        .timeline-stamp-header { font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
         
-        .timeline-card-wrapper { 
-            display: grid; 
-            grid-template-columns: 1fr; 
-            gap: 12px; 
-        }
-        .timeline-subject-pill { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between; position: relative; gap: 8px; }
-        .timeline-subject-pill.is-off { opacity: 0.3; text-decoration: line-through; }
-        .off-toggle-btn { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: var(--accent-red); padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
-        .off-toggle-btn.is-active-state { background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--accent-green); }
+        .timeline-card-wrapper { display: grid; grid-template-columns: 1fr; gap: 12px; }
+        .timeline-subject-pill { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; position: relative; gap: 8px; }
+        .timeline-subject-pill.is-off { opacity: 0.4; text-decoration: line-through; }
+        .off-toggle-btn { background: var(--bg-dark); border: 1px solid var(--border-color); color: var(--text-main); padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; }
+        .off-toggle-btn.is-active-state { background: var(--accent-blue); border-color: var(--accent-blue); color: #ffffff; }
         
-        .analytics-table-wrapper { width: 100%; overflow-x: auto; margin-top: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: rgba(2, 4, 10, 0.2); -webkit-overflow-scrolling: touch; }
-        .analytics-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.82rem; min-width: 550px; }
-        .analytics-table th { background: rgba(11, 17, 32, 0.8); padding: 10px 14px; font-weight: 700; color: var(--text-muted); border-bottom: 1px solid var(--border-color); }
-        .analytics-table td { padding: 10px 14px; border-bottom: 1px solid var(--border-color); color: var(--text-main); }
-        .badge-yield { padding: 4px 6px; border-radius: 6px; font-weight: 700; font-size: 0.72rem; display: inline-block; }
-        .badge-yield.yield-high { background: rgba(16, 185, 129, 0.15); color: #10b981; }
-        .badge-yield.yield-mid { background: rgba(249, 115, 22, 0.15); color: #f97316; }
-        .badge-yield.yield-low { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
-        
-        .chart-master-viewport { display: flex; flex-direction: column; gap: 20px; margin-top: 16px; width: 100%; }
-        .chart-panel-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 16px; display: flex; flex-direction: column; width: 100%; }
-        .chart-layout-wrapper { display: flex; width: 100%; height: 260px; margin-top: 12px; position: relative; }
-        .chart-y-axis-legend { display: flex; flex-direction: column; justify-content: space-between; width: 45px; height: 205px; font-size: 0.65rem; color: var(--text-muted); font-weight: 700; text-align: right; padding-right: 8px; }
-        .chart-canvas-container { display: flex; align-items: flex-end; justify-content: space-around; flex-grow: 1; height: 205px; background: rgba(0, 0, 0, 0.15); border-radius: 14px; border: 1px solid var(--border-color); position: relative; padding: 0 4px; }
-        .chart-grid-line-layer { position: absolute; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding-top: 10px; pointer-events: none; }
-        .chart-grid-horizontal-wire { width: 100%; height: 1px; background: rgba(255, 255, 255, 0.03); }
+        .chart-panel-card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; width: 100%; box-shadow: 0 2px 4px var(--shadow-matrix); margin-bottom: 20px; }
+        .chart-layout-wrapper { display: flex; width: 100%; height: 260px; margin-top: 16px; position: relative; }
+        .chart-y-axis-legend { display: flex; flex-direction: column; justify-content: space-between; width: 45px; height: 205px; font-size: 0.7rem; color: var(--text-muted); font-weight: 600; text-align: right; padding-right: 12px; }
+        .chart-canvas-container { display: flex; align-items: flex-end; justify-content: space-around; flex-grow: 1; height: 205px; background: var(--bg-dark); border-radius: 8px; border: 1px solid var(--border-color); position: relative; padding: 0 4px; }
+        .chart-grid-horizontal-wire { width: 100%; height: 1px; background: var(--border-color); }
         .chart-bar-pillar { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; flex-grow: 1; max-width: 55px; position: relative; z-index: 2; padding-bottom: 24px; }
-        .chart-segment-stack { width: 75%; border-radius: 4px 4px 0 0; display: flex; flex-direction: column; justify-content: flex-end; height: 0%; overflow: visible; transition: height 0.4s ease; min-height: 2px; position: relative; }
-        .chart-segment-layer { width: 100%; transition: height 0.3s; position: relative; }
-        .chart-axis-label { position: absolute; bottom: 2px; font-size: 0.65rem; color: var(--text-muted); font-weight: 700; text-align: center; width: 100%; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
-        .chart-legend-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 4px; }
-        .legend-color-blob { width: 10px; height: 10px; border-radius: 2px; }
-        .graph-nav-group { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.03); padding: 4px; border-radius: 10px; border: 1px solid var(--border-color); }
-        .graph-nav-btn { background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-main); font-size: 0.75rem; font-weight: 700; padding: 6px 10px; border-radius: 6px; cursor: pointer; }
-        .graph-nav-label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); min-width: 100px; text-align: center; }
+        .chart-segment-stack { width: 75%; border-radius: 4px 4px 0 0; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden; position: relative; }
+        .chart-axis-label { position: absolute; bottom: 4px; font-size: 0.7rem; color: var(--text-muted); font-weight: 600; text-align: center; width: 100%; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
         
-        .chart-value-label {
-            position: absolute;
-            top: -16px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.65rem;
-            font-weight: 800;
-            color: var(--text-main);
-            white-space: nowrap;
-            z-index: 5;
-            background: var(--bg-panel);
-            padding: 1px 4px;
-            border-radius: 3px;
-            border: 1px solid var(--border-color);
-        }
-
-        .widget-nav-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-main); width: 26px; height: 26px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.75rem; font-weight: bold; }
-        .title-actions-container { display: flex; align-items: center; gap: 6px; }
-        .revision-date-setter input { background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 6px 10px; border-radius: 6px; font-size: 0.8rem; outline: none; width: 100%; min-width: 120px; }
-        
-        /* Premium Multi-Device Access Control Portal */
         .auth-overlay-matrix {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(3, 5, 13, 0.96); backdrop-filter: blur(14px);
+            background: var(--bg-dark);
             z-index: 10000; display: flex; align-items: center; justify-content: center;
             transition: opacity 0.3s ease, visibility 0.3s;
         }
-        .auth-overlay-matrix.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
         .auth-card-panel {
-            background: #0b1122; border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 36px; border-radius: 24px; width: 100%; max-width: 420px;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.6); text-align: center;
+            background: var(--bg-panel); border: 1px solid var(--border-color);
+            padding: 40px; border-radius: 12px; width: 100%; max-width: 400px;
+            box-shadow: 0 10px 25px var(--shadow-matrix); text-align: center;
         }
         .auth-input-field {
-            width: 100%; background: #03060d; border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px; color: #fff; padding: 14px; margin-top: 12px;
-            outline: none; font-size: 0.95rem; font-weight: 600; transition: border-color 0.2s;
+            width: 100%; background: var(--input-bg); border: 1px solid var(--border-color);
+            border-radius: 8px; color: var(--text-main); padding: 14px; margin-top: 12px;
+            outline: none; font-size: 0.95rem; font-weight: 500; transition: border-color 0.2s;
         }
         .auth-input-field:focus { border-color: var(--accent-blue); }
         .auth-primary-btn {
-            width: 100%; background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-            color: #fff; border: none; padding: 14px; border-radius: 12px;
-            font-weight: 700; margin-top: 20px; cursor: pointer; font-size: 0.95rem;
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); transition: opacity 0.2s;
+            width: 100%; background: var(--accent-blue); color: #fff; border: none; 
+            padding: 14px; border-radius: 8px; font-weight: 600; margin-top: 24px; 
+            cursor: pointer; font-size: 1rem; transition: opacity 0.2s;
         }
-        .auth-primary-btn:hover { opacity: 0.95; }
+        .auth-primary-btn:hover { opacity: 0.9; }
         .auth-anonymous-btn {
-            width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);
-            color: var(--text-muted); padding: 12px; border-radius: 12px;
-            font-weight: 600; margin-top: 12px; cursor: pointer; font-size: 0.9rem; transition: all 0.2s;
+            width: 100%; background: var(--bg-dark); border: 1px solid var(--border-color);
+            color: var(--text-main); padding: 12px; border-radius: 8px;
+            font-weight: 600; margin-top: 12px; cursor: pointer; font-size: 0.9rem; transition: background 0.2s;
         }
-        .auth-anonymous-btn:hover { background: rgba(255, 255, 255, 0.06); color: #fff; border-color: rgba(255, 255, 255, 0.15); }
-        .auth-toggle-link { color: var(--text-muted); font-size: 0.85rem; margin-top: 18px; display: inline-block; cursor: pointer; text-decoration: underline; }
-        .auth-toggle-link:hover { color: #fff; }
-        .auth-error-msg { color: var(--accent-red); font-size: 0.8rem; font-weight: 700; margin-top: 12px; text-align: left; min-height: 18px; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Smartphone Landscape Optimization */
-        @media (orientation: landscape) and (max-height: 600px) {
-            body { 
-                grid-template-rows: 60px 1fr; 
-            }
-            .topbar { 
-                height: 60px; 
-                padding: 0 15px; 
-                display: flex !important; 
-            }
-            .sidebar {
-                display: none !important; 
-            }
-            .workspace { 
-                height: calc(100vh - 60px);
-                padding: 15px 15px 100px 15px; 
-            }
-            .countdown-card { padding: 14px; gap: 10px; flex-direction: row; justify-content: space-between; text-align: left; }
-            .timer-display { width: auto; }
-            .time-box { min-width: 55px; padding: 6px 10px; }
-            .time-val { font-size: 1.2rem; }
-            .subject-dashboard-header { flex-direction: row; gap: 12px; }
-            .chart-layout-wrapper { height: 180px; }
-            .chart-y-axis-legend, .chart-canvas-container { height: 150px; }
-            
-            .vertical-timeline-container {
-                display: flex;
-                flex-direction: column;
-                gap: 16px;
-            }
-            .timeline-card-wrapper {
-                grid-template-columns: 1fr !important;
-            }
-            .floating-menu-toggle {
-                display: none !important;
-            }
-        }
-
-        /* Tablet Responsive Mapping */
+        .auth-anonymous-btn:hover { background: var(--progress-bg); }
+        
+        /* Layout overrides for larger screens */
         @media (min-width: 600px) {
-            .home-grid { gap: 20px; }
-            .countdown-card { flex-direction: row; justify-content: space-between; text-align: left; padding: 24px; }
-            .timer-display { width: auto; }
             .grid-md-4 { grid-column: span 6; }
             .grid-md-6 { grid-column: span 6; }
             .grid-md-8 { grid-column: span 12; }
@@ -436,26 +365,14 @@
             .premium-box-stat-layout { grid-template-columns: repeat(4, 1fr); }
             .inline-meta-panel { grid-template-columns: repeat(3, 1fr); }
             .test-log-form { grid-template-columns: repeat(3, 1fr); }
-            .test-metrics-grid { grid-template-columns: repeat(4, 1fr); }
-            .subject-dashboard-header { flex-direction: row; }
-            .subject-dashboard-header .card { max-width: 280px; }
+            .countdown-card { flex-direction: row; justify-content: space-between; text-align: left; }
+            .timer-display { width: auto; }
         }
-
-        /* Desktop Layout Extensions */
         @media (min-width: 1024px) {
-            body { grid-template-columns: 280px 1fr; grid-template-rows: 75px 1fr; }
-            .sidebar { 
-                grid-row: 1 / -1; 
-                grid-column: 1; 
-                position: static; 
-                left: 0; 
-                height: 100vh; 
-                border-right: 1px solid var(--border-color); 
-                box-shadow: none; 
-                display: flex !important; 
-            }
-            .topbar { grid-row: 1; grid-column: 2; padding: 0 40px; height: 75px; }
-            .workspace { grid-row: 2; grid-column: 2; padding: 40px 40px 120px 40px; height: calc(100vh - 75px); }
+            body { grid-template-columns: 260px 1fr; grid-template-rows: 64px 1fr; }
+            .sidebar { grid-row: 1 / -1; grid-column: 1; position: static; left: 0; display: flex !important; box-shadow: none; }
+            .topbar { grid-row: 1; grid-column: 2; padding: 0 40px; }
+            .workspace { grid-row: 2; grid-column: 2; padding: 30px 40px 60px 40px; height: calc(100vh - 64px); }
             .floating-menu-toggle { display: none; }
             .grid-md-4 { grid-column: span 4; }
             .grid-md-6 { grid-column: span 6; }
@@ -464,25 +381,28 @@
             .countdown-card { grid-column: span 12; }
             .timeline-card-wrapper { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
         }
+        
+        .view-section { display: none; }
+        .view-section.active { display: block; }
     </style>
 </head>
 <body>
     <div id="masterAuthOverlayPortal" class="auth-overlay-matrix">
         <div class="auth-card-panel">
-            <h2 style="font-size: 1.7rem; font-weight: 900; margin-bottom: 6px;">JEE <span style="color: #00f2fe;">2027</span></h2>
-            <p id="authSubtitle" style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 20px;">Secure Synchronized Progress Environment</p>
+            <h2 style="font-size: 1.7rem; font-weight: 800; margin-bottom: 8px;">JEE <span style="color: var(--accent-blue);">2027</span></h2>
+            <p id="authSubtitle" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px;">Secure Synchronized Progress Environment</p>
             
             <div id="authCredentialsFormContainer">
                 <input type="email" id="authEmailInput" class="auth-input-field" placeholder="Account Email Address">
                 <input type="password" id="authPasswordInput" class="auth-input-field" placeholder="System Security Password">
             </div>
             
-            <div id="authErrorMessageDisplay" class="auth-error-msg"></div>
+            <div id="authErrorMessageDisplay" style="color: var(--accent-red); font-size: 0.85rem; font-weight: 600; margin-top: 12px; text-align: left; min-height: 18px;"></div>
             
             <button id="authPrimaryActionButton" class="auth-primary-btn" onclick="executeAuthenticationPipeline()">Authenticate Session</button>
             <button id="authAnonymousActionButton" class="auth-anonymous-btn" onclick="executeAnonymousAuthenticationPipeline()">Access via Anonymous Guest Mode</button>
             
-            <span id="authToggleActionStateLink" class="auth-toggle-link" onclick="toggleAuthInterfaceStateMode()">Create a new cloud sync profile</span>
+            <span id="authToggleActionStateLink" style="color: var(--accent-blue); font-size: 0.85rem; margin-top: 20px; display: inline-block; cursor: pointer; font-weight: 600;" onclick="toggleAuthInterfaceStateMode()">Create a new cloud sync profile</span>
         </div>
     </div>
 
@@ -509,15 +429,15 @@
         
         <div class="sidebar-actions-panel">
             <div class="sidebar-utility-row">
-                <button class="theme-toggle-btn" onclick="toggleSystemThemeMode()">🌓</button>
-                <button class="theme-toggle-btn" onclick="toggleFullscreenView()">🖥️</button>
+                <button class="btn-backup" style="flex-grow: 1;" onclick="toggleSystemThemeMode()">Theme Toggle</button>
+                <button class="btn-backup" style="flex-grow: 1;" onclick="toggleFullscreenView()">Expand</button>
             </div>
             <div class="sidebar-utility-row">
-                <button class="btn-backup" style="flex-grow: 1; text-align: center;" onclick="exportData()">Export</button>
-                <button class="btn-backup" style="flex-grow: 1; text-align: center;" onclick="document.getElementById('hiddenFileInput').click()">Import</button>
+                <button class="btn-backup" style="flex-grow: 1;" onclick="exportData()">Export</button>
+                <button class="btn-backup" style="flex-grow: 1;" onclick="document.getElementById('hiddenFileInput').click()">Import</button>
             </div>
             <div class="sidebar-utility-row" style="margin-top: 4px;">
-                <button class="btn-backup" style="flex-grow: 1; text-align: center; border-color: rgba(239, 68, 68, 0.3); color: var(--accent-red);" onclick="executeGlobalSignOutPipeline()">Log Out</button>
+                <button class="btn-backup" style="flex-grow: 1; border-color: var(--border-color); color: var(--accent-red);" onclick="executeGlobalSignOutPipeline()">Log Out</button>
             </div>
         </div>
     </aside>
@@ -525,13 +445,13 @@
     <button class="floating-menu-toggle" onclick="toggleSidebarMenu(true)">☰</button>
 
     <header class="topbar">
-        <div class="topbar-left">
-            <div style="font-weight: 700; color: var(--text-muted); font-size: 0.85rem; white-space: nowrap;">STATUS: <span id="syncStatus" style="color: var(--accent-orange);">INITIALIZING MATRIX...</span></div>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <div style="font-weight: 700; color: var(--text-muted); font-size: 0.85rem; white-space: nowrap;">STATUS: <span id="syncStatus" style="color: var(--accent-orange);">INITIALIZING SYSTEM...</span></div>
         </div>
-        <div class="topbar-actions">
-            <div class="compact-toggle-wrap"><input type="checkbox" id="compactModeCheck" onchange="toggleCompactLayout(this)"><label for="compactModeCheck">Compact</label></div>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <div style="display: flex; align-items: center; gap: 6px; color: var(--text-muted); font-size: 0.85rem; font-weight: 600;"><input type="checkbox" id="compactModeCheck" onchange="toggleCompactLayout(this)"><label for="compactModeCheck">Compact Mode</label></div>
             <input type="file" id="hiddenFileInput" style="display:none" accept=".json" onchange="importData(event)">
-            <div id="headerDateDisplay" style="color: var(--text-main); font-weight: 700; font-size: 0.85rem; white-space: nowrap; margin-left: 5px;"></div>
+            <div id="headerDateDisplay" style="color: var(--text-main); font-weight: 600; font-size: 0.85rem;"></div>
         </div>
     </header>
 
@@ -540,8 +460,8 @@
             <div class="home-grid">
                 <div class="countdown-card">
                     <div>
-                        <div style="color: #00f2fe; font-size: 0.75rem; font-weight: 800; letter-spacing: 3px;">TARGET MATRIX DEPLOYED</div>
-                        <h3 style="font-weight: 800; font-size: 1.3rem; margin-top: 2px;">JEE MAINS & ADVANCED 2027</h3>
+                        <div style="color: var(--accent-blue); font-size: 0.8rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;">Target Assessment</div>
+                        <h3 style="font-weight: 800; font-size: 1.4rem; margin-top: 6px;">JEE MAINS & ADVANCED 2027</h3>
                     </div>
                     <div class="timer-display">
                         <div class="time-box"><div class="time-val" id="t-days">00</div><div class="time-label">Days</div></div>
@@ -554,13 +474,12 @@
                 <div class="card grid-md-6" style="border-top: 4px solid var(--accent-orange);">
                     <div class="card-title" style="color: var(--accent-orange);">
                         <span>Examination Pipeline</span>
-                        <div class="title-actions-container">
-                            <button class="widget-nav-btn" onclick="offsetHomeTestWidgetSelection(-1)">◀</button>
-                            <button class="widget-nav-btn" onclick="offsetHomeTestWidgetSelection(1)">▶</button>
-                            <span style="font-size: 0.65rem; opacity: 0.7; border: 1px solid var(--accent-orange); padding: 2px 4px; border-radius: 4px;">AITS PROFILE</span>
+                        <div style="display: flex; gap: 6px;">
+                            <button class="prac-btn" style="padding: 4px 8px; font-size: 0.75rem;" onclick="offsetHomeTestWidgetSelection(-1)">◀</button>
+                            <button class="prac-btn" style="padding: 4px 8px; font-size: 0.75rem;" onclick="offsetHomeTestWidgetSelection(1)">▶</button>
                         </div>
                     </div>
-                    <div id="homeNextTestContainer" class="dashboard-meta-widget-scroller">
+                    <div id="homeNextTestContainer" style="display: flex; flex-direction: column; gap: 10px;">
                         <div class="meta-dynamic-strip"><span style="color: var(--text-muted);">Scanning operational logs...</span></div>
                     </div>
                 </div>
@@ -568,109 +487,116 @@
                 <div class="card grid-md-6" style="border-top: 4px solid var(--accent-purple);">
                     <div class="card-title" style="color: var(--accent-purple);">
                         <span>Revision Targets</span>
-                        <div class="title-actions-container">
-                            <button class="widget-nav-btn" onclick="offsetHomeRevisionWidgetSelection(-1)">◀</button>
-                            <button class="widget-nav-btn" onclick="offsetHomeRevisionWidgetSelection(1)">▶</button>
-                            <span style="font-size: 0.65rem; opacity: 0.7; border: 1px solid var(--accent-purple); padding: 2px 4px; border-radius: 4px;">CALENDAR BOUND</span>
+                        <div style="display: flex; gap: 6px;">
+                            <button class="prac-btn" style="padding: 4px 8px; font-size: 0.75rem;" onclick="offsetHomeRevisionWidgetSelection(-1)">◀</button>
+                            <button class="prac-btn" style="padding: 4px 8px; font-size: 0.75rem;" onclick="offsetHomeRevisionWidgetSelection(1)">▶</button>
                         </div>
                     </div>
-                    <div id="homeNextRevisionContainer" class="dashboard-meta-widget-scroller">
+                    <div id="homeNextRevisionContainer" style="display: flex; flex-direction: column; gap: 10px;">
                         <div class="meta-dynamic-strip"><span style="color: var(--text-muted);">Calculating timeline coordinates...</span></div>
                     </div>
                 </div>
 
-                <div class="card grid-md-4" style="border-top: 4px solid #4facfe;">
-                    <div class="card-title" style="color: var(--accent-blue);">Daily Practice | Physics</div>
-                    <div class="prac-row-isolated">
+                <div class="card grid-md-4" style="border-top: 4px solid var(--grad-physics);">
+                    <div class="card-title" style="color: var(--grad-physics);">Daily Practice | Physics</div>
+                    <div style="display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; gap: 12px;">
                         <div>
-                            <div class="stat-labels"><span>Blueprint Target: 30 Qs</span><span id="pQTxt" style="color: var(--accent-blue);">0/30</span></div>
+                            <div class="stat-labels"><span>Target: 30 Qs</span><span id="pQTxt" style="color: var(--grad-physics);">0/30</span></div>
                             <div class="stat-bar-bg"><div id="pQBar" class="stat-bar-fill" style="background: var(--grad-physics); width: 0%;"></div></div>
                         </div>
                     </div>
                 </div>
-                <div class="card grid-md-4" style="border-top: 4px solid #ff0844;">
-                    <div class="card-title" style="color: #ff0844;">Daily Practice | Chemistry</div>
-                    <div class="prac-row-isolated">
+                
+                <div class="card grid-md-4" style="border-top: 4px solid var(--grad-chemistry);">
+                    <div class="card-title" style="color: var(--grad-chemistry);">Daily Practice | Chemistry</div>
+                    <div style="display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; gap: 12px;">
                         <div>
-                            <div class="stat-labels"><span>Blueprint Target: 40 Qs</span><span id="cQTxt" style="color: #ff0844;">0/40</span></div>
+                            <div class="stat-labels"><span>Target: 40 Qs</span><span id="cQTxt" style="color: var(--grad-chemistry);">0/40</span></div>
                             <div class="stat-bar-bg"><div id="cQBar" class="stat-bar-fill" style="background: var(--grad-chemistry); width: 0%;"></div></div>
                         </div>
                     </div>
                 </div>
-                <div class="card grid-md-4" style="border-top: 4px solid #b180ff;">
-                    <div class="card-title" style="color: #b180ff;">Daily Practice | Mathematics</div>
-                    <div class="prac-row-isolated">
+                
+                <div class="card grid-md-4" style="border-top: 4px solid var(--grad-maths);">
+                    <div class="card-title" style="color: var(--grad-maths);">Daily Practice | Mathematics</div>
+                    <div style="display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; gap: 12px;">
                         <div>
-                            <div class="stat-labels"><span>Blueprint Target: 30 Qs</span><span id="mQTxt" style="color: #b180ff;">0/30</span></div>
+                            <div class="stat-labels"><span>Target: 30 Qs</span><span id="mQTxt" style="color: var(--grad-maths);">0/30</span></div>
                             <div class="stat-bar-bg"><div id="mQBar" class="stat-bar-fill" style="background: var(--grad-maths); width: 0%;"></div></div>
                         </div>
                     </div>
                 </div>
 
-                <div class="card grid-md-12" style="border-top: 4px solid #eab308; margin-top: -8px;">
+                <div class="card grid-md-12" style="border-top: 4px solid var(--accent-yellow);">
                     <div class="card-title" style="color: var(--accent-yellow);">Quick Logs Problem Practice Hub</div>
-                    <div style="display: flex; flex-direction: column; gap: 14px;">
-                        <div class="stat-row"><div class="stat-labels"><span style="color: #4facfe;">Quick Logs | Physics</span><span id="pFastQTxt">0 Qs</span></div><div class="stat-bar-bg"><div id="pFastQBar" class="stat-bar-fill" style="background: var(--grad-physics); width: 0%;"></div></div></div>
-                        <div class="stat-row"><div class="stat-labels"><span style="color: #ffb199;">Quick Logs | Chemistry</span><span id="cFastQTxt">0 Qs</span></div><div class="stat-bar-bg"><div id="cFastQBar" class="stat-bar-fill" style="background: var(--grad-chemistry); width: 0%;"></div></div></div>
-                        <div class="stat-row"><div class="stat-labels"><span style="color: #d2bbff;">Quick Logs | Mathematics</span><span id="mFastQTxt">0 Qs</span></div><div class="stat-bar-bg"><div id="mFastQBar" class="stat-bar-fill" style="background: var(--grad-maths); width: 0%;"></div></div></div>
+                    <div style="display: flex; flex-direction: column; gap: 16px;">
+                        <div><div class="stat-labels"><span style="color: var(--grad-physics);">Physics</span><span id="pFastQTxt">0 Qs</span></div><div class="stat-bar-bg"><div id="pFastQBar" class="stat-bar-fill" style="background: var(--grad-physics); width: 0%;"></div></div></div>
+                        <div><div class="stat-labels"><span style="color: var(--grad-chemistry);">Chemistry</span><span id="cFastQTxt">0 Qs</span></div><div class="stat-bar-bg"><div id="cFastQBar" class="stat-bar-fill" style="background: var(--grad-chemistry); width: 0%;"></div></div></div>
+                        <div><div class="stat-labels"><span style="color: var(--grad-maths);">Mathematics</span><span id="mFastQTxt">0 Qs</span></div><div class="stat-bar-bg"><div id="mFastQBar" class="stat-bar-fill" style="background: var(--grad-maths); width: 0%;"></div></div></div>
                     </div>
                 </div>
                 
-                <div class="card grid-md-4" style="border-left: 4px solid #a855f7;">
+                <div class="card grid-md-4" style="border-left: 4px solid var(--accent-purple);">
                     <div class="card-title" style="color: var(--accent-purple);">Today's Target Hub</div>
-                    <div id="todayScheduleContainer" style="max-height:480px; overflow-y:auto; padding-right:4px;"></div>
+                    <div id="todayScheduleContainer" style="max-height:480px; overflow-y:auto; padding-right:8px;"></div>
                 </div>
                 
                 <div class="card grid-md-8">
-                    <div class="card-title" style="color: #05f8a6;">Syllabus Velocity Matrix Engine</div>
-                    <div class="velocity-banner"><span>Syllabus Finish Projection Milestone:</span><span class="velocity-metric" id="velocityPredictionTxt">Calculating Velocity Matrix...</span></div>
+                    <div class="card-title" style="color: var(--accent-green);">Syllabus Velocity Engine</div>
+                    <div class="velocity-banner"><span>Completion Milestone Projection:</span><span class="velocity-metric" id="velocityPredictionTxt">Calculating...</span></div>
                     
                     <div class="premium-box-stat-layout">
                         <div class="premium-time-card">
-                            <span class="premium-time-card-title" style="color: var(--accent-green);">Global Load Ratio</span>
+                            <span class="premium-time-card-title" style="color: var(--accent-green);">Global Load</span>
                             <span class="premium-time-card-value" id="box-stat-global">0.0 / 0.0h</span>
                         </div>
                         <div class="premium-time-card">
-                            <span class="premium-time-card-title" style="color: #4facfe;">Physics</span>
+                            <span class="premium-time-card-title" style="color: var(--grad-physics);">Physics</span>
                             <span class="premium-time-card-value" id="box-stat-physics">0.0 / 0.0h</span>
                         </div>
                         <div class="premium-time-card">
-                            <span class="premium-time-card-title" style="color: #ffb199;">Chemistry</span>
+                            <span class="premium-time-card-title" style="color: var(--grad-chemistry);">Chemistry</span>
                             <span class="premium-time-card-value" id="box-stat-chemistry">0.0 / 0.0h</span>
                         </div>
                         <div class="premium-time-card">
-                            <span class="premium-time-card-title" style="color: #d2bbff;">Mathematics</span>
+                            <span class="premium-time-card-title" style="color: var(--grad-maths);">Mathematics</span>
                             <span class="premium-time-card-value" id="box-stat-maths">0.0 / 0.0h</span>
                         </div>
                     </div>
 
-                    <div style="display: flex; flex-direction: column; gap: 14px; margin-top: 20px;">
-                        <div class="stat-row"><div class="stat-labels"><span style="color: var(--accent-green);">Total Core Syllabus Progress Matrix</span><span id="stat-a-hrs">0 / 0 hrs</span></div><div class="stat-bar-bg"><div id="bar-a-hrs" class="stat-bar-fill" style="background: var(--grad-green); width: 0%;"></div></div></div>
-                        <div class="stat-row"><div class="stat-labels"><span style="color: var(--accent-yellow);">Global PYQ Completion Tracker</span><span id="stat-a-pyqs">0 PYQs Logged</span></div><div class="stat-bar-bg"><div id="bar-a-pyqs" class="stat-bar-fill" style="background: var(--grad-pyq); width: 0%;"></div></div></div>
+                    <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 24px;">
+                        <div><div class="stat-labels"><span style="color: var(--accent-green);">Total Core Syllabus Progress</span><span id="stat-a-hrs">0 / 0 hrs</span></div><div class="stat-bar-bg"><div id="bar-a-hrs" class="stat-bar-fill" style="background: var(--accent-green); width: 0%;"></div></div></div>
+                        <div><div class="stat-labels"><span style="color: var(--accent-purple);">Global PYQ Completion</span><span id="stat-a-pyqs">0 PYQs Logged</span></div><div class="stat-bar-bg"><div id="bar-a-pyqs" class="stat-bar-fill" style="background: var(--accent-purple); width: 0%;"></div></div></div>
                     </div>
                     
-                    <div style="display: flex; flex-direction: column; gap: 14px; margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 16px;">
-                        <div style="font-size: 0.8rem; font-weight: 800; color: var(--accent-yellow); margin-bottom: 4px; text-transform: uppercase;">Subject-Wise Dedicated PYQ Solved Trackers</div>
-                        <div class="stat-row"><div class="stat-labels"><span style="color: #4facfe;">Physics PYQs Progress</span><span id="home-pyq-p-txt">0 PYQs</span></div><div class="stat-bar-bg"><div id="home-pyq-p-bar" class="stat-bar-fill" style="background: var(--grad-physics); width: 0%;"></div></div></div>
-                        <div class="stat-row"><div class="stat-labels"><span style="color: #ffb199;">Chemistry PYQs Progress</span><span id="home-pyq-c-txt">0 PYQs</span></div><div class="stat-bar-bg"><div id="home-pyq-c-bar" class="stat-bar-fill" style="background: var(--grad-chemistry); width: 0%;"></div></div></div>
-                        <div class="stat-row"><div class="stat-labels"><span style="color: #d2bbff;">Mathematics PYQs Progress</span><span id="home-pyq-m-txt">0 PYQs</span></div><div class="stat-bar-bg"><div id="home-pyq-m-bar" class="stat-bar-fill" style="background: var(--grad-maths); width: 0%;"></div></div></div>
+                    <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 20px;">
+                        <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;">Subject-Wise PYQ Solved Trackers</div>
+                        <div><div class="stat-labels"><span style="color: var(--grad-physics);">Physics PYQs</span><span id="home-pyq-p-txt">0 PYQs</span></div><div class="stat-bar-bg"><div id="home-pyq-p-bar" class="stat-bar-fill" style="background: var(--grad-physics); width: 0%;"></div></div></div>
+                        <div><div class="stat-labels"><span style="color: var(--grad-chemistry);">Chemistry PYQs</span><span id="home-pyq-c-txt">0 PYQs</span></div><div class="stat-bar-bg"><div id="home-pyq-c-bar" class="stat-bar-fill" style="background: var(--grad-chemistry); width: 0%;"></div></div></div>
+                        <div><div class="stat-labels"><span style="color: var(--grad-maths);">Mathematics PYQs</span><span id="home-pyq-m-txt">0 PYQs</span></div><div class="stat-bar-bg"><div id="home-pyq-m-bar" class="stat-bar-fill" style="background: var(--grad-maths); width: 0%;"></div></div></div>
                     </div>
                 </div>
+                
                 <div class="card grid-md-12">
-                    <div class="card-title">Productivity Index & Matrix Consistency Heatmap</div>
-                    <div class="heatmap-container" style="margin-bottom: 12px;"><div class="heatmap-grid" id="consistencyHeatmap"></div><div class="heatmap-labels"><span id="heatmapStartLabel">Past Sprints</span><span>Active Present Week</span></div></div>
+                    <div class="card-title">Consistency Heatmap & Summary</div>
+                    <div style="display: flex; flex-direction: column; gap: 10px; width: 100%; overflow-x: auto; margin-bottom: 20px;">
+                        <div class="heatmap-grid" id="consistencyHeatmap"></div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); font-weight: 600; min-width: 320px;">
+                            <span id="heatmapStartLabel">Past Sprints</span><span>Current Week</span>
+                        </div>
+                    </div>
                     <div class="big-stat-grid">
                         <div class="big-stat-box"><div id="tot-a-q" class="big-stat-num" style="color: var(--accent-green)">0</div><div class="big-stat-label">Total Logs Vol</div></div>
-                        <div class="big-stat-box"><div id="tot-p-q" class="big-stat-num" style="color: #4facfe">0</div><div class="big-stat-label">Physics Solved</div></div>
-                        <div class="big-stat-box"><div id="tot-c-q" class="big-stat-num" style="color: #ffb199">0</div><div class="big-stat-label">Chemistry Solved</div></div>
-                        <div class="big-stat-box"><div id="tot-m-q" class="big-stat-num" style="color: #d2bbff">0</div><div class="big-stat-label">Maths Solved</div></div>
+                        <div class="big-stat-box"><div id="tot-p-q" class="big-stat-num" style="color: var(--grad-physics)">0</div><div class="big-stat-label">Physics Solved</div></div>
+                        <div class="big-stat-box"><div id="tot-c-q" class="big-stat-num" style="color: var(--grad-chemistry)">0</div><div class="big-stat-label">Chemistry Solved</div></div>
+                        <div class="big-stat-box"><div id="tot-m-q" class="big-stat-num" style="color: var(--grad-maths)">0</div><div class="big-stat-label">Maths Solved</div></div>
                     </div>
                 </div>
             </div>
         </section>
 
         <section id="view-schedule" class="view-section">
-            <div class="header-routing-group"><h3 style="font-size: 1.4rem; font-weight: 800;">Master Study Timeline</h3><button class="btn-jump-portal" onclick="jumpToActiveTimelineDayNode()">🎯 Jump to Current Day</button></div>
+            <div class="header-routing-group"><h3 style="font-size: 1.4rem; font-weight: 800;">Master Study Timeline</h3><button class="btn-jump-portal" onclick="jumpToActiveTimelineDayNode()">Jump to Current Day</button></div>
             <div class="timeline-filter-bar">
                 <button class="filter-chip active" id="flt-all" onclick="setTimelineFilter('all')">All Tracks</button>
                 <button class="filter-chip" id="flt-p" onclick="setTimelineFilter('p')">Physics Only</button>
@@ -681,65 +607,76 @@
         </section>
 
         <section id="view-revision" class="view-section">
-            <div class="header-routing-group"><h3 style="font-size: 1.4rem; font-weight: 800; color: var(--accent-purple);">Dedicated Revision Calendar Hub</h3><button class="btn-jump-portal" onclick="jumpToNearestActiveRevisionNode()">⏳ Jump to Current Review</button></div>
-            <p style="color: var(--text-muted); margin-bottom: 16px; font-size: 0.85rem;">Centrally review logged deadlines. Structural alterations instantly scale into underlying workspaces.</p>
+            <div class="header-routing-group"><h3 style="font-size: 1.4rem; font-weight: 800; color: var(--accent-purple);">Revision Hub</h3><button class="btn-jump-portal" onclick="jumpToNearestActiveRevisionNode()">Jump to Current Review</button></div>
             
-            <div class="timeline-filter-bar" style="margin-bottom: 8px;">
+            <div class="timeline-filter-bar" style="margin-bottom: 12px;">
                 <button class="filter-chip active" id="rev-subj-all" onclick="setRevisionSubjectFilter('all')">All Subjects</button>
                 <button class="filter-chip" id="rev-subj-p" onclick="setRevisionSubjectFilter('p')">Physics</button>
                 <button class="filter-chip" id="rev-subj-c" onclick="setRevisionSubjectFilter('c')">Chemistry</button>
                 <button class="filter-chip" id="rev-subj-m" onclick="setRevisionSubjectFilter('m')">Maths</button>
             </div>
 
-            <div class="timeline-filter-bar" style="margin-bottom: 16px;">
+            <div class="timeline-filter-bar" style="margin-bottom: 24px;">
                 <button class="filter-chip active" id="rev-state-all" onclick="setRevisionStateFilter('all')">All Reviews</button>
                 <button class="filter-chip" id="rev-state-pending" onclick="setRevisionStateFilter('pending')">Pending</button>
                 <button class="filter-chip" id="rev-state-complete" onclick="setRevisionStateFilter('complete')">Complete</button>
             </div>
 
-            <div class="card"><div class="card-title" style="color: var(--accent-purple);">Dynamic Revision Target Matrix</div><div class="chapter-accordion-wrapper" id="masterRevisionListWrapper"></div></div>
+            <div class="card">
+                <div class="card-title" style="color: var(--accent-purple);">Revision Targets Matrix</div>
+                <div style="display: flex; flex-direction: column; gap: 8px;" id="masterRevisionListWrapper"></div>
+            </div>
         </section>
 
         <section id="view-physics" class="view-section">
-            <div class="subject-dashboard-header">
-                <div class="subject-headline-box" style="border-left: 6px solid #4facfe"><h3 style="font-size: 1.5rem; font-weight: 800;">Physics Workspace</h3><div id="p-sub-stats" style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600; margin-top: 4px;"></div></div>
-                <div style="display: flex; gap: 10px; width: 100%; max-width: 500px;">
-                    <div class="card" style="flex:1;"><div style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight:800;">Quick Problem Log</div><div style="display:flex; margin-top: 8px; gap:6px;"><input type="number" id="fast-p-inp" class="prac-input" placeholder="+"><button class="prac-btn" onclick="addSubjectFastPractice('p')">Log</button></div></div>
-                    <div class="card" style="flex:1;"><div style="font-size: 0.7rem; text-transform: uppercase; color: var(--accent-yellow); font-weight:800;">Quick PYQ Log</div><div style="display:flex; margin-top: 8px; gap:6px;"><input type="number" id="fast-p-pyq" class="prac-input" placeholder="+"><button class="prac-btn" style="border-color: var(--accent-yellow);" onclick="addSubjectFastPYQ('p')">Log</button></div></div>
+            <div style="display: flex; flex-direction: column; gap: 20px; margin-bottom: 24px; max-width: 800px;">
+                <div style="background: var(--bg-panel); border: 1px solid var(--border-color); padding: 24px; border-radius: 12px; border-left: 6px solid var(--grad-physics);">
+                    <h3 style="font-size: 1.5rem; font-weight: 800;">Physics Workspace</h3>
+                    <div id="p-sub-stats" style="color: var(--text-muted); font-size: 0.9rem; font-weight: 600; margin-top: 8px;"></div>
+                </div>
+                <div style="display: flex; gap: 12px; width: 100%;">
+                    <div class="card" style="flex:1;"><div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight:700;">Quick Problem Log</div><div style="display:flex; margin-top: 10px; gap:8px;"><input type="number" id="fast-p-inp" class="prac-input" placeholder="+"><button class="prac-btn" onclick="addSubjectFastPractice('p')">Log</button></div></div>
+                    <div class="card" style="flex:1;"><div style="font-size: 0.75rem; text-transform: uppercase; color: var(--accent-purple); font-weight:700;">Quick PYQ Log</div><div style="display:flex; margin-top: 10px; gap:8px;"><input type="number" id="fast-p-pyq" class="prac-input" placeholder="+"><button class="prac-btn" onclick="addSubjectFastPYQ('p')">Log</button></div></div>
                 </div>
             </div>
-            <div class="chapter-accordion-wrapper" id="accordion-p"></div>
+            <div style="display: flex; flex-direction: column; gap: 8px;" id="accordion-p"></div>
         </section>
 
         <section id="view-chemistry" class="view-section">
-            <div class="subject-dashboard-header">
-                <div class="subject-headline-box" style="border-left: 6px solid #ff0844"><h3 style="font-size: 1.5rem; font-weight: 800;">Chemistry Workspace</h3><div id="c-sub-stats" style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600; margin-top: 4px;"></div></div>
-                <div style="display: flex; gap: 10px; width: 100%; max-width: 500px;">
-                    <div class="card" style="flex:1;"><div style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight:800;">Quick Problem Log</div><div style="display:flex; margin-top: 8px; gap:6px;"><input type="number" id="fast-c-inp" class="prac-input" placeholder="+"><button class="prac-btn" onclick="addSubjectFastPractice('c')">Log</button></div></div>
-                    <div class="card" style="flex:1;"><div style="font-size: 0.7rem; text-transform: uppercase; color: var(--accent-yellow); font-weight:800;">Quick PYQ Log</div><div style="display:flex; margin-top: 8px; gap:6px;"><input type="number" id="fast-c-pyq" class="prac-input" placeholder="+"><button class="prac-btn" style="border-color: var(--accent-yellow);" onclick="addSubjectFastPYQ('c')">Log</button></div></div>
+            <div style="display: flex; flex-direction: column; gap: 20px; margin-bottom: 24px; max-width: 800px;">
+                <div style="background: var(--bg-panel); border: 1px solid var(--border-color); padding: 24px; border-radius: 12px; border-left: 6px solid var(--grad-chemistry);">
+                    <h3 style="font-size: 1.5rem; font-weight: 800;">Chemistry Workspace</h3>
+                    <div id="c-sub-stats" style="color: var(--text-muted); font-size: 0.9rem; font-weight: 600; margin-top: 8px;"></div>
+                </div>
+                <div style="display: flex; gap: 12px; width: 100%;">
+                    <div class="card" style="flex:1;"><div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight:700;">Quick Problem Log</div><div style="display:flex; margin-top: 10px; gap:8px;"><input type="number" id="fast-c-inp" class="prac-input" placeholder="+"><button class="prac-btn" onclick="addSubjectFastPractice('c')">Log</button></div></div>
+                    <div class="card" style="flex:1;"><div style="font-size: 0.75rem; text-transform: uppercase; color: var(--accent-purple); font-weight:700;">Quick PYQ Log</div><div style="display:flex; margin-top: 10px; gap:8px;"><input type="number" id="fast-c-pyq" class="prac-input" placeholder="+"><button class="prac-btn" onclick="addSubjectFastPYQ('c')">Log</button></div></div>
                 </div>
             </div>
-            <div class="chapter-accordion-wrapper" id="accordion-c"></div>
+            <div style="display: flex; flex-direction: column; gap: 8px;" id="accordion-c"></div>
         </section>
 
         <section id="view-mathematics" class="view-section">
-            <div class="subject-dashboard-header">
-                <div class="subject-headline-box" style="border-left: 6px solid #b180ff"><h3 style="font-size: 1.5rem; font-weight: 800;">Mathematics Workspace</h3><div id="m-sub-stats" style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600; margin-top: 4px;"></div></div>
-                <div style="display: flex; gap: 10px; width: 100%; max-width: 500px;">
-                    <div class="card" style="flex:1;"><div style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight:800;">Quick Problem Log</div><div style="display:flex; margin-top: 8px; gap:6px;"><input type="number" id="fast-m-inp" class="prac-input" placeholder="+"><button class="prac-btn" onclick="addSubjectFastPractice('m')">Log</button></div></div>
-                    <div class="card" style="flex:1;"><div style="font-size: 0.7rem; text-transform: uppercase; color: var(--accent-yellow); font-weight:800;">Quick PYQ Log</div><div style="display:flex; margin-top: 8px; gap:6px;"><input type="number" id="fast-m-pyq" class="prac-input" placeholder="+"><button class="prac-btn" style="border-color: var(--accent-yellow);" onclick="addSubjectFastPYQ('m')">Log</button></div></div>
+            <div style="display: flex; flex-direction: column; gap: 20px; margin-bottom: 24px; max-width: 800px;">
+                <div style="background: var(--bg-panel); border: 1px solid var(--border-color); padding: 24px; border-radius: 12px; border-left: 6px solid var(--grad-maths);">
+                    <h3 style="font-size: 1.5rem; font-weight: 800;">Mathematics Workspace</h3>
+                    <div id="m-sub-stats" style="color: var(--text-muted); font-size: 0.9rem; font-weight: 600; margin-top: 8px;"></div>
+                </div>
+                <div style="display: flex; gap: 12px; width: 100%;">
+                    <div class="card" style="flex:1;"><div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight:700;">Quick Problem Log</div><div style="display:flex; margin-top: 10px; gap:8px;"><input type="number" id="fast-m-inp" class="prac-input" placeholder="+"><button class="prac-btn" onclick="addSubjectFastPractice('m')">Log</button></div></div>
+                    <div class="card" style="flex:1;"><div style="font-size: 0.75rem; text-transform: uppercase; color: var(--accent-purple); font-weight:700;">Quick PYQ Log</div><div style="display:flex; margin-top: 10px; gap:8px;"><input type="number" id="fast-m-pyq" class="prac-input" placeholder="+"><button class="prac-btn" onclick="addSubjectFastPYQ('m')">Log</button></div></div>
                 </div>
             </div>
-            <div class="chapter-accordion-wrapper" id="accordion-m"></div>
+            <div style="display: flex; flex-direction: column; gap: 8px;" id="accordion-m"></div>
         </section>
 
         <section id="view-tests" class="view-section">
             <div class="header-routing-group">
-                <h3 style="font-size: 1.4rem; font-weight: 800; color: var(--accent-orange);">Test Series Timeline Matrix</h3>
-                <button class="btn-jump-portal" onclick="jumpToNearestActiveTestSessionNode()">⏳ Jump to Current Test</button>
+                <h3 style="font-size: 1.4rem; font-weight: 800; color: var(--accent-orange);">Test Analytics</h3>
+                <button class="btn-jump-portal" onclick="jumpToNearestActiveTestSessionNode()">Jump to Current Test</button>
             </div>
             
-            <div class="timeline-filter-bar" style="margin-bottom: 8px;">
+            <div class="timeline-filter-bar" style="margin-bottom: 12px;">
                 <button class="filter-chip active" id="test-batch-all" onclick="setTestBatchFilter('all')">All Batches</button>
                 <button class="filter-chip" id="test-batch-prayas" onclick="setTestBatchFilter('Prayas')">Prayas</button>
                 <button class="filter-chip" id="test-batch-lakshya" onclick="setTestBatchFilter('Lakshya')">Lakshya</button>
@@ -748,50 +685,66 @@
 
             <div class="timeline-filter-bar">
                 <button class="filter-chip active" id="test-state-all" onclick="setTestStateFilter('all')">All Attempts</button>
-                <button class="filter-chip" id="test-state-attempted" onclick="setTestStateFilter('attempted')">Attempted Only</button>
-                <button class="filter-chip" id="test-state-unattempted" onclick="setTestStateFilter('unattempted')">Unattempted Only</button>
+                <button class="filter-chip" id="test-state-attempted" onclick="setTestStateFilter('attempted')">Attempted</button>
+                <button class="filter-chip" id="test-state-unattempted" onclick="setTestStateFilter('unattempted')">Unattempted</button>
             </div>
 
-            <div class="vertical-timeline-container" id="testSeriesAccordionWrapper" style="margin-top: 20px;"></div>
+            <div class="vertical-timeline-container" id="testSeriesAccordionWrapper" style="margin-top: 24px;"></div>
         </section>
 
         <section id="view-progress" class="view-section">
-            <h3 style="margin-bottom: 12px; font-size: 1.4rem; font-weight: 800; color: #05f8a6;">Progress Analysis Hub</h3>
-            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:16px;">
-                <div class="timeline-filter-bar" style="margin-bottom:0; max-width: 100%;"><button class="filter-chip active" id="time-flt-daily" onclick="switchGraphTimeframe('daily')">Daily</button><button class="filter-chip" id="time-flt-weekly" onclick="switchGraphTimeframe('weekly')">Weekly</button><button class="filter-chip" id="time-flt-monthly" onclick="switchGraphTimeframe('monthly')">Monthly</button></div>
-                <div class="graph-nav-group"><button class="graph-nav-btn" onclick="navigateGraphWindow(-1)">◀</button><span class="graph-nav-label" id="graphWindowRangeLabel">Current Matrix</span><button class="graph-nav-btn" onclick="navigateGraphWindow(1)">▶</button></div>
-                <div class="timeline-filter-bar" style="margin-bottom:0; max-width: 100%;"><button class="filter-chip active" id="graph-subj-all" onclick="setGraphSubjectFilter('all')">Global</button><button class="filter-chip" id="graph-subj-p" onclick="setGraphSubjectFilter('p')">Physics</button><button class="filter-chip" id="graph-subj-c" onclick="setGraphSubjectFilter('c')">Chem</button><button class="filter-chip" id="graph-subj-m" onclick="setGraphSubjectFilter('m')">Maths</button></div>
+            <h3 style="margin-bottom: 20px; font-size: 1.4rem; font-weight: 800;">Progress Analysis</h3>
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px;">
+                <div class="timeline-filter-bar" style="margin-bottom:0; max-width: 100%;">
+                    <button class="filter-chip active" id="time-flt-daily" onclick="switchGraphTimeframe('daily')">Daily</button>
+                    <button class="filter-chip" id="time-flt-weekly" onclick="switchGraphTimeframe('weekly')">Weekly</button>
+                    <button class="filter-chip" id="time-flt-monthly" onclick="switchGraphTimeframe('monthly')">Monthly</button>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; background: var(--bg-panel); padding: 6px; border-radius: 8px; border: 1px solid var(--border-color);">
+                    <button class="prac-btn" style="padding: 6px 12px; font-size: 0.8rem;" onclick="navigateGraphWindow(-1)">◀</button>
+                    <span id="graphWindowRangeLabel" style="font-size: 0.85rem; font-weight: 600; color: var(--text-main); min-width: 140px; text-align: center;">Current Matrix</span>
+                    <button class="prac-btn" style="padding: 6px 12px; font-size: 0.8rem;" onclick="navigateGraphWindow(1)">▶</button>
+                </div>
+                <div class="timeline-filter-bar" style="margin-bottom:0; max-width: 100%;">
+                    <button class="filter-chip active" id="graph-subj-all" onclick="setGraphSubjectFilter('all')">Global</button>
+                    <button class="filter-chip" id="graph-subj-p" onclick="setGraphSubjectFilter('p')">Physics</button>
+                    <button class="filter-chip" id="graph-subj-c" onclick="setGraphSubjectFilter('c')">Chemistry</button>
+                    <button class="filter-chip" id="graph-subj-m" onclick="setGraphSubjectFilter('m')">Maths</button>
+                </div>
             </div>
             
-            <div class="timeline-filter-bar" style="margin-bottom:16px; background: rgba(11, 17, 32, 0.6);">
+            <div class="timeline-filter-bar" style="margin-bottom:24px;">
                 <button class="filter-chip active" id="graph-metric-total" onclick="setGraphMetricFilter('total')">Total Questions</button>
                 <button class="filter-chip" id="graph-metric-standard" onclick="setGraphMetricFilter('standard')">Standard Questions</button>
                 <button class="filter-chip" id="graph-metric-quick" onclick="setGraphMetricFilter('quick')">Quick Logs</button>
-                <button class="filter-chip" id="graph-metric-pyqs" onclick="setGraphMetricFilter('pyqs')">Dedicated PYQs</button>
+                <button class="filter-chip" id="graph-metric-pyqs" onclick="setGraphMetricFilter('pyqs')">PYQs</button>
             </div>
             
-            <div class="card" style="margin-bottom: 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; height: auto;">
-                <div style="background: var(--box-stat-bg); padding: 12px; border-radius: 12px; border-left: 3px solid #4facfe;">
-                    <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: 800;">PHYSICS FINISH</div>
-                    <div id="mastery-p-txt" style="font-size: 1.1rem; font-weight: 800; margin-top: 4px;">0%</div>
+            <div style="margin-bottom: 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px;">
+                <div style="background: var(--bg-panel); padding: 16px; border-radius: 8px; border: 1px solid var(--border-color); border-left: 4px solid var(--grad-physics);">
+                    <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">PHYSICS FINISH</div>
+                    <div id="mastery-p-txt" style="font-size: 1.3rem; font-weight: 800; margin-top: 6px;">0%</div>
                 </div>
-                <div style="background: var(--box-stat-bg); padding: 12px; border-radius: 12px; border-left: 3px solid #ff0844;">
-                    <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: 800;">CHEMISTRY FINISH</div>
-                    <div id="mastery-c-txt" style="font-size: 1.1rem; font-weight: 800; margin-top: 4px;">0%</div>
+                <div style="background: var(--bg-panel); padding: 16px; border-radius: 8px; border: 1px solid var(--border-color); border-left: 4px solid var(--grad-chemistry);">
+                    <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">CHEMISTRY FINISH</div>
+                    <div id="mastery-c-txt" style="font-size: 1.3rem; font-weight: 800; margin-top: 6px;">0%</div>
                 </div>
-                <div style="background: var(--box-stat-bg); padding: 12px; border-radius: 12px; border-left: 3px solid #b180ff;">
-                    <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: 800;">MATHS FINISH</div>
-                    <div id="mastery-m-txt" style="font-size: 1.1rem; font-weight: 800; margin-top: 4px;">0%</div>
+                <div style="background: var(--bg-panel); padding: 16px; border-radius: 8px; border: 1px solid var(--border-color); border-left: 4px solid var(--grad-maths);">
+                    <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">MATHS FINISH</div>
+                    <div id="mastery-m-txt" style="font-size: 1.3rem; font-weight: 800; margin-top: 6px;">0%</div>
                 </div>
             </div>
 
-            <div class="chart-master-viewport">
+            <div style="display: flex; flex-direction: column; gap: 24px; width: 100%;">
                 <div class="chart-panel-card">
-                    <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap: wrap;"><h4>Problem Practice Matrix</h4><div class="chart-legend-row" id="problemsChartLegendContainer"></div></div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap;">
+                        <h4 style="font-size: 1.1rem; font-weight: 700;">Practice Volume</h4>
+                        <div id="problemsChartLegendContainer" style="display: flex; gap: 12px; font-size: 0.8rem; font-weight: 600; color: var(--text-muted);"></div>
+                    </div>
                     <div class="chart-layout-wrapper"><div class="chart-y-axis-legend" id="yAxisProblemsLegend"></div><div class="chart-canvas-container" id="problemsChartCanvas"></div></div>
                 </div>
                 <div class="chart-panel-card">
-                    <div style="display:flex; justify-content:space-between; align-items:center;"><h4>Module Mastery Core Duration (Hours)</h4></div>
+                    <h4 style="font-size: 1.1rem; font-weight: 700;">Lecture Mastery Duration (Hours)</h4>
                     <div class="chart-layout-wrapper"><div class="chart-y-axis-legend" id="yAxisWatchLegend"></div><div class="chart-canvas-container" id="watchMinutesChartCanvas"></div></div>
                 </div>
             </div>
@@ -799,18 +752,16 @@
 
         <section id="view-streaks" class="view-section">
             <div class="header-routing-group">
-                <h3 style="font-size: 1.4rem; font-weight: 800; color: var(--accent-orange);">Consistency Streaks</h3>
+                <h3 style="font-size: 1.4rem; font-weight: 800;">Consistency Streaks</h3>
             </div>
             <div class="home-grid">
                 <div class="card grid-md-12">
                     <div class="card-title">Problem Practice Streaks</div>
-                    <div class="big-stat-grid" id="streak-q-grid">
-                        </div>
+                    <div class="big-stat-grid" id="streak-q-grid"></div>
                 </div>
                 <div class="card grid-md-12">
-                    <div class="card-title">Module Mastery Streaks (Watch Time)</div>
-                    <div class="big-stat-grid" id="streak-w-grid">
-                        </div>
+                    <div class="card-title">Module Mastery Streaks</div>
+                    <div class="big-stat-grid" id="streak-w-grid"></div>
                 </div>
             </div>
         </section>
@@ -822,7 +773,6 @@
         let activeOpenViewId = "home";
         let isNewUserRegistrationMode = false;
 
-        // UPDATED SECURE CONFIGURATION BLUEPRINT
         const ENV_INFRASTRUCTURE_BLUEPRINT = {
             apiKey: "AIzaSyChMlBb9DYZU0wZAv9mZdZ9ESinshq3fkI", 
             authDomain: "jee-planner-2dda7.firebaseapp.com",
@@ -1023,7 +973,7 @@
             { d: "30 November", p: null, c: null, m: "Quadratic Equations" }
         ];
 
-        const colorMap = { p: "#4facfe", c: "#ff0844", m: "#b180ff" }, subjMap = { p: "Physics", c: "Chemistry", m: "Maths" };
+        const colorMap = { p: "var(--grad-physics)", c: "var(--grad-chemistry)", m: "var(--grad-maths)" }, subjMap = { p: "Physics", c: "Chemistry", m: "Maths" };
         let internalProgress = { p: {}, c: {}, m: {} }, offDays = { global: [], p: [], c: [], m: [] }, practiceData = {}, examScoreDB = {}; 
         let compactLayoutActive = false, currentTimelineFilter = "all", currentTestBatchFilter = "all", currentTestStateFilter = "all", activeGraphTimeframe = "daily", graphSubjectFilter = "all", graphWindowOffset = 0; 
         let currentRevisionSubjectFilter = "all", currentRevisionStateFilter = "all", graphMetricFilter = "total";
@@ -1037,7 +987,7 @@
             }
 
             document.getElementById('headerDateDisplay').innerText = new Date().toDateString();
-            document.body.setAttribute('data-theme', localStorage.getItem('jee_system_theme_preference') || 'amoled-dark');
+            document.body.setAttribute('data-theme', localStorage.getItem('jee_system_theme_preference') || 'cyber-light');
             initCountdown();
             const hydrate = (k, d) => { try { const r = localStorage.getItem(k); return r ? JSON.parse(r) : d; } catch(e) { return d; } };
             internalProgress = hydrate('jeeInternalProgressV6', { p: {}, c: {}, m: {} });
@@ -1053,7 +1003,6 @@
             
             window.addEventListener('beforeunload', () => { if (localCacheIsDirty) flushLocalDataToDisk(); });
 
-            // Network Authentication Architecture Initialization
             try {
                 if (typeof firebase !== 'undefined' && ENV_INFRASTRUCTURE_BLUEPRINT.apiKey) {
                     firebase.initializeApp(ENV_INFRASTRUCTURE_BLUEPRINT); 
@@ -1062,10 +1011,9 @@
                     firebase.auth().onAuthStateChanged((user) => {
                         if (user) {
                             userDocRef = db.collection("users").doc(user.uid);
-                            document.getElementById("masterAuthOverlayPortal").classList.add("hidden");
+                            document.getElementById("masterAuthOverlayPortal").style.display = "none";
                             setSyncBadge("SYNCHRONIZING CORE...", "var(--accent-orange)");
                             
-                            // Map Profile Email Element
                             const emailDisplayElement = document.getElementById("sidebarProfileEmailDisplay");
                             if (emailDisplayElement) {
                                 emailDisplayElement.innerText = user.isAnonymous ? "Anonymous Guest Account" : user.email;
@@ -1088,7 +1036,7 @@
                                 }
                             }).catch(() => setSyncBadge("LOCAL SANDBOX ACTIVE", "var(--text-muted)"));
                         } else {
-                            document.getElementById("masterAuthOverlayPortal").classList.remove("hidden");
+                            document.getElementById("masterAuthOverlayPortal").style.display = "flex";
                             setSyncBadge("AUTHENTICATION REQUIRED", "var(--accent-red)");
                             
                             const emailDisplayElement = document.getElementById("sidebarProfileEmailDisplay");
@@ -1384,17 +1332,17 @@
                     if(showP) {
                         const isSubOff = isDayGloballyOff || offDays.p?.includes(s);
                         const subActionBtn = isCurrentDay ? `<button class="off-toggle-btn ${offDays.p?.includes(s)?'is-active-state':''}" onclick="toggleDayOff('${s}', 'p')">${offDays.p?.includes(s)?'Restore':'Skip'}</button>` : '';
-                        h += `<div class="timeline-subject-pill ${isSubOff?'is-off':''}" style="border-left:4px solid #4facfe;"><div style="color:#4facfe; font-size:0.75rem; font-weight:800;">PHYSICS</div><div style="margin: 4px 0; font-weight: 700;">${dP}</div>${subActionBtn}</div>`;
+                        h += `<div class="timeline-subject-pill ${isSubOff?'is-off':''}" style="border-left:4px solid var(--grad-physics);"><div style="color:var(--grad-physics); font-size:0.75rem; font-weight:800;">PHYSICS</div><div style="margin: 4px 0; font-weight: 700;">${dP}</div>${subActionBtn}</div>`;
                     }
                     if(showC) {
                         const isSubOff = isDayGloballyOff || offDays.c?.includes(s);
                         const subActionBtn = isCurrentDay ? `<button class="off-toggle-btn ${offDays.c?.includes(s)?'is-active-state':''}" onclick="toggleDayOff('${s}', 'c')">${offDays.c?.includes(s)?'Restore':'Skip'}</button>` : '';
-                        h += `<div class="timeline-subject-pill ${isSubOff?'is-off':''}" style="border-left:4px solid #ff0844;"><div style="color:#ff0844; font-size:0.75rem; font-weight:800;">CHEMISTRY</div><div style="margin: 4px 0; font-weight: 700;">${dC}</div>${subActionBtn}</div>`;
+                        h += `<div class="timeline-subject-pill ${isSubOff?'is-off':''}" style="border-left:4px solid var(--grad-chemistry);"><div style="color:var(--grad-chemistry); font-size:0.75rem; font-weight:800;">CHEMISTRY</div><div style="margin: 4px 0; font-weight: 700;">${dC}</div>${subActionBtn}</div>`;
                     }
                     if(showM) {
                         const isSubOff = isDayGloballyOff || offDays.m?.includes(s);
                         const subActionBtn = isCurrentDay ? `<button class="off-toggle-btn ${offDays.m?.includes(s)?'is-active-state':''}" onclick="toggleDayOff('${s}', 'm')">${offDays.m?.includes(s)?'Restore':'Skip'}</button>` : '';
-                        h += `<div class="timeline-subject-pill ${isSubOff?'is-off':''}" style="border-left:4px solid #b180ff;"><div style="color:#b180ff; font-size:0.75rem; font-weight:800;">MATHS</div><div style="margin: 4px 0; font-weight: 700;">${dM}</div>${subActionBtn}</div>`;
+                        h += `<div class="timeline-subject-pill ${isSubOff?'is-off':''}" style="border-left:4px solid var(--grad-maths);"><div style="color:var(--grad-maths); font-size:0.75rem; font-weight:800;">MATHS</div><div style="margin: 4px 0; font-weight: 700;">${dM}</div>${subActionBtn}</div>`;
                     }
                     h += `</div></div>`;
                 }
@@ -1417,22 +1365,18 @@
                         let cb = ""; 
                         const pct = Math.round((st.w.length / chap.v) * 100);
                         
-                        // Map checklist inputs safely
                         for(let i=0; i<chap.v; i++) { 
                             cb += `<div class="video-checkbox ${st.w.includes(i)?'watched':''}" onclick="event.stopPropagation(); toggleWorkspaceVideo('${s}', ${idx}, ${i})">${i + 1}</div>`; 
                         }
                         
-                        // Look up the actual calendar completion context via generated master timeline path
                         let deadlineDateStr = st.rd; 
                         if(!deadlineDateStr) {
-                            // Automatically fetch fallback blueprint date bounds from final tracked node entry
                             const timelineNodes = generatedTimeline.filter(node => node[s]?.toLowerCase() === chap.n.toLowerCase());
                             if(timelineNodes.length > 0) {
                                 deadlineDateStr = timelineNodes[timelineNodes.length - 1].date;
                             }
                         }
 
-                        // Compute Velocity Window Duration & Minutes Required Matrix
                         let deadlineMeta = `<span style="color:var(--text-muted)">No Target Limit</span>`;
                         let minPerDayTxt = "0 min/d";
                         
@@ -1440,7 +1384,7 @@
                             const todayStart = new Date(); todayStart.setHours(0,0,0,0);
                             const deadlineTarget = new Date(deadlineDateStr + "T00:00:00");
                             let diffTime = deadlineTarget.getTime() - todayStart.getTime();
-                            let remainingDays = Math.ceil(diffTime / 86400000) + 1; // inclusive window context
+                            let remainingDays = Math.ceil(diffTime / 86400000) + 1; 
                             
                             let displayDeadlineToDate = new Date(deadlineDateStr).toLocaleDateString('en-IN', {day:'numeric', month:'short'});
                             deadlineMeta = `<span style="color:var(--accent-purple); font-weight:700;">Rev Limit: ${displayDeadlineToDate}</span>`;
@@ -1463,24 +1407,24 @@
                         }
 
                         h += `
-                        <div class="today-target-node" id="today-node-${s}" style="margin-bottom: 8px;">
-                            <div class="today-target-summary" onclick="this.parentElement.classList.toggle('expanded')" style="flex-direction: column; align-items: stretch; gap: 6px; padding: 10px 12px;">
+                        <div class="today-target-node" id="today-node-${s}">
+                            <div class="today-target-summary" onclick="this.parentElement.classList.toggle('expanded')" style="flex-direction: column; align-items: stretch; gap: 6px;">
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
                                     <div>
-                                        <span style="color:${colorMap[s]}; font-size:0.65rem; font-weight:900; letter-spacing:1px; display:block; text-transform:uppercase;">${subjMap[s]} Tracker</span>
-                                        <span style="font-weight:700; font-size:0.88rem; color:var(--text-main);">${chap.n}</span>
+                                        <span style="color:${colorMap[s]}; font-size:0.65rem; font-weight:800; letter-spacing:1px; display:block; text-transform:uppercase;">${subjMap[s]} Tracker</span>
+                                        <span style="font-weight:700; font-size:0.95rem; color:var(--text-main);">${chap.n}</span>
                                     </div>
-                                    <div style="font-weight:800; font-size:0.75rem; color:var(--text-muted); text-align:right;">
-                                        <span style="color:var(--text-main); font-size:0.85rem;">${st.w.length}/${chap.v}</span> (${pct}%)
+                                    <div style="font-weight:700; font-size:0.8rem; color:var(--text-muted); text-align:right;">
+                                        <span style="color:var(--text-main);">${st.w.length}/${chap.v}</span> (${pct}%)
                                     </div>
                                 </div>
-                                <div style="display:flex; justify-content:space-between; font-size:0.72rem; font-weight:700; background:rgba(2,4,10,0.3); padding:4px 8px; border-radius:6px; border:1px solid var(--border-color);">
+                                <div style="display:flex; justify-content:space-between; font-size:0.75rem; font-weight:600; background:var(--bg-dark); padding:6px 10px; border-radius:6px; border:1px solid var(--border-color); margin-top:4px;">
                                     ${deadlineMeta}
                                     <span style="color:${minPerDayTxt === 'Overdue Limit' ? 'var(--accent-red)' : 'var(--accent-green)'}">${minPerDayTxt}</span>
                                 </div>
                             </div>
-                            <div class="today-target-details" style="padding: 0 10px 10px 10px;">
-                                <div class="video-grid is-compact" style="margin-top: 6px;">${cb}</div>
+                            <div class="today-target-details">
+                                <div class="video-grid" style="margin-top: 0;">${cb}</div>
                             </div>
                         </div>`;
                     }
@@ -1500,9 +1444,9 @@
                     const targetExam = examEntries[currentExamPtr]; const trackingStatusText = currentExamPtr < baseExamIndex ? 'PAST' : currentExamPtr === baseExamIndex ? 'TARGET' : 'FUTURE';
                     const labelColor = trackingStatusText === 'PAST' ? 'var(--text-muted)' : trackingStatusText === 'TARGET' ? 'var(--accent-orange)' : 'var(--accent-blue)';
                     testContainer.innerHTML = `
-                    <div class="meta-dynamic-strip" style="border-left: 3px solid ${labelColor}; cursor: pointer;" onclick="switchView('tests'); jumpToSpecificTestNode(${targetExam.id});">
-                        <div><strong style="font-size:0.95rem; color:var(--text-main); display:block; margin-bottom:2px;">${targetExam.exam.n}</strong><span style="font-size:0.75rem; color:var(--text-muted);">Batch: <span style="color:var(--accent-blue); font-weight:700;">${targetExam.exam.b}</span> | Status: <span style="color:${labelColor}; font-weight:700;">${trackingStatusText}</span></span></div>
-                        <div style="text-align:right; font-weight:800; font-size:0.8rem; color:var(--accent-orange); white-space:nowrap;">${targetExam.exam.d}</div>
+                    <div class="meta-dynamic-strip" style="border-left: 4px solid ${labelColor}; cursor: pointer;" onclick="switchView('tests'); jumpToSpecificTestNode(${targetExam.id});">
+                        <div><strong style="font-size:1rem; color:var(--text-main); display:block; margin-bottom:4px;">${targetExam.exam.n}</strong><span style="font-size:0.8rem; color:var(--text-muted);">Batch: <span style="color:var(--accent-blue); font-weight:700;">${targetExam.exam.b}</span> | Status: <span style="color:${labelColor}; font-weight:700;">${trackingStatusText}</span></span></div>
+                        <div style="text-align:right; font-weight:800; font-size:0.85rem; color:var(--accent-orange); white-space:nowrap;">${targetExam.exam.d}</div>
                     </div>`;
                 } else { testContainer.innerHTML = `<div class="meta-dynamic-strip"><span style="color:var(--text-muted); font-size:0.85rem;">No logs inside window view.</span></div>`; }
             }
@@ -1515,9 +1459,9 @@
                     const revLabelColor = revisionStatusText === 'COMPLETED' ? 'var(--accent-green)' : (revisionStatusText === 'OVERDUE' ? 'var(--accent-red)' : 'var(--accent-purple)');
                     const displayRevDate = new Date(revItem.dateStr).toLocaleDateString('en-IN', {day:'numeric', month:'short'});
                     revContainer.innerHTML = `
-                    <div class="meta-dynamic-strip" style="border-left: 3px solid ${colorMap[revItem.s]}; cursor: pointer;" onclick="jumpToSpecificRevisionNode('${revItem.s}', '${revItem.chap.n}')">
-                        <div><strong style="font-size:0.95rem; color:var(--text-main); display:block; margin-bottom:2px;">${revItem.chap.n}</strong><span style="font-size:0.75rem; color:var(--text-muted);">Subject: <span style="color:${colorMap[revItem.s]}; font-weight:700;">${subjMap[revItem.s]}</span> | Track: <span style="color:${revLabelColor}; font-weight:700;">${revisionStatusText}</span></span></div>
-                        <div style="text-align:right; font-weight:800; font-size:0.8rem; color:var(--accent-purple); white-space:nowrap;">${displayRevDate}</div>
+                    <div class="meta-dynamic-strip" style="border-left: 4px solid ${colorMap[revItem.s]}; cursor: pointer;" onclick="jumpToSpecificRevisionNode('${revItem.s}', '${revItem.chap.n}')">
+                        <div><strong style="font-size:1rem; color:var(--text-main); display:block; margin-bottom:4px;">${revItem.chap.n}</strong><span style="font-size:0.8rem; color:var(--text-muted);">Subject: <span style="color:${colorMap[revItem.s]}; font-weight:700;">${subjMap[revItem.s]}</span> | Track: <span style="color:${revLabelColor}; font-weight:700;">${revisionStatusText}</span></span></div>
+                        <div style="text-align:right; font-weight:800; font-size:0.85rem; color:var(--accent-purple); white-space:nowrap;">${displayRevDate}</div>
                     </div>`;
                 } else { revContainer.innerHTML = `<div class="meta-dynamic-strip"><span style="color:var(--text-muted); font-size:0.85rem;">No active calendar milestones logged.</span></div>`; }
             }
@@ -1537,19 +1481,19 @@
                     subLectureStats[s].w += st.w.length;
                     let cb = ""; for(let i=0; i<chap.v; i++) cb += `<div class="video-checkbox ${st.w.includes(i)?'watched':''}" onclick="event.stopPropagation(); toggleWorkspaceVideo('${s}', ${idx}, ${i})">${i + 1}</div>`;
                     
-                    let revHistoryHtml = `<div style="margin-top:14px; background:rgba(2, 4, 10, 0.2); padding:10px; border-radius:10px; border:1px solid var(--border-color);"><span style="font-size:0.65rem; color:var(--text-muted); font-weight:800; text-transform:uppercase; display:block; margin-bottom:6px;">Revision Tracking Logs</span>`;
+                    let revHistoryHtml = `<div style="margin-top:16px; background:var(--bg-dark); padding:14px; border-radius:8px; border:1px solid var(--border-color);"><span style="font-size:0.75rem; color:var(--text-muted); font-weight:700; text-transform:uppercase; display:block; margin-bottom:8px;">Revision Tracking Logs</span>`;
                     if(st.rev_history && st.rev_history.length > 0) {
-                        revHistoryHtml += `<ul style="list-style:none; display:flex; flex-direction:column; gap:4px; font-size:0.75rem; color:var(--text-main);">`;
+                        revHistoryHtml += `<ul style="list-style:none; display:flex; flex-direction:column; gap:6px; font-size:0.85rem; color:var(--text-main);">`;
                         st.rev_history.forEach(revLog => {
-                            revHistoryHtml += `<li style="display:flex; justify-content:space-between; padding:4px 6px; background:rgba(255,255,255,0.02); border-radius:4px;"><span>📅 Completed on: <strong>${revLog.date}</strong></span> <span class="badge-yield yield-high" style="font-size:0.65rem; padding:1px 4px;">Verified</span></li>`;
+                            revHistoryHtml += `<li style="display:flex; justify-content:space-between; padding:6px 10px; background:var(--bg-panel); border:1px solid var(--border-color); border-radius:6px;"><span>Completed on: <strong>${revLog.date}</strong></span> <span style="font-size:0.75rem; color:var(--accent-green); font-weight:700;">Verified</span></li>`;
                         });
                         revHistoryHtml += `</ul>`;
                     } else {
-                        revHistoryHtml += `<div style="font-size:0.72rem; color:var(--text-muted);">No revision logs mapped for this core architecture.</div>`;
+                        revHistoryHtml += `<div style="font-size:0.8rem; color:var(--text-muted);">No revision logs mapped for this module.</div>`;
                     }
                     revHistoryHtml += `</div>`;
                     
-                    h += `<div class="chapter-node" id="node-${s}-${idx}"><div class="chapter-node-summary" onclick="toggleAccordionNode(this)"><div style="flex-grow:1;"><h4 style="font-weight:700; font-size:1rem; display:flex; align-items:center; flex-wrap:wrap; gap:6px;"><span>${chap.n}</span> <span style="font-size:0.75rem; color:var(--text-muted); font-weight:500;">(${(chap.l/60).toFixed(1)}h total)</span>${st.rd ? `<span style="font-size:0.7rem; background:rgba(168,85,247,0.12); color:#c084fc; padding:2px 6px; border-radius:6px;">Rev: ${st.rd}</span>` : ''}</h4><div style="display:flex; gap:12px; font-size:0.78rem; color:var(--text-muted); margin-top:4px;"><span>Modules: ${st.w.length}/${chap.v}</span><span>Problems: <span style="color:var(--text-main); font-weight:700;">${st.q || 0}/${st.target_q || 0}</span></span><span style="color:var(--accent-yellow); font-weight:700;">PYQs: ${st.pyq || 0}</span></div></div><div style="text-align:right;"><div style="font-weight:900; font-size:0.9rem; color:${pct===100?'var(--accent-green)':'var(--text-main)'}">${pct}%</div></div></div><div class="chapter-node-details" onclick="event.stopPropagation();"><div class="inline-meta-panel"><div><div style="font-size:0.65rem; color:var(--text-muted);">Goal Blueprint Date</div><div style="font-size:0.85rem; font-weight:700; margin-top:2px;">${dStr}</div></div><div><div style="font-size:0.65rem; color:var(--text-muted); margin-bottom:4px;">Bind Calendar</div><div class="revision-date-setter"><input type="date" value="${st.rd || ''}" onchange="setChapterRevisionDate('${s}', ${idx}, this.value)"></div></div><div><div style="font-size:0.65rem; color:var(--text-muted); margin-bottom:4px;">Target Problems Pool</div><div style="display:flex; gap:4px;"><input type="number" id="inline-target-q-${s}-${idx}" class="prac-input" placeholder="Goal Qs" value="${st.target_q || ''}" onchange="setChapterTargetPractice('${s}', ${idx}, this.value)"></div></div><div><div style="font-size:0.65rem; color:var(--text-muted); margin-bottom:4px;">Add Numericals</div><div style="display:flex; gap:4px;"><input type="number" id="inline-q-${s}-${idx}" class="prac-input" placeholder="+"><button class="prac-btn" style="background:${colorMap[s]}; border:none; color:#020617; font-weight:900;" onclick="addInlineChapterPractice('${s}', ${idx})">Log</button></div></div><div><div style="font-size:0.65rem; color:var(--accent-yellow); margin-bottom:4px;">Add PYQs</div><div style="display:flex; gap:4px;"><input type="number" id="inline-pyq-${s}-${idx}" class="prac-input" placeholder="+"><button class="prac-btn" style="background:var(--grad-pyq); border:none; color:#020617; font-weight:900;" onclick="addInlineChapterPYQ('${s}', ${idx})">Log</button></div></div></div><div class="video-grid ${compactLayoutActive ? 'is-compact' : ''}">${cb}</div>${revHistoryHtml}</div></div>`;
+                    h += `<div class="chapter-node" id="node-${s}-${idx}"><div class="chapter-node-summary" onclick="toggleAccordionNode(this)"><div style="flex-grow:1;"><h4 style="font-weight:700; font-size:1.05rem; display:flex; align-items:center; flex-wrap:wrap; gap:8px;"><span>${chap.n}</span> <span style="font-size:0.8rem; color:var(--text-muted); font-weight:500;">(${(chap.l/60).toFixed(1)}h total)</span>${st.rd ? `<span style="font-size:0.75rem; background:rgba(139,92,246,0.1); color:var(--accent-purple); padding:4px 8px; border-radius:6px;">Rev: ${st.rd}</span>` : ''}</h4><div style="display:flex; gap:16px; font-size:0.85rem; color:var(--text-muted); margin-top:8px;"><span>Modules: ${st.w.length}/${chap.v}</span><span>Problems: <span style="color:var(--text-main); font-weight:700;">${st.q || 0}/${st.target_q || 0}</span></span><span style="color:var(--accent-purple); font-weight:700;">PYQs: ${st.pyq || 0}</span></div></div><div style="text-align:right;"><div style="font-weight:800; font-size:1.1rem; color:${pct===100?'var(--accent-green)':'var(--text-main)'}">${pct}%</div></div></div><div class="chapter-node-details" onclick="event.stopPropagation();"><div class="inline-meta-panel"><div><div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:4px; font-weight:600;">Goal Blueprint Date</div><div style="font-size:0.9rem; font-weight:700;">${dStr}</div></div><div><div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:6px; font-weight:600;">Bind Calendar</div><input type="date" class="prac-input" value="${st.rd || ''}" onchange="setChapterRevisionDate('${s}', ${idx}, this.value)"></div><div><div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:6px; font-weight:600;">Target Problems Pool</div><div style="display:flex; gap:6px;"><input type="number" id="inline-target-q-${s}-${idx}" class="prac-input" placeholder="Goal Qs" value="${st.target_q || ''}" onchange="setChapterTargetPractice('${s}', ${idx}, this.value)"></div></div><div><div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:6px; font-weight:600;">Add Numericals</div><div style="display:flex; gap:6px;"><input type="number" id="inline-q-${s}-${idx}" class="prac-input" placeholder="+"><button class="prac-btn" style="background:${colorMap[s]}; border:none; color:#ffffff; font-weight:700;" onclick="addInlineChapterPractice('${s}', ${idx})">Log</button></div></div><div><div style="font-size:0.75rem; color:var(--accent-purple); margin-bottom:6px; font-weight:600;">Add PYQs</div><div style="display:flex; gap:6px;"><input type="number" id="inline-pyq-${s}-${idx}" class="prac-input" placeholder="+"><button class="prac-btn" style="background:var(--grad-pyq); border:none; color:#ffffff; font-weight:700;" onclick="addInlineChapterPYQ('${s}', ${idx})">Log</button></div></div></div><div class="video-grid">${cb}</div>${revHistoryHtml}</div></div>`;
                 }); w.innerHTML = h;
             });
 
@@ -1598,26 +1542,26 @@
                 found = true;
                 const isTodayNode = (item.dateStr === todayStr);
                 const completeBtnClass = item.r_done ? "off-toggle-btn is-active-state" : "off-toggle-btn";
-                const completeBtnLabel = item.r_done ? "Complete" : "Mark Complete";
+                const completeBtnLabel = item.r_done ? "Completed" : "Mark Done";
 
                 h += `
-                <div class="chapter-node" id="revision-node-${item.dateStr}" style="border-left: 4px solid ${colorMap[item.s]}; background: ${isTodayNode ? 'rgba(168,85,247,0.06)' : ''};">
-                    <div class="chapter-node-summary" style="padding: 12px 16px; flex-wrap:wrap;">
-                        <div style="flex-grow:1; display:flex; align-items:center; gap:8px;">
-                            <button class="${completeBtnClass}" style="padding: 4px 8px; font-size: 0.7 dream;" onclick="toggleRevisionCompleteState('${item.s}', ${item.idx})">${completeBtnLabel}</button>
+                <div class="chapter-node" id="revision-node-${item.dateStr}" style="border-left: 4px solid ${colorMap[item.s]}; background: ${isTodayNode ? 'var(--bg-panel)' : 'var(--bg-panel)'};">
+                    <div class="chapter-node-summary" style="padding: 16px; flex-wrap:wrap; gap: 16px;">
+                        <div style="flex-grow:1; display:flex; align-items:center; gap:12px;">
+                            <button class="${completeBtnClass}" onclick="toggleRevisionCompleteState('${item.s}', ${item.idx})">${completeBtnLabel}</button>
                             <div>
-                                <span style="color:${colorMap[item.s]}; font-size:0.7rem; font-weight:800; margin-right:6px;">${subjMap[item.s].toUpperCase()}</span>
-                                <strong style="font-size:0.95rem; color:var(--text-main); ${item.r_done ? 'text-decoration: line-through; opacity:0.6;' : ''}">${item.chap.n}</strong>
+                                <span style="color:${colorMap[item.s]}; font-size:0.75rem; font-weight:700; margin-right:8px;">${subjMap[item.s].toUpperCase()}</span>
+                                <strong style="font-size:1rem; color:var(--text-main); ${item.r_done ? 'text-decoration: line-through; opacity:0.6;' : ''}">${item.chap.n}</strong>
                             </div>
                         </div>
-                        <div class="revision-date-setter" style="display:flex; align-items:center; gap:8px; margin-top:4px;">
-                            <input type="date" value="${item.dateStr}" onchange="setChapterRevisionDate('${item.s}', ${item.idx}, this.value)">
+                        <div style="display:flex; align-items:center; gap:12px;">
+                            <input type="date" class="prac-input" style="padding: 6px 10px;" value="${item.dateStr}" onchange="setChapterRevisionDate('${item.s}', ${item.idx}, this.value)">
                             <button class="off-toggle-btn" onclick="setChapterRevisionDate('${item.s}', ${item.idx}, '')">Clear</button>
                         </div>
                     </div>
                 </div>`;
             });
-            w.innerHTML = found ? h : `<div style="text-align:center; color:var(--text-muted); padding:20px; font-size:0.85rem;">No revision targets matching the active filter settings.</div>`;
+            w.innerHTML = found ? h : `<div style="text-align:center; color:var(--text-muted); padding:24px; font-size:0.9rem;">No revision targets matching the active filter settings.</div>`;
         }
 
         function removeElementById(id) { const e = document.getElementById(id); if(e) e.remove(); }
@@ -1678,7 +1622,7 @@
             const w = document.getElementById("testSeriesAccordionWrapper"); if(!w) return;
             let h = "";
             let week = 1, cnt = 0;
-            h += `<div class="timeline-sprint-divider"><div class="sprint-badge">Test Block Track ${week}</div><div class="sprint-line"></div></div>`;
+            h += `<div class="timeline-sprint-divider"><div class="sprint-badge">Test Block ${week}</div><div class="sprint-line"></div></div>`;
             
             examManifestDB.forEach((exam, id) => {
                 const r = examScoreDB[id] || { score_ovr: "", score_p: "", score_c: "", score_m: "", corr_ovr: "", corr_p: "", corr_c: "", corr_m: "", inc_ovr: "", inc_p: "", inc_c: "", inc_m: "", time: "", attempted: false };
@@ -1689,7 +1633,7 @@
                 if (currentTestStateFilter === "attempted" && !isAttempted) return;
                 if (currentTestStateFilter === "unattempted" && isAttempted) return;
 
-                if (++cnt > 5) { week++; cnt = 1; h += `<div class="timeline-sprint-divider"><div class="sprint-badge">Test Block Track ${week}</div><div class="sprint-line"></div></div>`; }
+                if (++cnt > 5) { week++; cnt = 1; h += `<div class="timeline-sprint-divider"><div class="sprint-badge">Test Block ${week}</div><div class="sprint-line"></div></div>`; }
 
                 const btnClass = isAttempted ? "off-toggle-btn is-active-state" : "off-toggle-btn";
                 const btnLabel = isAttempted ? "Attempted" : "Mark Attempted";
@@ -1697,28 +1641,28 @@
                 
                 h += `
                 <div class="timeline-block" id="exam-card-${id}">
-                    <div class="timeline-node-dot" style="background: ${isAttempted ? 'var(--accent-green)' : 'var(--progress-bg)'};"></div>
+                    <div class="timeline-node-dot" style="background: ${isAttempted ? 'var(--accent-green)' : 'var(--border-color)'};"></div>
                     <div class="timeline-stamp-header">
                         <span>${exam.d}</span>
                         ${stateActionBtn}
                     </div>
                     <div class="timeline-card-wrapper">
-                        <div class="timeline-subject-pill" style="border-left: 4px solid var(--accent-orange); opacity: ${isAttempted ? '1' : '0.65'};">
+                        <div class="timeline-subject-pill" style="border-left: 4px solid var(--accent-orange); opacity: ${isAttempted ? '1' : '0.75'}; background: var(--bg-panel);">
                             <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                                <div style="color: var(--accent-orange); font-size: 0.75rem; font-weight: 800;">SERIES BATCH: ${exam.b.toUpperCase()}</div>
-                                <span style="font-size: 0.65rem; background: var(--progress-bg); padding: 2px 6px; border-radius: 4px; font-weight: 700;">MANIFEST ID: #${id}</span>
+                                <div style="color: var(--accent-orange); font-size: 0.8rem; font-weight: 700;">BATCH: ${exam.b.toUpperCase()}</div>
+                                <span style="font-size: 0.75rem; background: var(--bg-dark); padding: 4px 8px; border-radius: 6px; font-weight: 600; border: 1px solid var(--border-color);">ID: #${id}</span>
                             </div>
-                            <div style="margin: 6px 0; font-weight: 800; font-size: 1.05rem;" onclick="toggleAccordionNode(this)">${exam.n}</div>
+                            <div style="margin: 12px 0; font-weight: 800; font-size: 1.1rem; cursor: pointer;" onclick="toggleAccordionNode(this)">${exam.n}</div>
                             
                             <div class="chapter-node-details" style="margin-top: 10px; border-radius: 8px;">
                                 <div class="test-log-form" style="margin-top: 0;">
-                                    <div class="test-input-group"><label style="font-size:0.58rem;">Score Ovr</label><input type="number" class="test-field" value="${r.score_ovr||''}" onchange="updateExamDataFieldValue(${id},'score_ovr',this.value)"></div>
-                                    <div class="test-input-group"><label style="font-size:0.58rem;">Corr Ovr</label><input type="number" class="test-field" value="${r.corr_ovr||''}" onchange="updateExamDataFieldValue(${id},'corr_ovr',this.value)"></div>
-                                    <div class="test-input-group"><label style="font-size:0.58rem;">Inc Ovr</label><input type="number" class="test-field" value="${r.inc_ovr||''}" onchange="updateExamDataFieldValue(${id},'inc_ovr',this.value)"></div>
-                                    <div class="test-input-group"><label style="font-size:0.58rem;">Duration Mins</label><input type="number" class="test-field" value="${r.time||''}" onchange="updateExamDataFieldValue(${id},'time',this.value)"></div>
-                                    <div class="test-input-group"><label style="font-size:0.58rem;">Score Phys</label><input type="number" class="test-field" value="${r.score_p||''}" onchange="updateExamDataFieldValue(${id},'score_p',this.value)"></div>
-                                    <div class="test-input-group"><label style="font-size:0.58rem;">Score Chem</label><input type="number" class="test-field" value="${r.score_c||''}" onchange="updateExamDataFieldValue(${id},'score_c',this.value)"></div>
-                                    <div class="test-input-group"><label style="font-size:0.58rem;">Score Maths</label><input type="number" class="test-field" value="${r.score_m||''}" onchange="updateExamDataFieldValue(${id},'score_m',this.value)"></div>
+                                    <div class="test-input-group"><label>Total Score</label><input type="number" class="test-field" value="${r.score_ovr||''}" onchange="updateExamDataFieldValue(${id},'score_ovr',this.value)"></div>
+                                    <div class="test-input-group"><label>Total Correct</label><input type="number" class="test-field" value="${r.corr_ovr||''}" onchange="updateExamDataFieldValue(${id},'corr_ovr',this.value)"></div>
+                                    <div class="test-input-group"><label>Total Incorrect</label><input type="number" class="test-field" value="${r.inc_ovr||''}" onchange="updateExamDataFieldValue(${id},'inc_ovr',this.value)"></div>
+                                    <div class="test-input-group"><label>Duration (Mins)</label><input type="number" class="test-field" value="${r.time||''}" onchange="updateExamDataFieldValue(${id},'time',this.value)"></div>
+                                    <div class="test-input-group"><label>Physics Score</label><input type="number" class="test-field" value="${r.score_p||''}" onchange="updateExamDataFieldValue(${id},'score_p',this.value)"></div>
+                                    <div class="test-input-group"><label>Chemistry Score</label><input type="number" class="test-field" value="${r.score_c||''}" onchange="updateExamDataFieldValue(${id},'score_c',this.value)"></div>
+                                    <div class="test-input-group"><label>Maths Score</label><input type="number" class="test-field" value="${r.score_m||''}" onchange="updateExamDataFieldValue(${id},'score_m',this.value)"></div>
                                 </div>
                             </div>
                         </div>
@@ -1781,7 +1725,7 @@
 
             const setBar = (id, p) => { const e = document.getElementById(id); if(e) e.style.width = `${Math.min(p, 100)}%`; };
             setBar("bar-a-hrs", (dA/tA)*100);
-            setBar("bar-a-pyqs", Math.min(totalPYQs / 5, 100)); // Dynamic scaling
+            setBar("bar-a-pyqs", Math.min(totalPYQs / 5, 100));
             setEl("tot-p-q", pS + (fastPracticeTotals.p || 0)); 
             setEl("tot-c-q", cS + (fastPracticeTotals.c || 0)); 
             setEl("tot-m-q", mS + (fastPracticeTotals.m || 0)); 
@@ -1819,15 +1763,11 @@
             for (let i = 0; i < 20; i++) {
                 const s = getLocalYYYYMMDD(d), log = practiceData[s] || {p:0,c:0,m:0,fast_p:0,fast_c:0,fast_m:0,pyq_p:0,pyq_c:0,pyq_m:0}, tot = (log.p||0)+(log.c||0)+(log.m||0)+(log.fast_p||0)+(log.fast_c||0)+(log.fast_m||0)+(log.pyq_p||0)+(log.pyq_c||0)+(log.pyq_m||0);
                 let lvl = tot > 80 ? 4 : tot > 40 ? 3 : tot > 15 ? 2 : tot > 0 ? 1 : 0;
-                const cell = document.createElement('div'); cell.className = `heatmap-cell level-${lvl}`; cell.setAttribute('data-tooltip', `${d.toDateString()}: ${tot} Qs`);
+                const cell = document.createElement('div'); cell.className = `heatmap-cell level-${lvl}`; cell.setAttribute('title', `${d.toDateString()}: ${tot} Qs`);
                 g.appendChild(cell); d.setDate(d.getDate() + 1);
             }
         }
 
-        function addPractice(s) {
-            const el = document.getElementById(`${s}QInp`), v = parseInt(el.value, 10), t = getLocalYYYYMMDD(new Date()); if(!practiceData[t]) practiceData[t] = {p:0,c:0,m:0,fast_p:0,fast_c:0,fast_m:0,pyq_p:0,pyq_c:0,pyq_m:0, watch_p: 0, watch_c: 0, watch_m: 0};
-            if(!isNaN(v) && v > 0) { practiceData[t][s] = (practiceData[t][s]||0) + v; el.value = ""; queueCloudSync(); renderPracticeTracker(); buildWorkspaces(); buildConsistencyHeatmap(); if(activeOpenViewId === 'progress') renderProgressGraphs(); if(activeOpenViewId === 'streaks') renderStreaks(); }
-        }
         function renderPracticeTracker() {
             const t = getLocalYYYYMMDD(new Date()), d = practiceData[t] || {p:0,c:0,m:0,fast_p:0,fast_c:0,fast_m:0,pyq_p:0,pyq_c:0,pyq_m:0};
             ['p','c','m'].forEach(s => { const done = d[s]||0; const txtEl = document.getElementById(`${s}QTxt`); if(txtEl) txtEl.innerText = `${done}/${pracTargets[s]}`; const b = document.getElementById(`${s}QBar`); if(b) b.style.width = `${Math.min(done/pracTargets[s]*100, 100)}%`; });
@@ -1894,13 +1834,13 @@
             };
 
             const buildCard = (title, data, color) => `
-                <div class="big-stat-box" style="border-left: 3px solid ${color};">
+                <div class="big-stat-box" style="border-left: 4px solid ${color};">
                     <div class="big-stat-label">${title}</div>
-                    <div class="big-stat-num" style="color: ${color}; font-size: 1.8rem; margin: 8px 0;">${data.streak} <span style="font-size:0.8rem; color:var(--text-muted)">Days</span></div>
-                    <div style="font-size: 0.75rem; color: var(--text-main); font-weight: 700;">
+                    <div class="big-stat-num" style="color: ${color}; font-size: 1.8rem; margin: 12px 0;">${data.streak} <span style="font-size:0.85rem; color:var(--text-muted)">Days</span></div>
+                    <div style="font-size: 0.8rem; color: var(--text-main); font-weight: 700;">
                         Today: ${Math.round(data.todayVal)} / ${data.target}
                     </div>
-                    <div class="stat-bar-bg" style="margin-top: 6px; height: 4px;">
+                    <div class="stat-bar-bg" style="margin-top: 8px;">
                         <div class="stat-bar-fill" style="background: ${color}; width: ${Math.min(100, (data.todayVal/data.target)*100)}%;"></div>
                     </div>
                 </div>
@@ -1908,12 +1848,12 @@
 
             const qGrid = document.getElementById('streak-q-grid');
             if(qGrid) {
-                qGrid.innerHTML = buildCard('Global (80 Qs)', streaks.tQ, 'var(--accent-green)') + buildCard('Physics (25 Qs)', streaks.pQ, '#4facfe') + buildCard('Chemistry (25 Qs)', streaks.cQ, '#ff0844') + buildCard('Maths (25 Qs)', streaks.mQ, '#b180ff');
+                qGrid.innerHTML = buildCard('Global (80 Qs)', streaks.tQ, 'var(--accent-green)') + buildCard('Physics (25 Qs)', streaks.pQ, 'var(--grad-physics)') + buildCard('Chemistry (25 Qs)', streaks.cQ, 'var(--grad-chemistry)') + buildCard('Maths (25 Qs)', streaks.mQ, 'var(--grad-maths)');
             }
 
             const wGrid = document.getElementById('streak-w-grid');
             if(wGrid) {
-                wGrid.innerHTML = buildCard('Global (240 Mins)', streaks.tW, 'var(--accent-orange)') + buildCard('Physics (70 Mins)', streaks.pW, '#4facfe') + buildCard('Chemistry (70 Mins)', streaks.cW, '#ff0844') + buildCard('Maths (70 Mins)', streaks.mW, '#b180ff');
+                wGrid.innerHTML = buildCard('Global (240 Mins)', streaks.tW, 'var(--accent-orange)') + buildCard('Physics (70 Mins)', streaks.pW, 'var(--grad-physics)') + buildCard('Chemistry (70 Mins)', streaks.cW, 'var(--grad-chemistry)') + buildCard('Maths (70 Mins)', streaks.mW, 'var(--grad-maths)');
             }
         }
 
@@ -2042,11 +1982,11 @@
             setEl("yAxisProblemsLegend", `<div>${maxP}</div><div>${Math.round(maxP*0.5)}</div><div>0</div>`);
             setEl("yAxisWatchLegend", `<div>${maxW.toFixed(1)}h</div><div>${(maxW*0.5).toFixed(1)}h</div><div>0h</div>`);
             
-            const wires = () => `<div class="chart-grid-line-layer"><div class="chart-grid-horizontal-wire"></div><div class="chart-grid-horizontal-wire"></div><div class="chart-grid-horizontal-wire"></div></div>`;
-            pCanvas.innerHTML = wires(); wCanvas.innerHTML = wires();
+            pCanvas.innerHTML = `<div class="chart-grid-horizontal-wire" style="position:absolute; top: 0; width: 100%;"></div><div class="chart-grid-horizontal-wire" style="position:absolute; top: 50%; width: 100%;"></div>`;
+            wCanvas.innerHTML = `<div class="chart-grid-horizontal-wire" style="position:absolute; top: 0; width: 100%;"></div><div class="chart-grid-horizontal-wire" style="position:absolute; top: 50%; width: 100%;"></div>`;
             
             const leg = document.getElementById("problemsChartLegendContainer");
-            if(leg) leg.innerHTML = graphSubjectFilter==="all"? `<div class="legend-indicator-item"><div class="legend-color-blob" style="background:#4facfe;"></div>P</div><div class="legend-indicator-item"><div class="legend-color-blob" style="background:#ff0844;"></div>C</div><div class="legend-indicator-item"><div class="legend-color-blob" style="background:#b180ff;"></div>M</div>` : `<div class="legend-indicator-item"><div class="legend-color-blob" style="background:${colorMap[graphSubjectFilter]};"></div>Logs</div>`;
+            if(leg) leg.innerHTML = graphSubjectFilter==="all"? `<div style="display:flex; align-items:center; gap:4px;"><div style="width:12px; height:12px; border-radius:3px; background:var(--grad-physics);"></div>P</div><div style="display:flex; align-items:center; gap:4px;"><div style="width:12px; height:12px; border-radius:3px; background:var(--grad-chemistry);"></div>C</div><div style="display:flex; align-items:center; gap:4px;"><div style="width:12px; height:12px; border-radius:3px; background:var(--grad-maths);"></div>M</div>` : `<div style="display:flex; align-items:center; gap:4px;"><div style="width:12px; height:12px; border-radius:3px; background:${colorMap[graphSubjectFilter]};"></div>Logs</div>`;
 
             cData.forEach(item => {
                 const pillar = document.createElement("div"); pillar.className = "chart-bar-pillar";
@@ -2055,20 +1995,18 @@
                 const physHeight = item.tot > 0 ? (item.prob.p / item.tot) * 100 : 0;
 
                 pillar.innerHTML = `
-                    <div class="chart-segment-stack" style="height:${Math.max(4, (item.tot/maxP)*100)}%;">
-                        <div class="chart-segment-layer" style="background:#b180ff; height:${mathHeight}%;"></div>
-                        <div class="chart-segment-layer" style="background:#ff0844; height:${chemHeight}%;"></div>
-                        <div class="chart-segment-layer" style="background:#4facfe; height:${physHeight}%;"></div>
-                        <div class="chart-value-label">${item.tot}</div>
+                    <div class="chart-segment-stack" style="height:${Math.max(2, (item.tot/maxP)*100)}%;">
+                        <div style="background:var(--grad-maths); height:${mathHeight}%; width: 100%;"></div>
+                        <div style="background:var(--grad-chemistry); height:${chemHeight}%; width: 100%;"></div>
+                        <div style="background:var(--grad-physics); height:${physHeight}%; width: 100%;"></div>
                     </div>
                     <div class="chart-axis-label">${item.label}</div>`;
                 pCanvas.appendChild(pillar);
 
                 const wPillar = document.createElement("div"); wPillar.className = "chart-bar-pillar";
                 wPillar.innerHTML = `
-                    <div class="chart-segment-stack" style="height:${Math.max(4, (item.hrs/maxW)*100)}%;">
-                        <div class="chart-segment-layer" style="background:var(--grad-physics); height:100%;"></div>
-                        <div class="chart-value-label">${item.hrs.toFixed(1)}h</div>
+                    <div class="chart-segment-stack" style="height:${Math.max(2, (item.hrs/maxW)*100)}%;">
+                        <div style="background:var(--accent-blue); height:100%; width: 100%;"></div>
                     </div>
                     <div class="chart-axis-label">${item.label}</div>`;
                 wCanvas.appendChild(wPillar);
@@ -2080,7 +2018,7 @@
                 setSyncBadge("TERMINATING SESSION...", "var(--accent-red)");
                 firebase.auth().signOut()
                     .then(() => {
-                        document.getElementById("masterAuthOverlayPortal").classList.remove("hidden");
+                        document.getElementById("masterAuthOverlayPortal").style.display = "flex";
                     })
                     .catch((err) => {
                         alert("Sign out exception encountered: " + err.message);
