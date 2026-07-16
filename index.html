@@ -94,6 +94,8 @@
             z-index: 100; 
             transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
             box-shadow: 4px 0 20px var(--shadow-matrix); 
+            overflow-y: auto; /* Made sidebar scrollable for landscape screens */
+            overflow-x: hidden;
         }
         .sidebar.open { left: 0; }
         .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(2px); z-index: 99; display: none; }
@@ -119,7 +121,7 @@
         .profile-card-title { font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
         .profile-card-email { font-size: 0.9rem; font-weight: 600; color: var(--text-main); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-        .sidebar ul { list-style: none; display: flex; flex-direction: column; gap: 6px; overflow-y: auto; flex-grow: 1; padding: 0 16px 40px 16px; }
+        .sidebar ul { list-style: none; display: flex; flex-direction: column; gap: 6px; overflow-y: visible; flex-grow: 1; padding: 0 16px 40px 16px; }
         .sidebar li { 
             padding: 14px 16px; 
             color: var(--text-muted); 
@@ -144,7 +146,7 @@
         
         .sidebar-actions-panel {
             margin-top: auto;
-            padding: 20px 20px 0 20px;
+            padding: 20px 20px 24px 20px;
             border-top: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
@@ -356,6 +358,22 @@
             font-weight: 700; margin-top: 16px; cursor: pointer; font-size: 0.95rem; transition: background 0.2s;
         }
         .auth-anonymous-btn:hover { background: var(--progress-bg); }
+
+        /* Dynamic Streak Tracker Circular CSS */
+        .circular-tracker {
+            width: 180px; height: 180px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            background: conic-gradient(var(--accent-color) var(--p, 0%), var(--progress-bg) 0);
+            position: relative;
+        }
+        .circular-tracker::before {
+            content: ""; position: absolute; inset: 12px; border-radius: 50%;
+            background: var(--bg-panel);
+        }
+        .circular-tracker-val {
+            position: relative; z-index: 1; font-size: 1.8rem; font-weight: 900; color: var(--text-main);
+            text-align: center; line-height: 1.2;
+        }
         
         /* Layout overrides for larger screens */
         @media (min-width: 640px) {
@@ -768,6 +786,10 @@
                     <div class="big-stat-grid" id="streak-w-grid"></div>
                 </div>
             </div>
+        </section>
+
+        <section id="view-streak-detail" class="view-section">
+            <div id="streak-detail-container"></div>
         </section>
     </main>
 
@@ -1831,14 +1853,74 @@
             return { streak: currentStreak, todayVal: todayStats[metric], target: target };
         }
 
+        function openStreakDetail(metricId, title, target, color) {
+            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+            document.getElementById('view-streak-detail').classList.add('active');
+
+            const todayStr = getLocalYYYYMMDD(new Date());
+            const todayStats = getDailyStats(todayStr);
+            const todayVal = todayStats[metricId] || 0;
+            const pct = Math.min(100, (todayVal / target) * 100);
+            const currentStreak = calculateStreak(metricId, target).streak;
+
+            let historyHtml = '';
+            let d = new Date();
+            for(let i=0; i<30; i++) {
+                let s = getLocalYYYYMMDD(d);
+                let st = getDailyStats(s);
+                let val = st[metricId] || 0;
+                let passed = val >= target;
+                historyHtml += `
+                    <div style="display: flex; justify-content: space-between; padding: 16px; background: var(--bg-dark); border-bottom: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 8px;">
+                        <span style="color: var(--text-main); font-weight: 600;">${d.toLocaleDateString('en-IN', {weekday:'short', month:'short', day:'numeric'})}</span>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span style="font-weight: 800; color: ${passed ? color : 'var(--text-muted)'}">${Math.round(val)} / ${target}</span>
+                            <span>${passed ? '🔥' : '❌'}</span>
+                        </div>
+                    </div>
+                `;
+                d.setDate(d.getDate() - 1);
+            }
+
+            const w = document.getElementById('streak-detail-container');
+            w.innerHTML = `
+                <div class="header-routing-group">
+                    <h3 style="font-size: 1.6rem; font-weight: 900; letter-spacing: -0.5px; color: ${color}; display: flex; align-items: center; gap: 16px;">
+                        <button class="prac-btn" style="padding: 8px 16px; font-size: 0.9rem;" onclick="switchView('streaks')">◀ Back</button>
+                        ${title}
+                    </h3>
+                </div>
+                <div class="home-grid">
+                    <div class="card grid-md-6" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; padding: 40px;">
+                        <div style="font-size: 1.2rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Current Streak</div>
+                        <div style="font-size: 4rem; font-weight: 900; color: ${color}; text-shadow: 0 4px 20px ${color}40;">${currentStreak} <span style="font-size: 1.2rem; color: var(--text-muted);">Days</span></div>
+                        
+                        <div class="circular-tracker" style="--p: ${pct}%; --accent-color: ${color}; margin-top: 32px;">
+                            <div class="circular-tracker-val">
+                                <div style="font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Today</div>
+                                <div style="font-size: 2.2rem; color: ${color};">${Math.round(todayVal)}</div>
+                                <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">/ ${target}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card grid-md-6">
+                        <div class="card-title">30-Day History</div>
+                        <div style="max-height: 500px; overflow-y: auto; padding-right: 8px;">
+                            ${historyHtml}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
         function renderStreaks() {
             const streaks = {
                 tQ: calculateStreak('tQ', 80), pQ: calculateStreak('pQ', 25), cQ: calculateStreak('cQ', 25), mQ: calculateStreak('mQ', 25),
                 tW: calculateStreak('tW', 240), pW: calculateStreak('pW', 70), cW: calculateStreak('cW', 70), mW: calculateStreak('mW', 70)
             };
 
-            const buildCard = (title, data, color) => `
-                <div class="big-stat-box" style="border-left: 6px solid ${color};">
+            const buildCard = (title, data, color, metricId) => `
+                <div class="big-stat-box" style="border-left: 6px solid ${color}; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'" onclick="openStreakDetail('${metricId}', '${title}', ${data.target}, '${color}')">
                     <div class="big-stat-label">${title}</div>
                     <div class="big-stat-num" style="color: ${color}; font-size: 2.2rem; margin: 16px 0;">${data.streak} <span style="font-size:0.9rem; color:var(--text-muted)">Days</span></div>
                     <div style="font-size: 0.9rem; color: var(--text-main); font-weight: 800;">
@@ -1852,12 +1934,12 @@
 
             const qGrid = document.getElementById('streak-q-grid');
             if(qGrid) {
-                qGrid.innerHTML = buildCard('Global (80 Qs)', streaks.tQ, 'var(--accent-green)') + buildCard('Physics (25 Qs)', streaks.pQ, 'var(--grad-physics)') + buildCard('Chemistry (25 Qs)', streaks.cQ, 'var(--grad-chemistry)') + buildCard('Maths (25 Qs)', streaks.mQ, 'var(--grad-maths)');
+                qGrid.innerHTML = buildCard('Global (80 Qs)', streaks.tQ, 'var(--accent-green)', 'tQ') + buildCard('Physics (25 Qs)', streaks.pQ, 'var(--grad-physics)', 'pQ') + buildCard('Chemistry (25 Qs)', streaks.cQ, 'var(--grad-chemistry)', 'cQ') + buildCard('Maths (25 Qs)', streaks.mQ, 'var(--grad-maths)', 'mQ');
             }
 
             const wGrid = document.getElementById('streak-w-grid');
             if(wGrid) {
-                wGrid.innerHTML = buildCard('Global (240 Mins)', streaks.tW, 'var(--accent-orange)') + buildCard('Physics (70 Mins)', streaks.pW, 'var(--grad-physics)') + buildCard('Chemistry (70 Mins)', streaks.cW, 'var(--grad-chemistry)') + buildCard('Maths (70 Mins)', streaks.mW, 'var(--grad-maths)');
+                wGrid.innerHTML = buildCard('Global (240 Mins)', streaks.tW, 'var(--accent-orange)', 'tW') + buildCard('Physics (70 Mins)', streaks.pW, 'var(--grad-physics)', 'pW') + buildCard('Chemistry (70 Mins)', streaks.cW, 'var(--grad-chemistry)', 'cW') + buildCard('Maths (70 Mins)', streaks.mW, 'var(--grad-maths)', 'mW');
             }
         }
 
@@ -2036,3 +2118,4 @@
     </script>
 </body>
 </html>
+
