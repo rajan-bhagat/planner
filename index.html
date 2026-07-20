@@ -94,7 +94,7 @@
             z-index: 100; 
             transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
             box-shadow: 4px 0 20px var(--shadow-matrix); 
-            overflow-y: auto; /* Made sidebar scrollable for landscape screens */
+            overflow-y: auto; 
             overflow-x: hidden;
         }
         .sidebar.open { left: 0; }
@@ -253,6 +253,7 @@
         .prac-input:focus { border-color: var(--accent-blue); }
         .prac-btn { background: var(--progress-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: 700; transition: all 0.2s; font-size: 0.9rem; }
         .prac-btn:hover { background: var(--accent-blue); color: white; border-color: var(--accent-blue); transform: translateY(-1px); }
+        .prac-btn.active { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
         
         .big-stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; width: 100%; }
         .big-stat-box { background: var(--bg-dark); padding: 20px; border-radius: 16px; text-align: center; border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: center; }
@@ -373,6 +374,33 @@
         .circular-tracker-val {
             position: relative; z-index: 1; font-size: 1.8rem; font-weight: 900; color: var(--text-main);
             text-align: center; line-height: 1.2;
+        }
+
+        /* Modern SVG Chart Aesthetics */
+        .chart-svg-container {
+            width: 100%;
+            height: 240px;
+            background: var(--bg-dark);
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+            padding: 10px;
+        }
+        .svg-bar {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        .svg-bar:hover {
+            filter: brightness(1.2);
+        }
+        .svg-grid-line {
+            stroke: var(--border-color);
+            stroke-dasharray: 4,4;
+            opacity: 0.6;
+        }
+        .svg-axis-text {
+            fill: var(--text-muted);
+            font-size: 10px;
+            font-weight: 600;
         }
         
         /* Layout overrides for larger screens */
@@ -692,6 +720,11 @@
             <div style="display: flex; flex-direction: column; gap: 12px; max-width: 900px;" id="accordion-m"></div>
         </section>
 
+        <!-- Dynamic View -->
+        <section id="view-chapter-portal" class="view-section">
+            <div id="chapterPortalWorkspaceContainer" style="max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px;"></div>
+        </section>
+
         <section id="view-tests" class="view-section">
             <div class="header-routing-group">
                 <h3 style="font-size: 1.6rem; font-weight: 900; color: var(--accent-orange); letter-spacing: -0.5px;">Test Analytics</h3>
@@ -798,6 +831,12 @@
         let homeTestActiveOffset = 0, homeRevActiveOffset = 0;
         let activeOpenViewId = "home";
         let isNewUserRegistrationMode = false;
+        let currentlyOpenChapterPortalData = null; // Track single-chapter portal context
+
+        // Chapter chart filters global states
+        let selectedChapterTimeframe = 'all'; 
+        let selectedChapterMetric = 'total';
+        let selectedChapterDateOffset = 0;
 
         const ENV_INFRASTRUCTURE_BLUEPRINT = {
             apiKey: "AIzaSyChMlBb9DYZU0wZAv9mZdZ9ESinshq3fkI", 
@@ -1159,6 +1198,9 @@
 
         function runCoreGenerationPipeline() {
             generateDynamicTimeline(); buildWorkspaces(); renderPracticeTracker(); buildConsistencyHeatmap(); buildExamAnalyticsView(); buildMasterRevisionHub(); renderHomeDashboardMetaWidgets(); renderStreaks();
+            if (activeOpenViewId === "chapter-portal" && currentlyOpenChapterPortalData) {
+                openChapterPortalView(currentlyOpenChapterPortalData.s, currentlyOpenChapterPortalData.idx);
+            }
         }
         function setSyncBadge(t, c) { const e = document.getElementById('syncStatus'); if(e) { e.innerText = t; e.style.color = c; } }
         
@@ -1193,6 +1235,7 @@
         
         function switchView(v) {
             activeOpenViewId = v;
+            if (v !== 'chapter-portal') currentlyOpenChapterPortalData = null;
             document.querySelectorAll('#navMenu li').forEach((item, i) => item.classList.toggle('active', ['home', 'schedule', 'revision', 'physics', 'chemistry', 'mathematics', 'tests', 'progress', 'streaks'][i] === v));
             document.querySelectorAll('.view-section').forEach(s => s.classList.toggle('active', s.id === `view-${v}`));
             toggleSidebarMenu(false); 
@@ -1283,12 +1326,10 @@
         }
 
         function jumpToSpecificRevisionNode(s, chapName) {
-            switchView(s === 'p' ? 'physics' : s === 'c' ? 'chemistry' : 'mathematics');
-            setTimeout(() => {
-                const idx = syllabusDB[s].findIndex(c => c.n.toLowerCase() === chapName.toLowerCase());
-                const n = document.getElementById(`node-${s}-${idx}`);
-                if(n) { n.scrollIntoView({ behavior: 'smooth', block: 'center' }); n.classList.add('expanded'); }
-            }, 100);
+            const idx = syllabusDB[s].findIndex(c => c.n.toLowerCase() === chapName.toLowerCase());
+            if (idx !== -1) {
+                openChapterPortalView(s, idx);
+            }
         }
 
         function offsetHomeTestWidgetSelection(dir) {
@@ -1358,17 +1399,17 @@
                     if(showP) {
                         const isSubOff = isDayGloballyOff || offDays.p?.includes(s);
                         const subActionBtn = isCurrentDay ? `<button class="off-toggle-btn ${offDays.p?.includes(s)?'is-active-state':''}" onclick="toggleDayOff('${s}', 'p')">${offDays.p?.includes(s)?'Restore':'Skip'}</button>` : '';
-                        h += `<div class="timeline-subject-pill ${isSubOff?'is-off':''}" style="border-left:6px solid var(--grad-physics);"><div style="color:var(--grad-physics); font-size:0.8rem; font-weight:800; letter-spacing:0.5px;">PHYSICS</div><div style="margin: 8px 0; font-weight: 700; font-size: 1.1rem;">${dP}</div>${subActionBtn}</div>`;
+                        h += `<div class="timeline-subject-pill ${isSubOff?'is-off':''}" style="border-left:6px solid var(--grad-physics); cursor:pointer;" onclick="openChapterPortalView('p', ${syllabusDB.p.findIndex(c => c.n.toLowerCase() === dP.toLowerCase())})"><div style="color:var(--grad-physics); font-size:0.8rem; font-weight:800; letter-spacing:0.5px;">PHYSICS</div><div style="margin: 8px 0; font-weight: 700; font-size: 1.1rem;">${dP}</div>${subActionBtn}</div>`;
                     }
                     if(showC) {
                         const isSubOff = isDayGloballyOff || offDays.c?.includes(s);
                         const subActionBtn = isCurrentDay ? `<button class="off-toggle-btn ${offDays.c?.includes(s)?'is-active-state':''}" onclick="toggleDayOff('${s}', 'c')">${offDays.c?.includes(s)?'Restore':'Skip'}</button>` : '';
-                        h += `<div class="timeline-subject-pill ${isSubOff?'is-off':''}" style="border-left:6px solid var(--grad-chemistry);"><div style="color:var(--grad-chemistry); font-size:0.8rem; font-weight:800; letter-spacing:0.5px;">CHEMISTRY</div><div style="margin: 8px 0; font-weight: 700; font-size: 1.1rem;">${dC}</div>${subActionBtn}</div>`;
+                        h += `<div class="timeline-subject-pill ${isSubOff?'is-off':''}" style="border-left:6px solid var(--grad-chemistry); cursor:pointer;" onclick="openChapterPortalView('c', ${syllabusDB.c.findIndex(c => c.n.toLowerCase() === dC.toLowerCase())})"><div style="color:var(--grad-chemistry); font-size:0.8rem; font-weight:800; letter-spacing:0.5px;">CHEMISTRY</div><div style="margin: 8px 0; font-weight: 700; font-size: 1.1rem;">${dC}</div>${subActionBtn}</div>`;
                     }
                     if(showM) {
                         const isSubOff = isDayGloballyOff || offDays.m?.includes(s);
                         const subActionBtn = isCurrentDay ? `<button class="off-toggle-btn ${offDays.m?.includes(s)?'is-active-state':''}" onclick="toggleDayOff('${s}', 'm')">${offDays.m?.includes(s)?'Restore':'Skip'}</button>` : '';
-                        h += `<div class="timeline-subject-pill ${isSubOff?'is-off':''}" style="border-left:6px solid var(--grad-maths);"><div style="color:var(--grad-maths); font-size:0.8rem; font-weight:800; letter-spacing:0.5px;">MATHS</div><div style="margin: 8px 0; font-weight: 700; font-size: 1.1rem;">${dM}</div>${subActionBtn}</div>`;
+                        h += `<div class="timeline-subject-pill ${isSubOff?'is-off':''}" style="border-left:6px solid var(--grad-maths); cursor:pointer;" onclick="openChapterPortalView('m', ${syllabusDB.m.findIndex(c => c.n.toLowerCase() === dM.toLowerCase())})"><div style="color:var(--grad-maths); font-size:0.8rem; font-weight:800; letter-spacing:0.5px;">MATHS</div><div style="margin: 8px 0; font-weight: 700; font-size: 1.1rem;">${dM}</div>${subActionBtn}</div>`;
                     }
                     h += `</div></div>`;
                 }
@@ -1388,12 +1429,7 @@
                     if(idx !== -1) {
                         const chap = syllabusDB[s][idx];
                         const st = getChapterState(s, idx); 
-                        let cb = ""; 
                         const pct = Math.round((st.w.length / chap.v) * 100);
-                        
-                        for(let i=0; i<chap.v; i++) { 
-                            cb += `<div class="video-checkbox ${st.w.includes(i)?'watched':''}" onclick="event.stopPropagation(); toggleWorkspaceVideo('${s}', ${idx}, ${i})">${i + 1}</div>`; 
-                        }
                         
                         let deadlineDateStr = st.rd; 
                         if(!deadlineDateStr) {
@@ -1432,9 +1468,11 @@
                             }
                         }
 
+                        let computedTotalQuestions = (st.q || 0) + (st.fast_q || 0) + (st.pyq || 0);
+
                         h += `
-                        <div class="today-target-node" id="today-node-${s}">
-                            <div class="today-target-summary" onclick="this.parentElement.classList.toggle('expanded')" style="flex-direction: column; align-items: stretch; gap: 8px;">
+                        <div class="today-target-node" id="today-node-${s}" style="cursor:pointer;" onclick="openChapterPortalView('${s}', ${idx})">
+                            <div class="today-target-summary" style="flex-direction: column; align-items: stretch; gap: 8px;">
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
                                     <div>
                                         <span style="color:${colorMap[s]}; font-size:0.75rem; font-weight:800; letter-spacing:0.5px; display:block; text-transform:uppercase;">${subjMap[s]}</span>
@@ -1448,9 +1486,6 @@
                                     ${deadlineMeta}
                                     <span style="color:${minPerDayTxt === 'Overdue' ? 'var(--accent-red)' : 'var(--accent-green)'}">${minPerDayTxt}</span>
                                 </div>
-                            </div>
-                            <div class="today-target-details">
-                                <div class="video-grid" style="margin-top: 0;">${cb}</div>
                             </div>
                         </div>`;
                     }
@@ -1483,49 +1518,59 @@
                     const revItem = revisionEntries[homeRevActiveOffset]; const nowStartToday = new Date(); nowStartToday.setHours(0,0,0,0);
                     const revisionStatusText = revItem.r_done ? 'COMPLETED' : (revItem.time < nowStartToday.getTime() ? 'OVERDUE' : 'PENDING'); 
                     const revLabelColor = revisionStatusText === 'COMPLETED' ? 'var(--accent-green)' : (revisionStatusText === 'OVERDUE' ? 'var(--accent-red)' : 'var(--accent-purple)');
-                    const displayRevDate = new Date(revItem.dateStr).toLocaleDateString('en-IN', {day:'numeric', month:'short'});
                     revContainer.innerHTML = `
-                    <div class="meta-dynamic-strip" style="border-left: 6px solid ${colorMap[revItem.s]}; cursor: pointer;" onclick="jumpToSpecificRevisionNode('${revItem.s}', '${revItem.chap.n}')">
+                    <div class="meta-dynamic-strip" style="border-left: 6px solid ${colorMap[revItem.s]}; cursor: pointer;" onclick="openChapterPortalView('${revItem.s}', ${revItem.idx})">
                         <div><strong style="font-size:1.05rem; font-weight:800; color:var(--text-main); display:block; margin-bottom:4px;">${revItem.chap.n}</strong><span style="font-size:0.85rem; font-weight: 600; color:var(--text-muted);">Subject: <span style="color:${colorMap[revItem.s]}; font-weight:700;">${subjMap[revItem.s]}</span> • Track: <span style="color:${revLabelColor}; font-weight:700;">${revisionStatusText}</span></span></div>
-                        <div style="text-align:right; font-weight:800; font-size:0.9rem; color:var(--text-main); white-space:nowrap;">${displayRevDate}</div>
+                        <div style="text-align:right; font-weight:800; font-size:0.9rem; color:var(--text-main); white-space:nowrap;">${new Date(revItem.dateStr).toLocaleDateString('en-IN', {day:'numeric', month:'short'})}</div>
                     </div>`;
                 } else { revContainer.innerHTML = `<div class="meta-dynamic-strip"><span style="color:var(--text-muted); font-size:0.9rem; font-weight: 600;">No active reviews planned.</span></div>`; }
             }
         }
 
-        function getChapterState(s, i) { if(!internalProgress[s][i]) internalProgress[s][i] = { w: [], rd: "", q: 0, pyq: 0, r_done: false, target_q: 0, rev_history: [] }; if(!internalProgress[s][i].rev_history) internalProgress[s][i].rev_history = []; if(!internalProgress[s][i].pyq) internalProgress[s][i].pyq = 0; return internalProgress[s][i]; }
-        function toggleAccordionNode(e) { e.parentElement.classList.toggle('expanded'); }
+        function getChapterState(s, i) { 
+            if(!internalProgress[s][i]) internalProgress[s][i] = { w: [], rd: "", q: 0, fast_q: 0, pyq: 0, r_done: false, target_q: 0, rev_history: [], log_history: [] }; 
+            if(!internalProgress[s][i].rev_history) internalProgress[s][i].rev_history = []; 
+            if(!internalProgress[s][i].log_history) internalProgress[s][i].log_history = []; 
+            if(!internalProgress[s][i].pyq) internalProgress[s][i].pyq = 0; 
+            if(!internalProgress[s][i].fast_q) internalProgress[s][i].fast_q = 0; 
+            return internalProgress[s][i]; 
+        }
 
         function buildWorkspaces() {
-            const expandedIds = Array.from(document.querySelectorAll('.chapter-node.expanded')).map(el => el.id).filter(Boolean);
             let subLectureStats = { p: { t: 0, w: 0 }, c: { t: 0, w: 0 }, m: { t: 0, w: 0 } };
             ['p','c','m'].forEach(s => {
                 const w = document.getElementById(`accordion-${s}`); if(!w) return; let h = "";
                 syllabusDB[s].forEach((chap, idx) => {
                     subLectureStats[s].t += chap.v; const st = getChapterState(s, idx);
-                    const m = generatedTimeline.find(d => d[s]?.toLowerCase() === chap.n.toLowerCase()), dStr = m ? m.dateFormatted : "Unmapped", pct = Math.round((st.w.length / chap.v) * 100);
                     subLectureStats[s].w += st.w.length;
-                    let cb = ""; for(let i=0; i<chap.v; i++) cb += `<div class="video-checkbox ${st.w.includes(i)?'watched':''}" onclick="event.stopPropagation(); toggleWorkspaceVideo('${s}', ${idx}, ${i})">${i + 1}</div>`;
+                    const pct = Math.round((st.w.length / chap.v) * 100);
                     
-                    let revHistoryHtml = `<div style="margin-top:20px; background:var(--bg-panel); padding:16px; border-radius:12px; border:1px solid var(--border-color);"><span style="font-size:0.8rem; color:var(--text-muted); font-weight:800; text-transform:uppercase; letter-spacing:0.5px; display:block; margin-bottom:10px;">Revision Logs</span>`;
-                    if(st.rev_history && st.rev_history.length > 0) {
-                        revHistoryHtml += `<ul style="list-style:none; display:flex; flex-direction:column; gap:8px; font-size:0.9rem; color:var(--text-main); padding: 0;">`;
-                        st.rev_history.forEach(revLog => {
-                            revHistoryHtml += `<li style="display:flex; justify-content:space-between; padding:10px 14px; background:var(--bg-dark); border:1px solid var(--border-color); border-radius:8px;"><span>Completed on: <strong>${revLog.date}</strong></span> <span style="font-size:0.8rem; color:var(--accent-green); font-weight:800;">✓ Verified</span></li>`;
-                        });
-                        revHistoryHtml += `</ul>`;
-                    } else {
-                        revHistoryHtml += `<div style="font-size:0.85rem; font-weight:600; color:var(--text-muted);">No revisions logged yet.</div>`;
-                    }
-                    revHistoryHtml += `</div>`;
-                    
-                    h += `<div class="chapter-node" id="node-${s}-${idx}"><div class="chapter-node-summary" onclick="toggleAccordionNode(this)"><div style="flex-grow:1;"><h4 style="font-weight:800; font-size:1.15rem; color: var(--text-main); display:flex; align-items:center; flex-wrap:wrap; gap:10px;"><span>${chap.n}</span> <span style="font-size:0.85rem; color:var(--text-muted); font-weight:600;">(${(chap.l/60).toFixed(1)}h)</span>${st.rd ? `<span style="font-size:0.75rem; background:rgba(139,92,246,0.1); color:var(--accent-purple); padding:6px 10px; border-radius:8px; font-weight:700;">Rev: ${st.rd}</span>` : ''}</h4><div style="display:flex; gap:20px; font-size:0.9rem; font-weight:600; color:var(--text-muted); margin-top:12px;"><span>Lectures: <span style="color:var(--text-main);">${st.w.length}/${chap.v}</span></span><span>Problems: <span style="color:var(--text-main);">${st.q || 0}/${st.target_q || 0}</span></span><span style="color:var(--accent-purple);">PYQs: ${st.pyq || 0}</span></div></div><div style="display:flex; align-items:center; gap:12px; margin-left:12px;"><div style="display:flex; align-items:center; gap:6px;" onclick="event.stopPropagation();"><input type="number" id="quick-chap-q-${s}-${idx}" class="prac-input" placeholder="+Qs" style="width:65px; padding:6px 8px; font-size:0.85rem; height:32px; margin:0;"><button class="prac-btn" style="padding:6px 10px; font-size:0.85rem; height:32px; background:${colorMap[s]}; border:none; color:#ffffff; line-height:1;" onclick="addQuickChapterPractice('${s}', ${idx})">Log</button></div><div style="text-align:right; min-width:65px;"><div style="font-weight:900; font-size:1.3rem; color:${pct===100?'var(--accent-green)':'var(--text-main)'}">${pct}%</div><div style="font-size:0.75rem; color:var(--text-muted); font-weight:700; margin-top:2px;">Qs: ${(st.q || 0) + (st.pyq || 0)}</div></div></div></div><div class="chapter-node-details" onclick="event.stopPropagation();"><div class="inline-meta-panel"><div><div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:6px; font-weight:800; letter-spacing:0.5px;">TIMELINE DATE</div><div style="font-size:0.95rem; font-weight:700;">${dStr}</div></div><div><div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:8px; font-weight:800; letter-spacing:0.5px;">REVISION TARGET</div><input type="date" class="prac-input" value="${st.rd || ''}" onchange="setChapterRevisionDate('${s}', ${idx}, this.value)"></div><div><div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:8px; font-weight:800; letter-spacing:0.5px;">PROBLEM GOAL</div><div style="display:flex; gap:8px;"><input type="number" id="inline-target-q-${s}-${idx}" class="prac-input" placeholder="Goal Qs" value="${st.target_q || ''}" onchange="setChapterTargetPractice('${s}', ${idx}, this.value)"></div></div><div><div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:8px; font-weight:800; letter-spacing:0.5px;">ADD PROBLEMS</div><div style="display:flex; gap:8px;"><input type="number" id="inline-q-${s}-${idx}" class="prac-input" placeholder="+"><button class="prac-btn" style="background:${colorMap[s]}; border:none; color:#ffffff;" onclick="addInlineChapterPractice('${s}', ${idx})">Log</button></div></div><div><div style="font-size:0.8rem; color:var(--accent-purple); margin-bottom:8px; font-weight:800; letter-spacing:0.5px;">ADD PYQS</div><div style="display:flex; gap:8px;"><input type="number" id="inline-pyq-${s}-${idx}" class="prac-input" placeholder="+"><button class="prac-btn" style="background:var(--grad-pyq); border:none; color:#ffffff;" onclick="addInlineChapterPYQ('${s}', ${idx})">Log</button></div></div></div><div class="video-grid">${cb}</div>${revHistoryHtml}</div></div>`;
-                }); w.innerHTML = h;
-            });
+                    let totalQuestions = (st.q || 0) + (st.fast_q || 0) + (st.pyq || 0);
 
-            expandedIds.forEach(id => {
-                const el = document.getElementById(id);
-                if(el) el.classList.add('expanded');
+                    h += `
+                    <div class="chapter-node" id="node-${s}-${idx}" onclick="openChapterPortalView('${s}', ${idx})">
+                        <div class="chapter-node-summary">
+                            <div style="flex-grow:1;">
+                                <h4 style="font-weight:800; font-size:1.15rem; color: var(--text-main); display:flex; align-items:center; flex-wrap:wrap; gap:10px;">
+                                    <span>${chap.n}</span> 
+                                    <span style="font-size:0.85rem; color:var(--text-muted); font-weight:600;">(${(chap.l/60).toFixed(1)}h)</span>
+                                    ${st.rd ? `<span style="font-size:0.75rem; background:rgba(139,92,246,0.1); color:var(--accent-purple); padding:6px 10px; border-radius:8px; font-weight:700;">Rev: ${st.rd}</span>` : ''}
+                                </h4>
+                                <div style="display:flex; gap:20px; font-size:0.9rem; font-weight:600; color:var(--text-muted); margin-top:12px;">
+                                    <span>Lectures: <span style="color:var(--text-main);">${st.w.length}/${chap.v}</span></span>
+                                    <span>Total Solved: <span style="color:var(--text-main);">${totalQuestions}/${st.target_q || 0}</span></span>
+                                    <span style="color:var(--accent-purple);">PYQs: ${st.pyq || 0}</span>
+                                </div>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:12px; margin-left:12px;">
+                                <div style="text-align:right; min-width:65px;">
+                                    <div style="font-weight:900; font-size:1.3rem; color:${pct===100?'var(--accent-green)':'var(--text-main)'}">${pct}%</div>
+                                    <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700; margin-top:2px;">Volume: ${totalQuestions}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                }); w.innerHTML = h;
             });
 
             ['p','c','m'].forEach(s => {
@@ -1535,11 +1580,407 @@
             updateGlobalAnalytics();
         }
 
+        /* Highly Engineered Chapter Portal Page Injection Pipeline (Clean Ed-Tech UI) */
+        function openChapterPortalView(s, idx) {
+            currentlyOpenChapterPortalData = { s, idx };
+            activeOpenViewId = "chapter-portal";
+            
+            document.querySelectorAll('#navMenu li').forEach(item => item.classList.remove('active'));
+            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+            
+            const portalSection = document.getElementById('view-chapter-portal');
+            portalSection.classList.add('active');
+            
+            const chap = syllabusDB[s][idx];
+            const st = getChapterState(s, idx);
+            const m = generatedTimeline.find(d => d[s]?.toLowerCase() === chap.n.toLowerCase());
+            const dStr = m ? m.dateFormatted : "Unmapped";
+            const pct = Math.round((st.w.length / chap.v) * 100);
+            
+            let cb = ""; 
+            for(let i=0; i<chap.v; i++) {
+                let isWatched = st.w.includes(i);
+                // Smaller, cleaner checkboxes resembling a path tracker
+                cb += `<div class="video-checkbox ${isWatched?'watched':''}" style="border-radius: 8px; width: 42px; height: 42px; flex-shrink: 0; font-size: 0.85rem;" onclick="toggleWorkspaceVideo('${s}', ${idx}, ${i})">${isWatched ? '✓' : 'L'+(i + 1)}</div>`;
+            }
+
+            let totalQuestions = (st.q || 0) + (st.fast_q || 0) + (st.pyq || 0);
+            
+            let revHistoryHtml = `
+            <div style="margin-top: 24px;">
+                <div style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px;">Revision Log</div>
+                <div style="max-height: 150px; overflow-y: auto; padding-right:4px;">`;
+            if(st.rev_history && st.rev_history.length > 0) {
+                revHistoryHtml += `<ul style="list-style:none; display:flex; flex-direction:column; gap:8px; padding: 0;">`;
+                st.rev_history.forEach(revLog => {
+                    revHistoryHtml += `<li style="display:flex; justify-content:space-between; padding:10px 14px; background:var(--bg-dark); border:1px solid var(--border-color); border-radius:8px; font-size:0.85rem;"><span><strong style="color:var(--text-main);">${revLog.date}</strong></span> <span style="color:var(--accent-green); font-weight:700;">✓ Verified</span></li>`;
+                });
+                revHistoryHtml += `</ul>`;
+            } else {
+                revHistoryHtml += `<div style="font-size:0.85rem; font-weight:600; color:var(--text-muted); padding: 8px 0;">No revision history recorded.</div>`;
+            }
+            revHistoryHtml += `</div></div>`;
+            
+            const container = document.getElementById('chapterPortalWorkspaceContainer');
+            const accentColor = colorMap[s];
+
+            container.innerHTML = `
+                <!-- Streamlined Header Banner -->
+                <div style="background: var(--bg-panel); border: 1px solid var(--border-color); border-left: 6px solid ${accentColor}; border-radius: 16px; padding: 24px 32px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 2px 10px var(--shadow-matrix);">
+                    <div>
+                        <button class="prac-btn" style="padding: 6px 12px; font-size: 0.8rem; background: var(--bg-dark); border: 1px solid var(--border-color); color: var(--text-muted);" onclick="switchView('${s === 'p' ? 'physics' : s === 'c' ? 'chemistry' : 'mathematics'}')">← Back to ${subjMap[s]}</button>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px;">
+                        <div>
+                            <span style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: ${accentColor};">${subjMap[s]}</span>
+                            <h2 style="font-size: 2.2rem; font-weight: 900; letter-spacing: -0.5px; color: var(--text-main); margin-top: 4px;">${chap.n}</h2>
+                            <div style="display: flex; gap: 12px; font-size: 0.85rem; color: var(--text-muted); font-weight: 600; margin-top: 8px;">
+                                <span>⏱ ${(chap.l/60).toFixed(1)} Hrs</span> • <span>🗓️ Target: ${dStr}</span>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 2rem; font-weight: 900; color: ${pct===100 ? 'var(--accent-green)' : 'var(--text-main)'}; line-height: 1;">${pct}%</div>
+                            <div style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-top: 4px;">Completion</div>
+                        </div>
+                    </div>
+                    <div class="stat-bar-bg" style="height: 6px; background: var(--bg-dark); margin-top: 4px;"><div class="stat-bar-fill" style="background: ${accentColor}; width: ${pct}%;"></div></div>
+                </div>
+
+                <!-- Flat Ed-Tech Metric Grid -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                    <div class="card" style="padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: none; border-bottom: 3px solid var(--accent-blue);">
+                        <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase;">Lectures</span>
+                        <span style="font-size: 1.4rem; font-weight: 900; color: var(--text-main);">${st.w.length}<span style="font-size: 1rem; color: var(--text-muted);">/${chap.v}</span></span>
+                    </div>
+                    <div class="card" style="padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: none; border-bottom: 3px solid ${accentColor};">
+                        <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase;">Standard Qs</span>
+                        <span style="font-size: 1.4rem; font-weight: 900; color: var(--text-main);">${st.q || 0}</span>
+                    </div>
+                    <div class="card" style="padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: none; border-bottom: 3px solid var(--accent-purple);">
+                        <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase;">PYQs Done</span>
+                        <span style="font-size: 1.4rem; font-weight: 900; color: var(--accent-purple);">${st.pyq || 0}</span>
+                    </div>
+                    <div class="card" style="padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: none; border-bottom: 3px solid var(--accent-green);">
+                        <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase;">Total Volume</span>
+                        <span style="font-size: 1.4rem; font-weight: 900; color: var(--accent-green);">${totalQuestions}</span>
+                    </div>
+                </div>
+
+                <!-- Main Layout Split -->
+                <div style="display: flex; flex-wrap: wrap; gap: 24px;">
+                    <!-- Core Tools (Left 65%) -->
+                    <div style="flex: 1 1 65%; min-width: 320px; display: flex; flex-direction: column; gap: 24px;">
+                        <!-- Lecture Array -->
+                        <div class="card" style="box-shadow: none; padding: 24px;">
+                            <div class="card-title" style="margin-bottom: 16px; font-size: 1.1rem;">Lecture Progress Tracker</div>
+                            <div class="video-grid" style="margin-top: 0; display: flex; flex-wrap: wrap; gap: 10px; background: transparent; padding: 0; border: none;">
+                                ${cb}
+                            </div>
+                        </div>
+
+                        <!-- Data Visualization Split -->
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
+                            <div class="card" style="box-shadow: none; padding: 20px;">
+                                <div class="card-title" style="margin-bottom: 12px; font-size: 1rem;">Volume Distribution</div>
+                                <div style="display: flex; gap: 4px; margin-bottom: 12px; flex-wrap: wrap;">
+                                    <button class="prac-btn ${selectedChapterTimeframe==='all'?'active':''}" style="padding: 4px 8px; font-size: 0.7rem; border-radius: 6px;" onclick="setChapterChartTimeframe('all')">All</button>
+                                    <button class="prac-btn ${selectedChapterTimeframe==='today'?'active':''}" style="padding: 4px 8px; font-size: 0.7rem; border-radius: 6px;" onclick="setChapterChartTimeframe('today')">Today</button>
+                                    <button class="prac-btn ${selectedChapterTimeframe==='7days'?'active':''}" style="padding: 4px 8px; font-size: 0.7rem; border-radius: 6px;" onclick="setChapterChartTimeframe('7days')">7D</button>
+                                    <button class="prac-btn ${selectedChapterTimeframe==='30days'?'active':''}" style="padding: 4px 8px; font-size: 0.7rem; border-radius: 6px;" onclick="setChapterChartTimeframe('30days')">30D</button>
+                                </div>
+                                <div class="chart-svg-container" id="chapterSummaryVolumeChartCanvas" style="height: 180px; border: none; background: transparent; padding: 0;"></div>
+                            </div>
+                            
+                            <div class="card" style="box-shadow: none; padding: 20px;">
+                                <div class="card-title" style="margin-bottom: 12px; font-size: 1rem;">
+                                    <span>Recent Log Timeline</span>
+                                    <div style="display: flex; gap: 4px; align-items: center;">
+                                        <button class="prac-btn" style="padding: 2px 8px; font-size: 0.7rem; border-radius: 6px;" onclick="navigateChapterDateTimeline(-1)">◀</button>
+                                        <button class="prac-btn" style="padding: 2px 8px; font-size: 0.7rem; border-radius: 6px;" onclick="navigateChapterDateTimeline(1)">▶</button>
+                                    </div>
+                                </div>
+                                <div class="chart-svg-container" id="chapterHistoricalTimelineChartCanvas" style="height: 180px; border: none; background: transparent; padding: 0;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Sidebar (Right 35%) -->
+                    <div style="flex: 1 1 30%; min-width: 320px; display: flex; flex-direction: column; gap: 24px;">
+                        
+                        <!-- Streamlined Input Hub -->
+                        <div class="card" style="box-shadow: none; background: var(--bg-dark);">
+                            <div class="card-title" style="margin-bottom: 16px; font-size: 1.1rem;">Quick Action Hub</div>
+                            <div style="display: flex; flex-direction: column; gap: 12px;">
+                                <div style="display: flex; gap: 8px;">
+                                    <input type="number" id="portal-q-${s}-${idx}" class="prac-input" placeholder="+ Standard Qs" style="flex: 2; padding: 10px; font-size: 0.85rem;">
+                                    <button class="prac-btn" style="flex: 1; background: ${accentColor}; color: white; border: none; padding: 10px;" onclick="addPortalChapterPractice('${s}', ${idx})">Log</button>
+                                </div>
+                                <div style="display: flex; gap: 8px;">
+                                    <input type="number" id="portal-pyq-${s}-${idx}" class="prac-input" placeholder="+ PYQs Matrix" style="flex: 2; padding: 10px; font-size: 0.85rem;">
+                                    <button class="prac-btn" style="flex: 1; background: var(--grad-pyq); color: white; border: none; padding: 10px;" onclick="addPortalChapterPYQ('${s}', ${idx})">Log</button>
+                                </div>
+                                <div style="display: flex; gap: 8px;">
+                                    <input type="number" id="portal-quick-q-${s}-${idx}" class="prac-input" placeholder="+ Fast Metrics" style="flex: 2; padding: 10px; font-size: 0.85rem;">
+                                    <button class="prac-btn" style="flex: 1; background: var(--accent-yellow); color: #000; border: none; padding: 10px;" onclick="addPortalQuickChapterPractice('${s}', ${idx})">Log</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- System Configuration -->
+                        <div class="card" style="box-shadow: none;">
+                            <div class="card-title" style="margin-bottom: 16px; font-size: 1.1rem;">Goals & Settings</div>
+                            <div style="display: flex; flex-direction: column; gap: 16px;">
+                                <div>
+                                    <label style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin-bottom: 4px; display: block;">Target Practice Goal</label>
+                                    <input type="number" class="prac-input" style="width: 100%; padding: 10px; font-size: 0.9rem;" placeholder="E.g., 100 Qs" value="${st.target_q || ''}" onchange="setChapterTargetPractice('${s}', ${idx}, this.value)">
+                                </div>
+                                <div>
+                                    <label style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin-bottom: 4px; display: block;">Revision Target Date</label>
+                                    <input type="date" class="prac-input" style="width: 100%; padding: 10px; text-align: left; font-size: 0.9rem;" value="${st.rd || ''}" onchange="setChapterRevisionDate('${s}', ${idx}, this.value)">
+                                </div>
+                            </div>
+                            ${revHistoryHtml}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            renderBespokeChapterPortalVisualizations(s, idx);
+        }
+
+        /* Visualization Pipelines Injectors */
+        function setChapterChartTimeframe(tf) {
+            selectedChapterTimeframe = tf;
+            if(currentlyOpenChapterPortalData) {
+                openChapterPortalView(currentlyOpenChapterPortalData.s, currentlyOpenChapterPortalData.idx);
+            }
+        }
+
+        function setChapterChartMetric(mt) {
+            selectedChapterMetric = mt;
+            if(currentlyOpenChapterPortalData) {
+                openChapterPortalView(currentlyOpenChapterPortalData.s, currentlyOpenChapterPortalData.idx);
+            }
+        }
+
+        function navigateChapterDateTimeline(dir) {
+            selectedChapterDateOffset += dir;
+            if(currentlyOpenChapterPortalData) {
+                openChapterPortalView(currentlyOpenChapterPortalData.s, currentlyOpenChapterPortalData.idx);
+            }
+        }
+
+        function renderBespokeChapterPortalVisualizations(s, idx) {
+            const st = getChapterState(s, idx);
+            const summaryCanvas = document.getElementById("chapterSummaryVolumeChartCanvas");
+            const timelineCanvas = document.getElementById("chapterHistoricalTimelineChartCanvas");
+            if(!summaryCanvas || !timelineCanvas) return;
+
+            // --- CANVAS A ENGINE: Timeframe and Categorical Split Analysis ---
+            let standardCount = 0, quickCount = 0, pyqCount = 0;
+            const now = new Date();
+            now.setHours(0,0,0,0);
+
+            if(st.log_history && st.log_history.length > 0) {
+                st.log_history.forEach(log => {
+                    let logTime = new Date(log.date + "T00:00:00").getTime();
+                    let diffDays = (now.getTime() - logTime) / 86400000;
+                    let matchesTimeframe = false;
+
+                    if(selectedChapterTimeframe === 'all') matchesTimeframe = true;
+                    else if(selectedChapterTimeframe === 'today' && diffDays === 0) matchesTimeframe = true;
+                    else if(selectedChapterTimeframe === '7days' && diffDays <= 7) matchesTimeframe = true;
+                    else if(selectedChapterTimeframe === '30days' && diffDays <= 30) matchesTimeframe = true;
+
+                    if(matchesTimeframe) {
+                        if(selectedChapterMetric === 'total' || selectedChapterMetric === 'standard') standardCount += (log.q || 0);
+                        if(selectedChapterMetric === 'total' || selectedChapterMetric === 'quick') quickCount += (log.fast_q || 0);
+                        if(selectedChapterMetric === 'total' || selectedChapterMetric === 'pyq') pyqCount += (log.pyq || 0);
+                    }
+                });
+            } else {
+                // Backward compatibility processing rules
+                if(selectedChapterTimeframe === 'all') {
+                    if(selectedChapterMetric === 'total' || selectedChapterMetric === 'standard') standardCount = st.q || 0;
+                    if(selectedChapterMetric === 'total' || selectedChapterMetric === 'quick') quickCount = st.fast_q || 0;
+                    if(selectedChapterMetric === 'total' || selectedChapterMetric === 'pyq') pyqCount = st.pyq || 0;
+                }
+            }
+
+            let categories = [
+                { label: 'Standard', value: standardCount, fill: colorMap[s] },
+                { label: 'Quick Log', value: quickCount, fill: 'var(--accent-yellow)' },
+                { label: 'PYQ Matrix', value: pyqCount, fill: 'var(--grad-pyq)' }
+            ];
+
+            let maxValA = Math.max(...categories.map(c => c.value), 10);
+            let svgA = `<svg width="100%" height="100%" viewBox="0 0 400 200" preserveAspectRatio="none">`;
+            // Horizontal reference guides lines grid loop 
+            for(let i=0; i<=4; i++) {
+                let y = 20 + i * 35;
+                let valLabel = Math.round(maxValA - (i * (maxValA / 4)));
+                svgA += `<line x1="60" y1="${y}" x2="380" y2="${y}" class="svg-grid-line" />`;
+                svgA += `<text x="15" y="${y+4}" class="svg-axis-text">${valLabel}</text>`;
+            }
+
+            categories.forEach((cat, i) => {
+                let x = 90 + i * 100;
+                let barHeight = (cat.value / maxValA) * 140;
+                let y = 160 - barHeight;
+                svgA += `<rect x="${x}" y="${y}" width="45" height="${barHeight}" fill="${cat.fill}" rx="6" class="svg-bar" />`;
+                svgA += `<text x="${x + 22}" y="${y - 6}" fill="var(--text-main)" font-size="10" font-weight="800" text-anchor="middle">${cat.value}</text>`;
+                svgA += `<text x="${x + 22}" y="180" class="svg-axis-text" text-anchor="middle">${cat.label}</text>`;
+            });
+            svgA += `</svg>`;
+            summaryCanvas.innerHTML = svgA;
+
+
+            // --- CANVAS B ENGINE: Chronological Date Navigation Sequence Matrix ---
+            let timelineDays = [];
+            let dateCursor = new Date();
+            dateCursor.setDate(dateCursor.getDate() + (selectedChapterDateOffset * 7));
+
+            for(let i=6; i>=0; i--) {
+                let d = new Date(dateCursor.getTime());
+                d.setDate(dateCursor.getDate() - i);
+                timelineDays.push({
+                    dateStr: getLocalYYYYMMDD(d),
+                    displayLabel: d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric' }),
+                    standard: 0, quick: 0, pyq: 0, total: 0
+                });
+            }
+
+            const windowLabelEl = document.getElementById("chapterDateTimelineWindowLabel");
+            if(windowLabelEl) {
+                windowLabelEl.innerText = `${timelineDays[0].displayLabel} - ${timelineDays[6].displayLabel}`;
+            }
+
+            timelineDays.forEach(day => {
+                if(st.log_history) {
+                    st.log_history.forEach(log => {
+                        if(log.date === day.dateStr) {
+                            day.standard += (log.q || 0);
+                            day.quick += (log.fast_q || 0);
+                            day.pyq += (log.pyq || 0);
+                        }
+                    });
+                } else {
+                    // Fallback interpolation logic
+                    if(day.dateStr === getLocalYYYYMMDD(new Date())) {
+                        day.standard = st.q || 0;
+                        day.quick = st.fast_q || 0;
+                        day.pyq = st.pyq || 0;
+                    }
+                }
+                day.total = day.standard + day.quick + day.pyq;
+            });
+
+            let maxValB = Math.max(...timelineDays.map(d => d.total), 15);
+            let svgB = `<svg width="100%" height="100%" viewBox="0 0 500 230" preserveAspectRatio="none">`;
+            
+            for(let i=0; i<=4; i++) {
+                let y = 20 + i * 40;
+                let valLabel = Math.round(maxValB - (i * (maxValB / 4)));
+                svgB += `<line x1="50" y1="${y}" x2="480" y2="${y}" class="svg-grid-line" />`;
+                svgB += `<text x="10" y="${y+4}" class="svg-axis-text">${valLabel}</text>`;
+            }
+
+            timelineDays.forEach((day, i) => {
+                let x = 70 + i * 58;
+                let barHeight = (day.total / maxValB) * 160;
+                let y = 180 - barHeight;
+
+                // Stack segments calculations vectors
+                let sH = day.total > 0 ? (day.standard / day.total) * barHeight : 0;
+                let qH = day.total > 0 ? (day.quick / day.total) * barHeight : 0;
+                let pH = day.total > 0 ? (day.pyq / day.total) * barHeight : 0;
+
+                let currentY = 180;
+                
+                if(sH > 0) {
+                    svgB += `<rect x="${x}" y="${currentY - sH}" width="28" height="${sH}" fill="${colorMap[s]}" class="svg-bar" />`;
+                    currentY -= sH;
+                }
+                if(qH > 0) {
+                    svgB += `<rect x="${x}" y="${currentY - qH}" width="28" height="${qH}" fill="var(--accent-yellow)" class="svg-bar" />`;
+                    currentY -= qH;
+                }
+                if(pH > 0) {
+                    svgB += `<rect x="${x}" y="${currentY - pH}" width="28" height="${pH}" fill="var(--grad-pyq)" class="svg-bar" />`;
+                    currentY -= pH;
+                }
+
+                if(day.total > 0) {
+                    svgB += `<text x="${x + 14}" y="${180 - barHeight - 6}" fill="var(--text-main)" font-size="9" font-weight="900" text-anchor="middle">${day.total}</text>`;
+                }
+                svgB += `<text x="${x + 14}" y="205" class="svg-axis-text" text-anchor="middle">${day.displayLabel}</text>`;
+            });
+
+            svgB += `</svg>`;
+            timelineCanvas.innerHTML = svgB;
+        }
+
+        function addPortalChapterPractice(s, i) {
+            const el = document.getElementById(`portal-q-${s}-${i}`), v = parseInt(el.value, 10);
+            if (!isNaN(v) && v > 0) {
+                let st = getChapterState(s, i);
+                st.q = (st.q || 0) + v; 
+                const t = getLocalYYYYMMDD(new Date());
+                
+                if(!practiceData[t]) practiceData[t] = { p: 0, c: 0, m: 0, fast_p: 0, fast_c: 0, fast_m: 0, pyq_p: 0, pyq_c: 0, pyq_m: 0, watch_p: 0, watch_c: 0, watch_m: 0 }; 
+                practiceData[t][s] = (practiceData[t][s] || 0) + v;
+                
+                let dayLog = st.log_history.find(l => l.date === t);
+                if(!dayLog) { dayLog = { date: t, q: 0, fast_q: 0, pyq: 0 }; st.log_history.push(dayLog); }
+                dayLog.q = (dayLog.q || 0) + v;
+
+                el.value = ""; queueCloudSync(); runCoreGenerationPipeline();
+            }
+        }
+
+        function addPortalQuickChapterPractice(s, i) {
+            const el = document.getElementById(`portal-quick-q-${s}-${i}`), v = parseInt(el.value, 10);
+            if (!isNaN(v) && v > 0) {
+                let st = getChapterState(s, i);
+                st.fast_q = (st.fast_q || 0) + v;
+                const t = getLocalYYYYMMDD(new Date());
+                
+                if(!practiceData[t]) practiceData[t] = { p: 0, c: 0, m: 0, fast_p: 0, fast_c: 0, fast_m: 0, pyq_p: 0, pyq_c: 0, pyq_m: 0, watch_p: 0, watch_c: 0, watch_m: 0 };
+                practiceData[t]['fast_' + s] = (practiceData[t]['fast_' + s] || 0) + v;
+                fastPracticeTotals[s] = (fastPracticeTotals[s] || 0) + v;
+                
+                let dayLog = st.log_history.find(l => l.date === t);
+                if(!dayLog) { dayLog = { date: t, q: 0, fast_q: 0, pyq: 0 }; st.log_history.push(dayLog); }
+                dayLog.fast_q = (dayLog.fast_q || 0) + v;
+
+                el.value = ""; queueCloudSync(); runCoreGenerationPipeline();
+            }
+        }
+
+        function addPortalChapterPYQ(s, i) {
+            const el = document.getElementById(`portal-pyq-${s}-${i}`), v = parseInt(el.value, 10);
+            if (!isNaN(v) && v > 0) {
+                let st = getChapterState(s, i);
+                st.pyq = (st.pyq || 0) + v;
+                pyqPracticeTotals[s] = (pyqPracticeTotals[s] || 0) + v;
+                const t = getLocalYYYYMMDD(new Date());
+                
+                if(!practiceData[t]) practiceData[t] = { p: 0, c: 0, m: 0, fast_p: 0, fast_c: 0, fast_m: 0, pyq_p: 0, pyq_c: 0, pyq_m: 0, watch_p: 0, watch_c: 0, watch_m: 0 };
+                practiceData[t]['pyq_' + s] = (practiceData[t]['pyq_' + s] || 0) + v;
+                
+                let dayLog = st.log_history.find(l => l.date === t);
+                if(!dayLog) { dayLog = { date: t, q: 0, fast_q: 0, pyq: 0 }; st.log_history.push(dayLog); }
+                dayLog.pyq = (dayLog.pyq || 0) + v;
+
+                el.value = ""; queueCloudSync(); runCoreGenerationPipeline();
+            }
+        }
+
         function setChapterTargetPractice(s, idx, val) {
             const v = parseInt(val, 10);
             getChapterState(s, idx).target_q = (!isNaN(v) && v >= 0) ? v : 0;
             queueCloudSync();
-            buildWorkspaces();
+            runCoreGenerationPipeline();
         }
 
         function toggleRevisionCompleteState(s, idx) {
@@ -1550,9 +1991,7 @@
                 st.rev_history.push({ date: new Date().toLocaleDateString('en-IN') });
             }
             queueCloudSync();
-            buildWorkspaces();
-            buildMasterRevisionHub();
-            renderHomeDashboardMetaWidgets();
+            runCoreGenerationPipeline();
         }
 
         function buildMasterRevisionHub() {
@@ -1571,16 +2010,16 @@
                 const completeBtnLabel = item.r_done ? "Done ✓" : "Mark";
 
                 h += `
-                <div class="chapter-node" id="revision-node-${item.dateStr}" style="border-left: 6px solid ${colorMap[item.s]}; background: ${isTodayNode ? 'var(--bg-panel)' : 'var(--bg-panel)'};">
+                <div class="chapter-node" id="revision-node-${item.dateStr}" style="border-left: 6px solid ${colorMap[item.s]}; background: var(--bg-panel);">
                     <div class="chapter-node-summary" style="padding: 20px; flex-wrap:wrap; gap: 20px;">
                         <div style="flex-grow:1; display:flex; align-items:center; gap:16px;">
-                            <button class="${completeBtnClass}" style="padding: 10px 20px;" onclick="toggleRevisionCompleteState('${item.s}', ${item.idx})">${completeBtnLabel}</button>
-                            <div>
+                            <button class="${completeBtnClass}" style="padding: 10px 20px;" onclick="event.stopPropagation(); toggleRevisionCompleteState('${item.s}', ${item.idx})">${completeBtnLabel}</button>
+                            <div style="cursor:pointer;" onclick="openChapterPortalView('${item.s}', ${item.idx})">
                                 <span style="color:${colorMap[item.s]}; font-size:0.8rem; font-weight:800; margin-right:12px; letter-spacing:0.5px;">${subjMap[item.s].toUpperCase()}</span>
                                 <strong style="font-size:1.15rem; color:var(--text-main); ${item.r_done ? 'text-decoration: line-through; opacity:0.6;' : ''}">${item.chap.n}</strong>
                             </div>
                         </div>
-                        <div style="display:flex; align-items:center; gap:12px;">
+                        <div style="display:flex; align-items:center; gap:12px;" onclick="event.stopPropagation();">
                             <input type="date" class="prac-input" style="padding: 10px 14px;" value="${item.dateStr}" onchange="setChapterRevisionDate('${item.s}', ${item.idx}, this.value)">
                             <button class="off-toggle-btn" style="padding: 10px 14px;" onclick="setChapterRevisionDate('${item.s}', ${item.idx}, '')">Clear</button>
                         </div>
@@ -1590,40 +2029,7 @@
             w.innerHTML = found ? h : `<div style="text-align:center; color:var(--text-muted); padding:32px; font-size:0.95rem; font-weight:600;">No revision targets matching the active filters.</div>`;
         }
 
-        function removeElementById(id) { const e = document.getElementById(id); if(e) e.remove(); }
-        function setChapterRevisionDate(s, i, v) { getChapterState(s, i).rd = v; queueCloudSync(); buildWorkspaces(); buildMasterRevisionHub(); renderHomeDashboardMetaWidgets(); }
-        
-        function addInlineChapterPractice(s, i) {
-            const el = document.getElementById(`inline-q-${s}-${i}`), v = parseInt(el.value, 10);
-            if (!isNaN(v) && v > 0) {
-                getChapterState(s, i).q = (getChapterState(s, i).q || 0) + v; const t = getLocalYYYYMMDD(new Date());
-                if(!practiceData[t]) practiceData[t] = { p: 0, c: 0, m: 0, fast_p: 0, fast_c: 0, fast_m: 0, pyq_p: 0, pyq_c: 0, pyq_m: 0, watch_p: 0, watch_c: 0, watch_m: 0 }; 
-                practiceData[t][s] = (practiceData[t][s] || 0) + v;
-                el.value = ""; queueCloudSync(); buildWorkspaces(); renderPracticeTracker(); buildConsistencyHeatmap(); if(activeOpenViewId === 'progress') renderProgressGraphs(); if(activeOpenViewId === 'streaks') renderStreaks();
-            }
-        }
-
-        function addQuickChapterPractice(s, i) {
-            const el = document.getElementById(`quick-chap-q-${s}-${i}`), v = parseInt(el.value, 10);
-            if (!isNaN(v) && v > 0) {
-                getChapterState(s, i).q = (getChapterState(s, i).q || 0) + v; const t = getLocalYYYYMMDD(new Date());
-                if(!practiceData[t]) practiceData[t] = { p: 0, c: 0, m: 0, fast_p: 0, fast_c: 0, fast_m: 0, pyq_p: 0, pyq_c: 0, pyq_m: 0, watch_p: 0, watch_c: 0, watch_m: 0 }; 
-                practiceData[t][s] = (practiceData[t][s] || 0) + v;
-                el.value = ""; queueCloudSync(); buildWorkspaces(); renderPracticeTracker(); buildConsistencyHeatmap(); if(activeOpenViewId === 'progress') renderProgressGraphs(); if(activeOpenViewId === 'streaks') renderStreaks();
-            }
-        }
-
-        function addInlineChapterPYQ(s, i) {
-            const el = document.getElementById(`inline-pyq-${s}-${i}`), v = parseInt(el.value, 10);
-            if (!isNaN(v) && v > 0) {
-                getChapterState(s, i).pyq = (getChapterState(s, i).pyq || 0) + v;
-                pyqPracticeTotals[s] = (pyqPracticeTotals[s] || 0) + v;
-                const t = getLocalYYYYMMDD(new Date());
-                if(!practiceData[t]) practiceData[t] = { p: 0, c: 0, m: 0, fast_p: 0, fast_c: 0, fast_m: 0, pyq_p: 0, pyq_c: 0, pyq_m: 0, watch_p: 0, watch_c: 0, watch_m: 0 };
-                practiceData[t]['pyq_' + s] = (practiceData[t]['pyq_' + s] || 0) + v;
-                el.value = ""; queueCloudSync(); buildWorkspaces(); renderPracticeTracker(); buildConsistencyHeatmap(); if(activeOpenViewId === 'progress') renderProgressGraphs(); if(activeOpenViewId === 'streaks') renderStreaks();
-            }
-        }
+        function setChapterRevisionDate(s, i, v) { getChapterState(s, i).rd = v; queueCloudSync(); runCoreGenerationPipeline(); }
         
         function addSubjectFastPractice(s) {
             const el = document.getElementById(`fast-${s}-inp`), v = parseInt(el.value, 10);
@@ -1632,7 +2038,7 @@
                 if(!practiceData[t]) practiceData[t] = { p: 0, c: 0, m: 0, fast_p: 0, fast_c: 0, fast_m: 0, pyq_p: 0, pyq_c: 0, pyq_m: 0, watch_p: 0, watch_c: 0, watch_m: 0 };
                 practiceData[t]['fast_' + s] = (practiceData[t]['fast_' + s] || 0) + v;
                 fastPracticeTotals[s] = (fastPracticeTotals[s] || 0) + v;
-                el.value = ""; queueCloudSync(); renderPracticeTracker(); buildWorkspaces(); buildConsistencyHeatmap(); if(activeOpenViewId === 'progress') renderProgressGraphs(); if(activeOpenViewId === 'streaks') renderStreaks();
+                el.value = ""; queueCloudSync(); runCoreGenerationPipeline();
             }
         }
 
@@ -1643,7 +2049,7 @@
                 const t = getLocalYYYYMMDD(new Date());
                 if(!practiceData[t]) practiceData[t] = { p: 0, c: 0, m: 0, fast_p: 0, fast_c: 0, fast_m: 0, pyq_p: 0, pyq_c: 0, pyq_m: 0, watch_p: 0, watch_c: 0, watch_m: 0 };
                 practiceData[t]['pyq_' + s] = (practiceData[t]['pyq_' + s] || 0) + v;
-                el.value = ""; queueCloudSync(); renderPracticeTracker(); buildWorkspaces(); buildConsistencyHeatmap(); if(activeOpenViewId === 'progress') renderProgressGraphs(); if(activeOpenViewId === 'streaks') renderStreaks();
+                el.value = ""; queueCloudSync(); runCoreGenerationPipeline();
             }
         }
 
@@ -1709,9 +2115,9 @@
         }
 
         function updateExamDataFieldValue(id, k, v) { if(!examScoreDB[id]) examScoreDB[id] = {}; examScoreDB[id][k] = v; queueCloudSync(); buildExamAnalyticsView(); renderHomeDashboardMetaWidgets(); }
-        
+        function toggleAccordionNode(e) { e.parentElement.classList.toggle('expanded'); }
+
         function toggleWorkspaceVideo(s, c, v) { 
-            const expandedIds = Array.from(document.querySelectorAll('.chapter-node.expanded, .today-target-node.expanded')).map(el => el.id).filter(Boolean);
             const st = getChapterState(s, c), idx = st.w.indexOf(v); 
             const todayStr = getLocalYYYYMMDD(new Date());
             
@@ -1729,20 +2135,14 @@
             } 
             
             queueCloudSync(); 
-            buildWorkspaces(); 
-            renderTodaySchedule(); 
-            if(activeOpenViewId === 'streaks') renderStreaks();
-            
-            expandedIds.forEach(id => {
-                const el = document.getElementById(id);
-                if(el) el.classList.add('expanded');
-            });
+            runCoreGenerationPipeline();
         }
         
         function updateGlobalAnalytics() {
             let tP = syllabusDB.p.reduce((s, c) => s + c.l, 0) / 60, tC = syllabusDB.c.reduce((s, c) => s + c.l, 0) / 60, tM = syllabusDB.m.reduce((s, c) => s + c.l, 0) / 60, tA = tP + tC + tM;
             let dP = 0, dC = 0, dM = 0, pS = 0, cS = 0, mS = 0;
             
+            // FIX: Only sum standard chapter Qs here. fast_q is already captured globally in fastPracticeTotals to avoid double counting.
             syllabusDB.p.forEach((chap, i) => { const st = getChapterState('p', i); dP += (st.w.length * (chap.l / chap.v)) / 60; pS += (st.q || 0); });
             syllabusDB.c.forEach((chap, i) => { const st = getChapterState('c', i); dC += (st.w.length * (chap.l / chap.v)) / 60; cS += (st.q || 0); });
             syllabusDB.m.forEach((chap, i) => { const st = getChapterState('m', i); dM += (st.w.length * (chap.l / chap.v)) / 60; mS += (st.q || 0); });
@@ -1762,13 +2162,20 @@
             const setBar = (id, p) => { const e = document.getElementById(id); if(e) e.style.width = `${Math.min(p, 100)}%`; };
             setBar("bar-a-hrs", (dA/tA)*100);
             setBar("bar-a-pyqs", Math.min(totalPYQs / 5, 100));
-            setEl("tot-p-q", pS + (fastPracticeTotals.p || 0)); 
-            setEl("tot-c-q", cS + (fastPracticeTotals.c || 0)); 
-            setEl("tot-m-q", mS + (fastPracticeTotals.m || 0)); 
-            setEl("tot-a-q", pS + cS + mS + (fastPracticeTotals.p || 0) + (fastPracticeTotals.c || 0) + (fastPracticeTotals.m || 0));
-            setEl("p-sub-stats", `${dP.toFixed(1)} / ${tP.toFixed(0)} Hours  •  ${pS} Numericals  •  ${pyqPracticeTotals.p || 0} PYQs`); 
-            setEl("c-sub-stats", `${dC.toFixed(1)} / ${tC.toFixed(0)} Hours  •  ${cS} Numericals  •  ${pyqPracticeTotals.c || 0} PYQs`); 
-            setEl("m-sub-stats", `${dM.toFixed(1)} / ${tM.toFixed(0)} Hours  •  ${mS} Numericals  •  ${pyqPracticeTotals.m || 0} PYQs`);
+            
+            // Re-aggregate perfectly avoiding double-counts
+            let totP = pS + (fastPracticeTotals.p || 0);
+            let totC = cS + (fastPracticeTotals.c || 0);
+            let totM = mS + (fastPracticeTotals.m || 0);
+
+            setEl("tot-p-q", totP); 
+            setEl("tot-c-q", totC); 
+            setEl("tot-m-q", totM); 
+            setEl("tot-a-q", totP + totC + totM);
+            
+            setEl("p-sub-stats", `${dP.toFixed(1)} / ${tP.toFixed(0)} Hours  •  ${totP} Numericals  •  ${pyqPracticeTotals.p || 0} PYQs`); 
+            setEl("c-sub-stats", `${dC.toFixed(1)} / ${tC.toFixed(0)} Hours  •  ${totC} Numericals  •  ${pyqPracticeTotals.c || 0} PYQs`); 
+            setEl("m-sub-stats", `${dM.toFixed(1)} / ${tM.toFixed(0)} Hours  •  ${totM} Numericals  •  ${pyqPracticeTotals.m || 0} PYQs`);
             
             setEl("home-pyq-p-txt", `${pyqPracticeTotals.p || 0} PYQs`);
             setEl("home-pyq-c-txt", `${pyqPracticeTotals.c || 0} PYQs`);
@@ -1806,7 +2213,7 @@
 
         function renderPracticeTracker() {
             const t = getLocalYYYYMMDD(new Date()), d = practiceData[t] || {p:0,c:0,m:0,fast_p:0,fast_c:0,fast_m:0,pyq_p:0,pyq_c:0,pyq_m:0};
-            ['p','c','m'].forEach(s => { const done = d[s]||0; const txtEl = document.getElementById(`${s}QTxt`); if(txtEl) txtEl.innerText = `${done}/${pracTargets[s]}`; const b = document.getElementById(`${s}QBar`); if(b) b.style.width = `${Math.min(done/pracTargets[s]*100, 100)}%`; });
+            ['p','c','m'].forEach(s => { const done = (d[s]||0) + (d['fast_' + s]||0); const txtEl = document.getElementById(`${s}QTxt`); if(txtEl) txtEl.innerText = `${done}/${pracTargets[s]}`; const b = document.getElementById(`${s}QBar`); if(b) b.style.width = `${Math.min(done/pracTargets[s]*100, 100)}%`; });
             
             const fastP = fastPracticeTotals.p || 0;
             const fastC = fastPracticeTotals.c || 0;
@@ -2128,4 +2535,3 @@
     </script>
 </body>
 </html>
-
