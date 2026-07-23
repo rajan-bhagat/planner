@@ -561,7 +561,16 @@
             <input type="hidden" id="ml-chapter">
             <input type="hidden" id="ml-type">
             <input type="hidden" id="ml-original-input-id">
-            
+
+            <div style="margin-bottom: 20px;">
+                <label style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; display: block;">Question Difficulty</label>
+                <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+                    <button type="button" class="ml-diff-btn prac-btn active" data-diff="1" style="padding:10px 6px; font-size:0.78rem; font-weight:800;" onclick="setMlDifficulty(1)">L1 · Basic</button>
+                    <button type="button" class="ml-diff-btn prac-btn" data-diff="2" style="padding:10px 6px; font-size:0.78rem; font-weight:800;" onclick="setMlDifficulty(2)">L2 · Mains</button>
+                    <button type="button" class="ml-diff-btn prac-btn" data-diff="3" style="padding:10px 6px; font-size:0.78rem; font-weight:800;" onclick="setMlDifficulty(3)">L3 · Advanced</button>
+                </div>
+            </div>
+
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px;">
                 <div style="background: var(--bg-dark); padding: 16px; border-radius: 12px; border: 1px solid var(--accent-green); text-align: center;">
                     <label style="font-size: 0.85rem; font-weight: 800; color: var(--accent-green); text-transform: uppercase;">Total Questions Practiced</label>
@@ -1115,14 +1124,55 @@
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 32px;">
                 <div class="chart-panel-card" style="margin-bottom: 0; border-top: 6px solid var(--accent-purple);">
                     <h4 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 8px;">Subject Equilibrium Index</h4>
-                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">Detects imbalances in practice volume & syllabus.</p>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">Detects imbalances in practice volume & syllabus.</p>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom: 16px;">
+                        <div class="filter-select-bar" style="margin-bottom:0;"><select class="filter-select" onchange="setEqTimeFilter(this.value)"><option value="all" selected>All Time</option><option value="3">Last 3 Days</option><option value="7">Last 7 Days</option><option value="15">Last 15 Days</option><option value="30">Last 30 Days</option><option value="60">Last 60 Days</option></select></div>
+                        <div class="filter-select-bar" style="margin-bottom:0;"><select class="filter-select" onchange="setEqTypeFilter(this.value)"><option value="all" selected>All Qs</option><option value="standard">Standard</option><option value="quick">Quick</option><option value="pyqs">PYQs</option></select></div>
+                        <div class="filter-select-bar" style="margin-bottom:0;"><select class="filter-select" onchange="setEqDiffFilter(this.value)"><option value="all" selected>All Difficulty</option><option value="1">L1 · Basic</option><option value="2">L2 · Mains</option><option value="3">L3 · Advanced</option></select></div>
+                    </div>
                     <div id="equilibriumIndexCanvas"></div>
                 </div>
                 <div class="chart-panel-card" style="margin-bottom: 0; border-top: 6px solid var(--accent-orange);">
                     <h4 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 8px;">Practice vs Test Delta</h4>
-                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">Compares home accuracy vs exam pressure.</p>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">Compares home accuracy vs exam pressure.</p>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom: 16px;">
+                        <div class="filter-select-bar" style="margin-bottom:0;"><select class="filter-select" onchange="setPvtTimeFilter(this.value)"><option value="all" selected>All Time</option><option value="3">Last 3 Days</option><option value="7">Last 7 Days</option><option value="15">Last 15 Days</option><option value="30">Last 30 Days</option><option value="60">Last 60 Days</option></select></div>
+                        <div class="filter-select-bar" style="margin-bottom:0;"><select class="filter-select" onchange="setPvtTypeFilter(this.value)"><option value="all" selected>All Qs</option><option value="standard">Standard</option><option value="quick">Quick</option><option value="pyqs">PYQs</option></select></div>
+                        <div class="filter-select-bar" style="margin-bottom:0;"><select class="filter-select" onchange="setPvtDiffFilter(this.value)"><option value="all" selected>All Difficulty</option><option value="1">L1 · Basic</option><option value="2">L2 · Mains</option><option value="3">L3 · Advanced</option></select></div>
+                    </div>
                     <div id="pracTestDeltaCanvas"></div>
                 </div>
+            </div>
+
+            <div class="chart-panel-card" style="margin-bottom: 32px; border-top: 6px solid var(--accent-purple);">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap; gap:16px;">
+                    <div>
+                        <h4 style="font-size: 1.25rem; font-weight: 800;">⏰ Time-of-Day Focus & Efficiency</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600; margin-top: 4px;">Correlates your study time blocks with accuracy to reveal your peak cognitive hours.</p>
+                    </div>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                        <div class="filter-select-bar" style="margin-bottom:0;"><select class="filter-select" onchange="setTodSubjFilter(this.value)"><option value="all" selected>Global</option><option value="p">Physics</option><option value="c">Chemistry</option><option value="m">Maths</option></select></div>
+                        <div class="filter-select-bar" style="margin-bottom:0;"><select class="filter-select" onchange="setTodTypeFilter(this.value)"><option value="all" selected>All Qs</option><option value="standard">Standard</option><option value="quick">Quick</option><option value="pyqs">PYQs</option></select></div>
+                        <div class="filter-select-bar" style="margin-bottom:0;"><select class="filter-select" onchange="setTodDiffFilter(this.value)"><option value="all" selected>All Difficulty</option><option value="1">L1 · Basic</option><option value="2">L2 · Mains</option><option value="3">L3 · Advanced</option></select></div>
+                    </div>
+                </div>
+                <div class="chart-svg-container" id="todAccuracyChartCanvas" style="height: 320px; padding: 12px; margin-top: 20px; border:none; background:transparent;"></div>
+            </div>
+
+            <div class="chart-panel-card" style="margin-bottom: 32px; border-top: 6px solid var(--accent-green);">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap; gap:16px;">
+                    <div>
+                        <h4 style="font-size: 1.25rem; font-weight: 800;">📈 Chapter-Wise Accuracy Trend</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600; margin-top: 4px;">Tracks accuracy session-over-session for a chapter, so you can see genuine improvement over time.</p>
+                    </div>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                        <div class="filter-select-bar" style="margin-bottom:0;"><select class="filter-select" onchange="setChTrendSubj(this.value)"><option value="p">Physics</option><option value="c">Chemistry</option><option value="m">Maths</option></select></div>
+                        <div class="filter-select-bar" style="margin-bottom:0;"><select class="filter-select" id="chTrendChapterSelect" onchange="setChTrendChapter(this.value)"></select></div>
+                        <div class="filter-select-bar" style="margin-bottom:0;"><select class="filter-select" onchange="setChTrendType(this.value)"><option value="all" selected>All Qs</option><option value="standard">Standard</option><option value="quick">Quick</option><option value="pyqs">PYQs</option></select></div>
+                        <div class="filter-select-bar" style="margin-bottom:0;"><select class="filter-select" onchange="setChTrendDiff(this.value)"><option value="all" selected>All Difficulty</option><option value="1">L1 · Basic</option><option value="2">L2 · Mains</option><option value="3">L3 · Advanced</option></select></div>
+                    </div>
+                </div>
+                <div class="chart-svg-container" id="chTrendHubChartCanvas" style="height: 320px; padding: 12px; margin-top: 20px; border:none; background:transparent;"></div>
             </div>
 
             <div style="margin-bottom: 32px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
@@ -1147,6 +1197,7 @@
                         <div class="filter-select-bar" style="margin-bottom:0;"><select class="filter-select" onchange="setCumulSubj(this.value)"><option value="all" selected>Global</option><option value="p">Physics</option><option value="c">Chemistry</option><option value="m">Maths</option></select></div>
                         <div class="filter-select-bar" style="margin-bottom:0;"><select class="filter-select" onchange="setCumulType(this.value)"><option value="all" selected>All Qs</option><option value="standard">Standard</option><option value="quick">Quick</option><option value="pyqs">PYQs</option></select></div>
                         <div class="filter-select-bar" style="margin-bottom:0;"><select class="filter-select" onchange="setCumulAcc(this.value)"><option value="total" selected>Total</option><option value="correct">Correct</option><option value="incorrect">Incorrect</option></select></div>
+                        <div class="filter-select-bar" style="margin-bottom:0;"><select class="filter-select" onchange="setCumulDiffFilter(this.value)"><option value="all" selected>All Difficulty</option><option value="1">L1 · Basic</option><option value="2">L2 · Mains</option><option value="3">L3 · Advanced</option></select></div>
                     </div>
                 </div>
                 <div class="chart-layout-wrapper" style="margin-top: 24px; height: 220px;">
@@ -1164,6 +1215,7 @@
                     <div style="display:flex; gap:10px; flex-wrap:wrap;">
                         <div class="filter-select-bar" style="margin-bottom:0;"><select class="filter-select" onchange="setAccuracySubjectFilter(this.value)"><option value="all" selected>Global</option><option value="p">Physics</option><option value="c">Chemistry</option><option value="m">Maths</option></select></div>
                         <div class="filter-select-bar" style="margin-bottom:0;"><select class="filter-select" onchange="setAccuracyTypeFilter(this.value)"><option value="all" selected>All Qs</option><option value="standard">Standard</option><option value="quick">Quick</option><option value="pyqs">PYQs</option></select></div>
+                        <div class="filter-select-bar" style="margin-bottom:0;"><select class="filter-select" onchange="setGAccDiffFilter(this.value)"><option value="all" selected>All Difficulty</option><option value="1">L1 · Basic</option><option value="2">L2 · Mains</option><option value="3">L3 · Advanced</option></select></div>
                     </div>
                 </div>
                 <div class="chart-svg-container" id="globalAccuracyChartCanvas" style="height: 250px; padding: 12px; margin-top: 20px; border:none; background:transparent;"></div>
@@ -1657,6 +1709,38 @@
         let timeBlockLogs = {}; // { 'YYYY-MM-DD': { block: 'morning', quality: 1-5 } }
         const timelineStartDate = new Date("2026-06-12T00:00:00"); let generatedTimeline = []; const pracTargets = { p: 30, c: 40, m: 30 };
 
+        // --- Per-Session Granular Log (Difficulty + Time-of-Day + Chapter Trend engine) ---
+        // Additive analytics layer. Does NOT alter any existing data structure or behavior.
+        let sessionLogDB = []; // [{ id, ts, date, block, s, chapterIdx, qtype, difficulty, correct, incorrect, total }]
+        const DIFF_LEVELS = [ [1,'L1 · Basic/Direct'], [2,'L2 · JEE Mains'], [3,'L3 · JEE Advanced'] ];
+        const TIME_BLOCKS_DEF = [ ['early_morning','Early Morning',3,8], ['late_morning','Late Morning',8,11.5], ['afternoon','Afternoon',11.5,17], ['evening','Evening',17,21], ['night','Night',21,27] ];
+        function getSessionTimeBlock(d) {
+            let h = d.getHours() + d.getMinutes()/60; if (h < 3) h += 24;
+            for (const [key, label, start, end] of TIME_BLOCKS_DEF) { if (h >= start && h < end) return key; }
+            return 'night';
+        }
+        function timeBlockLabel(key) { const f = TIME_BLOCKS_DEF.find(b => b[0] === key); return f ? f[1] : key; }
+        let mlDifficultyValue = 2;
+        function setMlDifficulty(v) { mlDifficultyValue = v; document.querySelectorAll('.ml-diff-btn').forEach(btn => btn.classList.toggle('active', parseInt(btn.dataset.diff,10) === v)); }
+        // Shared filter state for new sync'd difficulty/type/time filters
+        let todSubjFilter = 'all', todTypeFilter = 'all', todDiffFilter = 'all';
+        let chTrendSubjFilter = 'p', chTrendChapterIdx = 0, chTrendTypeFilter = 'all', chTrendDiffFilter = 'all';
+        let portalTrendTypeFilter = 'all', portalTrendDiffFilter = 'all';
+        let eqTimeFilter = 'all', eqTypeFilter = 'all', eqDiffFilter = 'all';
+        let pvtTimeFilter = 'all', pvtTypeFilter = 'all', pvtDiffFilter = 'all';
+        let gAccDiffFilter = 'all', cumulDiffFilter = 'all';
+        function sessionLogMatches(l, subj, type, diff, sinceDays) {
+            if (subj && subj !== 'all' && l.s !== subj) return false;
+            if (type && type !== 'all' && l.qtype !== type) return false;
+            if (diff && diff !== 'all' && String(l.difficulty) !== String(diff)) return false;
+            if (sinceDays && sinceDays !== 'all') {
+                const days = parseInt(sinceDays, 10);
+                const diffDays = (Date.now() - new Date(l.date + "T00:00:00").getTime()) / 86400000;
+                if (diffDays > days) return false;
+            }
+            return true;
+        }
+
         // --- Goal Pace & Target Benchmark ---
         const RANK_PACE_MAP = { u100: 150, u500: 120, u1000: 100, u5000: 80, u10000: 60 };
         let targetRankKey = "u1000", customBenchmarkPace = 100;
@@ -1688,6 +1772,8 @@
             pyqPracticeTotals = hydrate('jeePyqPracticeTotalsV1', { p: 0, c: 0, m: 0 });
             customTestsList = hydrate('jeeCustomTestsV1', []);
             timeBlockLogs = hydrate('jeeTimeBlockLogsV1', {});
+            sessionLogDB = hydrate('jeeSessionLogDBV1', []);
+            sessionLogDB = hydrate('jeeSessionLogDBV1', []);
             
             compactLayoutActive = localStorage.getItem('jeeCompactMode') === 'true';
             document.getElementById('compactModeCheck').checked = compactLayoutActive;
@@ -1729,6 +1815,7 @@
                                     pyqPracticeTotals = cloud.pyqPracticeTotals || pyqPracticeTotals;
                                     customTestsList = cloud.customTestsList || customTestsList;
                                     timeBlockLogs = cloud.timeBlockLogs || timeBlockLogs;
+                                    sessionLogDB = cloud.sessionLogDB || sessionLogDB;
                                     
                                     rebuildExamDatabase();
                                     runCoreGenerationPipeline(); 
@@ -1814,6 +1901,7 @@
             localStorage.setItem('jeePyqPracticeTotalsV1', JSON.stringify(pyqPracticeTotals));
             localStorage.setItem('jeeCustomTestsV1', JSON.stringify(customTestsList));
             localStorage.setItem('jeeTimeBlockLogsV1', JSON.stringify(timeBlockLogs));
+            localStorage.setItem('jeeSessionLogDBV1', JSON.stringify(sessionLogDB));
             localCacheIsDirty = false;
         }
 
@@ -1831,6 +1919,8 @@
             if (activeOpenViewId === "progress") {
                 renderProgressAdvancedAnalytics();
                 renderGoalPaceCard();
+                renderTimeOfDayAccuracyGraph();
+                renderChapterTrendHub();
             }
             if (activeOpenViewId === "test-analysis") {
                 renderTestAnalysisChart();
@@ -1844,7 +1934,7 @@
             if (syncTimeoutId) clearTimeout(syncTimeoutId);
             syncTimeoutId = setTimeout(() => {
                 if (userDocRef) {
-                    userDocRef.set({ internalProgress, offDays, practiceData, examScoreDB, fastPracticeTotals, pyqPracticeTotals, customTestsList, timeBlockLogs }, { merge: true })
+                    userDocRef.set({ internalProgress, offDays, practiceData, examScoreDB, fastPracticeTotals, pyqPracticeTotals, customTestsList, timeBlockLogs, sessionLogDB }, { merge: true })
                     .then(() => setSyncBadge("SYNCED", "var(--accent-green)"))
                     .catch(() => setSyncBadge("SYNC ERROR", "var(--accent-red)"));
                 }
@@ -1852,7 +1942,7 @@
         }
         
         function exportData() {
-            const a = document.createElement('a'); a.setAttribute("href", "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ internalProgress, offDays, practiceData, examScoreDB, fastPracticeTotals, pyqPracticeTotals, customTestsList, timeBlockLogs, v: 9.0 })));
+            const a = document.createElement('a'); a.setAttribute("href", "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ internalProgress, offDays, practiceData, examScoreDB, fastPracticeTotals, pyqPracticeTotals, customTestsList, timeBlockLogs, sessionLogDB, v: 9.1 })));
             a.setAttribute("download", `JEE_Backup_${getLocalYYYYMMDD(new Date())}.json`); document.body.appendChild(a); a.click(); a.remove();
         }
         function importData(e) {
@@ -1860,7 +1950,7 @@
             r.onload = function(evt) {
                 try {
                     const p = JSON.parse(evt.target.result);
-                    internalProgress = p.internalProgress || {p:{},c:{},m:{}}; offDays = p.offDays || {global:[],p:[],c:[],m:[]}; practiceData = p.practiceData || {}; examScoreDB = p.examScoreDB || {}; fastPracticeTotals = p.fastPracticeTotals || {p:0,c:0,m:0}; pyqPracticeTotals = p.pyqPracticeTotals || {p:0,c:0,m:0}; customTestsList = p.customTestsList || []; timeBlockLogs = p.timeBlockLogs || {};
+                    internalProgress = p.internalProgress || {p:{},c:{},m:{}}; offDays = p.offDays || {global:[],p:[],c:[],m:[]}; practiceData = p.practiceData || {}; examScoreDB = p.examScoreDB || {}; fastPracticeTotals = p.fastPracticeTotals || {p:0,c:0,m:0}; pyqPracticeTotals = p.pyqPracticeTotals || {p:0,c:0,m:0}; customTestsList = p.customTestsList || []; timeBlockLogs = p.timeBlockLogs || {}; sessionLogDB = p.sessionLogDB || [];
                     rebuildExamDatabase(); queueCloudSync(); runCoreGenerationPipeline(); alert("Data imported successfully.");
                 } catch(err) { alert("Invalid data format."); }
             }; r.readAsText(e.target.files[0]);
@@ -1883,7 +1973,7 @@
                 renderCumulativeGraph();
             }
             if(v === 'home') { renderHomeInsightsSnapshot(); }
-            if(v === 'progress') { renderProgressAdvancedAnalytics(); renderGoalPaceCard(); renderLectureVsQuestionsGraph(); }
+            if(v === 'progress') { renderProgressAdvancedAnalytics(); renderGoalPaceCard(); renderLectureVsQuestionsGraph(); renderTimeOfDayAccuracyGraph(); renderChapterTrendHub(); }
             if(v === 'test-analysis') renderTestAnalysisChart();
             if(v === 'schedule') { setTimeout(() => { jumpToActiveTimelineDayNode(); }, 50); }
             if(v === 'revision') { buildMasterRevisionHub(); jumpToNearestActiveRevisionNode(); }
@@ -1898,6 +1988,8 @@
         function setMistakeTypeFilter(t) { mistakeTypeFilter = t; document.querySelectorAll('[id^="mistake-type-"]').forEach(btn => btn.classList.toggle('active', btn.id === `mistake-type-${t}`)); renderGlobalMistakeProfile(); }
         function setAccuracySubjectFilter(s) { accuracySubjectFilter = s; document.querySelectorAll('[id^="acc-subj-"]').forEach(btn => btn.classList.toggle('active', btn.id === `acc-subj-${s}`)); renderGlobalAccuracyGraph(); }
         function setAccuracyTypeFilter(t) { accuracyTypeFilter = t; document.querySelectorAll('[id^="acc-type-"]').forEach(btn => btn.classList.toggle('active', btn.id === `acc-type-${t}`)); renderGlobalAccuracyGraph(); }
+        function setGAccDiffFilter(d) { gAccDiffFilter = d; renderGlobalAccuracyGraph(); }
+        function setCumulDiffFilter(d) { cumulDiffFilter = d; renderCumulativeGraph(); }
 
         // Test Logger Modal Functions
         function openTestLoggerModal(uid) {
@@ -2268,11 +2360,30 @@
             // Equilibrium Index
             let eqHtml = '';
             let sStats = { p: { v:0, l:0 }, c: { v:0, l:0 }, m: { v:0, l:0 } };
+            const eqTypeMap = { standard: 'q', quick: 'fast_q', pyqs: 'pyq' };
+            const eqIsDefault = (eqTimeFilter === 'all' && eqTypeFilter === 'all' && eqDiffFilter === 'all');
             ['p','c','m'].forEach(s => {
                 let v = 0, l = 0, tL = 0;
                 syllabusDB[s].forEach((c, idx) => {
                     let st = getChapterState(s, idx);
-                    v += (st.q||0) + (st.fast_q||0) + (st.pyq||0);
+                    if (eqIsDefault) {
+                        v += (st.q||0) + (st.fast_q||0) + (st.pyq||0);
+                    } else if (eqDiffFilter === 'all') {
+                        // Time/type filter only: derive from per-chapter log_history (existing structure, unaffected)
+                        (st.log_history || []).forEach(log => {
+                            if (eqTimeFilter !== 'all') {
+                                const diffDays = (Date.now() - new Date(log.date + "T00:00:00").getTime()) / 86400000;
+                                if (diffDays > parseInt(eqTimeFilter, 10)) return;
+                            }
+                            if (eqTypeFilter === 'all' || eqTypeFilter === 'standard') v += (log.q || 0);
+                            if (eqTypeFilter === 'all' || eqTypeFilter === 'quick') v += (log.fast_q || 0);
+                            if (eqTypeFilter === 'all' || eqTypeFilter === 'pyqs') v += (log.pyq || 0);
+                        });
+                    } else {
+                        // Difficulty filter active: derive from granular per-session log
+                        const wantedType = eqTypeFilter === 'all' ? 'all' : eqTypeMap[eqTypeFilter];
+                        v += sessionLogDB.filter(l => l.s === s && l.chapterIdx === idx && sessionLogMatches(l, s, wantedType, eqDiffFilter, eqTimeFilter)).reduce((a,l)=>a+l.total, 0);
+                    }
                     l += st.w.length;
                     tL += c.v;
                 });
@@ -2297,25 +2408,57 @@
                     </div>
                 </div>`;
             });
+            if (!eqIsDefault) eqHtml += `<div style="font-size:0.7rem; color:var(--text-muted); font-weight:600; margin-top:8px;">Lecture-completion weighting stays all-time; volume respects your filters above.${eqDiffFilter !== 'all' ? ' Difficulty view only reflects logs made since the difficulty tracker was added.' : ''}</div>`;
             let eqCnv = document.getElementById('equilibriumIndexCanvas');
             if(eqCnv) eqCnv.innerHTML = eqHtml;
 
             // Practice vs Test Delta
             let ptHtml = '';
+            const pvtTypeMap = { standard: 'q', quick: 'fast_q', pyqs: 'pyq' };
+            const pvtIsDefault = (pvtTimeFilter === 'all' && pvtTypeFilter === 'all' && pvtDiffFilter === 'all');
             
             let pAcc = {p:{c:0,t:0}, c:{c:0,t:0}, m:{c:0,t:0}};
-            Object.values(practiceData).forEach(day => {
-                ['p','c','m'].forEach(s => {
-                    let tot = (day[s]||0) + (day['fast_'+s]||0) + (day['pyq_'+s]||0);
-                    let inc = (day.incorrect_totals?.[s]?.q||0) + (day.incorrect_totals?.[s]?.fast_q||0) + (day.incorrect_totals?.[s]?.pyq||0);
-                    pAcc[s].t += tot;
-                    pAcc[s].c += Math.max(0, tot - inc);
+            if (pvtIsDefault) {
+                Object.values(practiceData).forEach(day => {
+                    ['p','c','m'].forEach(s => {
+                        let tot = (day[s]||0) + (day['fast_'+s]||0) + (day['pyq_'+s]||0);
+                        let inc = (day.incorrect_totals?.[s]?.q||0) + (day.incorrect_totals?.[s]?.fast_q||0) + (day.incorrect_totals?.[s]?.pyq||0);
+                        pAcc[s].t += tot;
+                        pAcc[s].c += Math.max(0, tot - inc);
+                    });
                 });
-            });
+            } else if (pvtDiffFilter === 'all') {
+                Object.keys(practiceData).forEach(dateStr => {
+                    if (pvtTimeFilter !== 'all') {
+                        const diffDays = (Date.now() - new Date(dateStr + "T00:00:00").getTime()) / 86400000;
+                        if (diffDays > parseInt(pvtTimeFilter, 10)) return;
+                    }
+                    const day = practiceData[dateStr];
+                    ['p','c','m'].forEach(s => {
+                        let tot = 0, inc = 0;
+                        if (pvtTypeFilter === 'all' || pvtTypeFilter === 'standard') { tot += (day[s]||0); inc += (day.incorrect_totals?.[s]?.q||0); }
+                        if (pvtTypeFilter === 'all' || pvtTypeFilter === 'quick') { tot += (day['fast_'+s]||0); inc += (day.incorrect_totals?.[s]?.fast_q||0); }
+                        if (pvtTypeFilter === 'all' || pvtTypeFilter === 'pyqs') { tot += (day['pyq_'+s]||0); inc += (day.incorrect_totals?.[s]?.pyq||0); }
+                        pAcc[s].t += tot; pAcc[s].c += Math.max(0, tot - inc);
+                    });
+                });
+            } else {
+                const wantedType = pvtTypeFilter === 'all' ? 'all' : pvtTypeMap[pvtTypeFilter];
+                sessionLogDB.filter(l => sessionLogMatches(l, null, wantedType, pvtDiffFilter, pvtTimeFilter)).forEach(l => {
+                    pAcc[l.s].t += l.total; pAcc[l.s].c += l.correct;
+                });
+            }
 
             let tAcc = {p:{c:0,t:0}, c:{c:0,t:0}, m:{c:0,t:0}};
-            Object.values(examScoreDB).forEach(r => {
+            Object.entries(examScoreDB).forEach(([uid, r]) => {
                 if(r.attempted) {
+                    if (pvtTimeFilter !== 'all') {
+                        const manifestEntry = examManifestDB.find(e => e.uid === uid);
+                        if (manifestEntry) {
+                            const diffDays = (Date.now() - new Date(manifestEntry.d).getTime()) / 86400000;
+                            if (diffDays > parseInt(pvtTimeFilter, 10)) return;
+                        }
+                    }
                     ['p','c','m'].forEach(s => {
                         let atmpt = (r[`corr_${s}`]||0) + (r[`inc_${s}`]||0);
                         tAcc[s].t += atmpt;
@@ -2418,6 +2561,7 @@
             document.getElementById('ml-incorrect').value = 0;
             
             ['concept', 'calc', 'formula', 'silly', 'approach'].forEach(k => document.getElementById(`ml-err-${k}`).value = 0);
+            setMlDifficulty(2);
             document.getElementById('mistakeLoggerModal').style.display = 'flex';
             updateMistakeTotal();
         }
@@ -2497,6 +2641,22 @@
             }
 
             if(inputId) { const srcEl = document.getElementById(inputId); if(srcEl) srcEl.value = ''; }
+
+            // --- New: push a granular per-session log entry (additive, doesn't touch any existing structure) ---
+            const nowD = new Date();
+            sessionLogDB.push({
+                id: 'sl_' + Date.now() + '_' + Math.floor(Math.random()*10000),
+                ts: nowD.getTime(),
+                date: t,
+                block: getSessionTimeBlock(nowD),
+                s: s,
+                chapterIdx: (cStr !== 'global') ? parseInt(cStr, 10) : null,
+                qtype: type,
+                difficulty: mlDifficultyValue,
+                correct: cor,
+                incorrect: inc,
+                total: total
+            });
 
             closeMistakeLogger();
             queueCloudSync();
@@ -2581,16 +2741,25 @@
         function renderGlobalAccuracyGraph() {
             const canvas = document.getElementById("globalAccuracyChartCanvas"); if(!canvas) return;
             let totalAttempts = 0, totalIncorrect = 0;
-            
-            Object.values(practiceData).forEach(day => {
-                ['p','c','m'].forEach(subj => {
-                    if (accuracySubjectFilter === 'all' || accuracySubjectFilter === subj) {
-                        if (accuracyTypeFilter === 'all' || accuracyTypeFilter === 'standard') { totalAttempts += (day[subj] || 0); totalIncorrect += (day.incorrect_totals?.[subj]?.q || 0); }
-                        if (accuracyTypeFilter === 'all' || accuracyTypeFilter === 'quick') { totalAttempts += (day['fast_' + subj] || 0); totalIncorrect += (day.incorrect_totals?.[subj]?.fast_q || 0); }
-                        if (accuracyTypeFilter === 'all' || accuracyTypeFilter === 'pyqs') { totalAttempts += (day['pyq_' + subj] || 0); totalIncorrect += (day.incorrect_totals?.[subj]?.pyq || 0); }
-                    }
+
+            if (gAccDiffFilter === 'all') {
+                Object.values(practiceData).forEach(day => {
+                    ['p','c','m'].forEach(subj => {
+                        if (accuracySubjectFilter === 'all' || accuracySubjectFilter === subj) {
+                            if (accuracyTypeFilter === 'all' || accuracyTypeFilter === 'standard') { totalAttempts += (day[subj] || 0); totalIncorrect += (day.incorrect_totals?.[subj]?.q || 0); }
+                            if (accuracyTypeFilter === 'all' || accuracyTypeFilter === 'quick') { totalAttempts += (day['fast_' + subj] || 0); totalIncorrect += (day.incorrect_totals?.[subj]?.fast_q || 0); }
+                            if (accuracyTypeFilter === 'all' || accuracyTypeFilter === 'pyqs') { totalAttempts += (day['pyq_' + subj] || 0); totalIncorrect += (day.incorrect_totals?.[subj]?.pyq || 0); }
+                        }
+                    });
                 });
-            });
+            } else {
+                // Difficulty-specific view draws from the granular per-session log (only populated by logs made after the difficulty feature was added)
+                const typeMap = { standard: 'q', quick: 'fast_q', pyqs: 'pyq' };
+                const wantedType = accuracyTypeFilter === 'all' ? 'all' : typeMap[accuracyTypeFilter];
+                sessionLogDB.filter(l => sessionLogMatches(l, accuracySubjectFilter, wantedType, gAccDiffFilter, 'all')).forEach(l => {
+                    totalAttempts += l.total; totalIncorrect += l.incorrect;
+                });
+            }
             let totalCorrect = Math.max(0, totalAttempts - totalIncorrect);
             canvas.innerHTML = createAccuracySvg(totalCorrect, totalIncorrect, 250);
         }
@@ -2620,6 +2789,12 @@
         function setCumulSubj(s) { cumulSubjectFilter = s; document.querySelectorAll('[id^="cumul-subj-"]').forEach(btn => btn.classList.toggle('active', btn.id === `cumul-subj-${s}`)); renderCumulativeGraph(); }
         function setCumulType(t) { cumulTypeFilter = t; document.querySelectorAll('[id^="cumul-type-"]').forEach(btn => btn.classList.toggle('active', btn.id === `cumul-type-${t}`)); renderCumulativeGraph(); }
         function setCumulAcc(a) { cumulAccFilter = a; document.querySelectorAll('[id^="cumul-acc-"]').forEach(btn => btn.classList.toggle('active', btn.id === `cumul-acc-${a}`)); renderCumulativeGraph(); }
+        function setEqTimeFilter(v) { eqTimeFilter = v; renderProgressAdvancedAnalytics(); }
+        function setEqTypeFilter(v) { eqTypeFilter = v; renderProgressAdvancedAnalytics(); }
+        function setEqDiffFilter(v) { eqDiffFilter = v; renderProgressAdvancedAnalytics(); }
+        function setPvtTimeFilter(v) { pvtTimeFilter = v; renderProgressAdvancedAnalytics(); }
+        function setPvtTypeFilter(v) { pvtTypeFilter = v; renderProgressAdvancedAnalytics(); }
+        function setPvtDiffFilter(v) { pvtDiffFilter = v; renderProgressAdvancedAnalytics(); }
 
         function switchGraphTimeframe(m) { activeGraphTimeframe = m; graphWindowOffset = 0; document.querySelectorAll('.filter-chip').forEach(b => { if(b.id.startsWith('time-flt-')) b.classList.toggle('active', b.id === `time-flt-${m}`); }); renderProgressGraphs(); }
         function setGraphSubjectFilter(s) { graphSubjectFilter = s; document.querySelectorAll('.filter-chip').forEach(b => { if(b.id.startsWith('graph-subj-')) b.classList.toggle('active', b.id === `graph-subj-${s}`); }); renderProgressGraphs(); }
@@ -2999,6 +3174,7 @@
         }
 
         function openChapterPortalView(s, idx) {
+            if (!currentlyOpenChapterPortalData || currentlyOpenChapterPortalData.s !== s || currentlyOpenChapterPortalData.idx !== idx) { portalTrendTypeFilter = 'all'; portalTrendDiffFilter = 'all'; }
             currentlyOpenChapterPortalData = { s, idx }; activeOpenViewId = "chapter-portal";
             document.querySelectorAll('#navMenu li').forEach(item => item.classList.remove('active'));
             document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
@@ -3020,7 +3196,7 @@
             
             const container = document.getElementById('chapterPortalWorkspaceContainer'), accentColor = colorMap[s];
 
-            container.innerHTML = `<div style="background: var(--bg-panel); border: 1px solid var(--border-color); border-left: 6px solid ${accentColor}; border-radius: 16px; padding: 24px 32px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 2px 10px var(--shadow-matrix);"><div><button class="prac-btn" style="padding: 6px 12px; font-size: 0.8rem; background: var(--bg-dark); border: 1px solid var(--border-color); color: var(--text-muted);" onclick="switchView('${s === 'p' ? 'physics' : s === 'c' ? 'chemistry' : 'mathematics'}')">← Back to ${subjMap[s]}</button></div><div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px;"><div><span style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: ${accentColor};">${subjMap[s]}</span><h2 style="font-size: 2.2rem; font-weight: 900; letter-spacing: -0.5px; color: var(--text-main); margin-top: 4px;">${chap.n}</h2><div style="display: flex; gap: 12px; font-size: 0.85rem; color: var(--text-muted); font-weight: 600; margin-top: 8px;"><span>⏱ ${(chap.l/60).toFixed(1)} Hrs</span> • <span>🗓️ Target: ${dStr}</span></div></div><div style="text-align: right;"><div style="font-size: 2rem; font-weight: 900; color: ${pct===100 ? 'var(--accent-green)' : 'var(--text-main)'}; line-height: 1;">${pct}%</div><div style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-top: 4px;">Completion</div></div></div><div class="stat-bar-bg" style="height: 6px; background: var(--bg-dark); margin-top: 4px;"><div class="stat-bar-fill" style="background: ${accentColor}; width: ${pct}%;"></div></div></div><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;"><div class="card" style="padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: none; border-bottom: 3px solid var(--accent-blue);"><span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase;">Lectures</span><span style="font-size: 1.4rem; font-weight: 900; color: var(--text-main);">${st.w.length}<span style="font-size: 1rem; color: var(--text-muted);">/${chap.v}</span></span></div><div class="card" style="padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: none; border-bottom: 3px solid ${accentColor};"><span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase;">Standard Qs</span><span style="font-size: 1.4rem; font-weight: 900; color: var(--text-main);">${st.q || 0}</span></div><div class="card" style="padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: none; border-bottom: 3px solid var(--accent-purple);"><span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase;">PYQs Done</span><span style="font-size: 1.4rem; font-weight: 900; color: var(--accent-purple);">${st.pyq || 0}</span></div><div class="card" style="padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: none; border-bottom: 3px solid var(--accent-green);"><span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase;">Total Volume</span><span style="font-size: 1.4rem; font-weight: 900; color: var(--accent-green);">${totalQuestions}</span></div></div><div style="display: flex; flex-wrap: wrap; gap: 24px;"><div style="flex: 1 1 65%; min-width: 320px; display: flex; flex-direction: column; gap: 24px;"><div class="card" style="box-shadow: none; padding: 24px;"><div class="card-title" style="margin-bottom: 16px; font-size: 1.1rem;">Lecture Progress Tracker</div><div class="video-grid" style="margin-top: 0; display: flex; flex-wrap: wrap; gap: 10px; background: transparent; padding: 0; border: none;">${cb}</div></div><div class="card" style="box-shadow: none; padding: 24px; border-top: 4px solid var(--accent-blue);"><div class="card-title" style="margin-bottom: 4px; font-size: 1.1rem;">Lecture vs Questions Ratio</div>${buildChapterLQRatioHtml(s, idx)}</div><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;"><div class="card" style="box-shadow: none; padding: 20px;"><div class="card-title" style="margin-bottom: 12px; font-size: 1rem;">Volume Distribution</div><div style="display: flex; gap: 4px; margin-bottom: 12px; flex-wrap: wrap;"><button class="prac-btn ${selectedChapterTimeframe==='all'?'active':''}" style="padding: 4px 8px; font-size: 0.7rem; border-radius: 6px;" onclick="setChapterChartTimeframe('all')">All</button><button class="prac-btn ${selectedChapterTimeframe==='today'?'active':''}" style="padding: 4px 8px; font-size: 0.7rem; border-radius: 6px;" onclick="setChapterChartTimeframe('today')">Today</button><button class="prac-btn ${selectedChapterTimeframe==='7days'?'active':''}" style="padding: 4px 8px; font-size: 0.7rem; border-radius: 6px;" onclick="setChapterChartTimeframe('7days')">7D</button><button class="prac-btn ${selectedChapterTimeframe==='30days'?'active':''}" style="padding: 4px 8px; font-size: 0.7rem; border-radius: 6px;" onclick="setChapterChartTimeframe('30days')">30D</button></div><div class="chart-svg-container" id="chapterSummaryVolumeChartCanvas" style="height: 250px; border: none; background: transparent; padding: 0;"></div></div><div class="card" style="box-shadow: none; padding: 20px;"><div class="card-title" style="margin-bottom: 12px; font-size: 1rem;"><span>Log Timeline</span><div style="display: flex; gap: 4px; align-items: center;"><button class="prac-btn" style="padding: 2px 8px; font-size: 0.7rem; border-radius: 6px;" onclick="navigateChapterDateTimeline(-1)">◀</button><button class="prac-btn" style="padding: 2px 8px; font-size: 0.7rem; border-radius: 6px;" onclick="navigateChapterDateTimeline(1)">▶</button></div></div><div class="chart-svg-container" id="chapterHistoricalTimelineChartCanvas" style="height: 250px; border: none; background: transparent; padding: 0;"></div></div><div class="card" style="box-shadow: none; padding: 20px;"><div class="card-title" style="margin-bottom: 12px; font-size: 1rem;">Accuracy Analytics</div><div style="display: flex; gap: 4px; margin-bottom: 12px; flex-wrap: wrap;"><button class="prac-btn ${selectedChapterAccuracyType==='all'?'active':''}" style="padding: 4px 8px; font-size: 0.7rem; border-radius: 6px;" onclick="setChapterAccuracyType('all')">All Qs</button><button class="prac-btn ${selectedChapterAccuracyType==='standard'?'active':''}" style="padding: 4px 8px; font-size: 0.7rem; border-radius: 6px;" onclick="setChapterAccuracyType('standard')">Standard</button><button class="prac-btn ${selectedChapterAccuracyType==='quick'?'active':''}" style="padding: 4px 8px; font-size: 0.7rem; border-radius: 6px;" onclick="setChapterAccuracyType('quick')">Quick</button><button class="prac-btn ${selectedChapterAccuracyType==='pyqs'?'active':''}" style="padding: 4px 8px; font-size: 0.7rem; border-radius: 6px;" onclick="setChapterAccuracyType('pyqs')">PYQs</button></div><div class="chart-svg-container" id="chapterAccuracyProfileCanvas" style="height: 250px; border: none; background: transparent; padding: 0;"></div></div><div class="card" style="box-shadow: none; padding: 20px;"><div class="card-title" style="margin-bottom: 12px; font-size: 1rem;">Mistake Categorization</div><div class="chart-svg-container" id="chapterMistakeProfileCanvas" style="height: 250px; border: none; background: transparent; padding: 0;"></div></div></div></div><div style="flex: 1 1 30%; min-width: 320px; display: flex; flex-direction: column; gap: 24px;"><div class="card" style="box-shadow: none; background: var(--bg-dark);"><div class="card-title" style="margin-bottom: 16px; font-size: 1.1rem;">Quick Action Hub</div><div style="display: flex; flex-direction: column; gap: 12px;"><div style="display: flex; gap: 8px;"><button class="prac-btn" style="flex: 1; background: ${accentColor}; color: white; border: none; padding: 12px; font-size:0.95rem;" onclick="openMistakeLogger('${s}', ${idx}, 'q', null)">Log Standard Questions</button></div><div style="display: flex; gap: 8px;"><button class="prac-btn" style="flex: 1; background: var(--grad-pyq); color: white; border: none; padding: 12px; font-size:0.95rem;" onclick="openMistakeLogger('${s}', ${idx}, 'pyq', null)">Log PYQs Pattern</button></div><div style="display: flex; gap: 8px;"><button class="prac-btn" style="flex: 1; background: var(--accent-yellow); color: #000; border: none; padding: 12px; font-size:0.95rem;" onclick="openMistakeLogger('${s}', ${idx}, 'fast_q', null)">Log Quick Metrics</button></div></div></div><div class="card" style="box-shadow: none;"><div class="card-title" style="margin-bottom: 16px; font-size: 1.1rem;">Goals & Settings</div><div style="display: flex; flex-direction: column; gap: 16px;"><div><label style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin-bottom: 4px; display: block;">Target Practice Goal</label><input type="number" class="prac-input" style="width: 100%; padding: 10px; font-size: 0.9rem;" placeholder="E.g., 100 Qs" value="${st.target_q || ''}" onchange="setChapterTargetPractice('${s}', ${idx}, this.value)"></div></div>${revHistoryHtml}</div></div></div>`;
+            container.innerHTML = `<div style="background: var(--bg-panel); border: 1px solid var(--border-color); border-left: 6px solid ${accentColor}; border-radius: 16px; padding: 24px 32px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 2px 10px var(--shadow-matrix);"><div><button class="prac-btn" style="padding: 6px 12px; font-size: 0.8rem; background: var(--bg-dark); border: 1px solid var(--border-color); color: var(--text-muted);" onclick="switchView('${s === 'p' ? 'physics' : s === 'c' ? 'chemistry' : 'mathematics'}')">← Back to ${subjMap[s]}</button></div><div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px;"><div><span style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: ${accentColor};">${subjMap[s]}</span><h2 style="font-size: 2.2rem; font-weight: 900; letter-spacing: -0.5px; color: var(--text-main); margin-top: 4px;">${chap.n}</h2><div style="display: flex; gap: 12px; font-size: 0.85rem; color: var(--text-muted); font-weight: 600; margin-top: 8px;"><span>⏱ ${(chap.l/60).toFixed(1)} Hrs</span> • <span>🗓️ Target: ${dStr}</span></div></div><div style="text-align: right;"><div style="font-size: 2rem; font-weight: 900; color: ${pct===100 ? 'var(--accent-green)' : 'var(--text-main)'}; line-height: 1;">${pct}%</div><div style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-top: 4px;">Completion</div></div></div><div class="stat-bar-bg" style="height: 6px; background: var(--bg-dark); margin-top: 4px;"><div class="stat-bar-fill" style="background: ${accentColor}; width: ${pct}%;"></div></div></div><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;"><div class="card" style="padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: none; border-bottom: 3px solid var(--accent-blue);"><span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase;">Lectures</span><span style="font-size: 1.4rem; font-weight: 900; color: var(--text-main);">${st.w.length}<span style="font-size: 1rem; color: var(--text-muted);">/${chap.v}</span></span></div><div class="card" style="padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: none; border-bottom: 3px solid ${accentColor};"><span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase;">Standard Qs</span><span style="font-size: 1.4rem; font-weight: 900; color: var(--text-main);">${st.q || 0}</span></div><div class="card" style="padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: none; border-bottom: 3px solid var(--accent-purple);"><span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase;">PYQs Done</span><span style="font-size: 1.4rem; font-weight: 900; color: var(--accent-purple);">${st.pyq || 0}</span></div><div class="card" style="padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: none; border-bottom: 3px solid var(--accent-green);"><span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase;">Total Volume</span><span style="font-size: 1.4rem; font-weight: 900; color: var(--accent-green);">${totalQuestions}</span></div></div><div style="display: flex; flex-wrap: wrap; gap: 24px;"><div style="flex: 1 1 65%; min-width: 320px; display: flex; flex-direction: column; gap: 24px;"><div class="card" style="box-shadow: none; padding: 24px;"><div class="card-title" style="margin-bottom: 16px; font-size: 1.1rem;">Lecture Progress Tracker</div><div class="video-grid" style="margin-top: 0; display: flex; flex-wrap: wrap; gap: 10px; background: transparent; padding: 0; border: none;">${cb}</div></div><div class="card" style="box-shadow: none; padding: 24px; border-top: 4px solid var(--accent-blue);"><div class="card-title" style="margin-bottom: 4px; font-size: 1.1rem;">Lecture vs Questions Ratio</div>${buildChapterLQRatioHtml(s, idx)}</div><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;"><div class="card" style="box-shadow: none; padding: 20px;"><div class="card-title" style="margin-bottom: 12px; font-size: 1rem;">Volume Distribution</div><div style="display: flex; gap: 4px; margin-bottom: 12px; flex-wrap: wrap;"><button class="prac-btn ${selectedChapterTimeframe==='all'?'active':''}" style="padding: 4px 8px; font-size: 0.7rem; border-radius: 6px;" onclick="setChapterChartTimeframe('all')">All</button><button class="prac-btn ${selectedChapterTimeframe==='today'?'active':''}" style="padding: 4px 8px; font-size: 0.7rem; border-radius: 6px;" onclick="setChapterChartTimeframe('today')">Today</button><button class="prac-btn ${selectedChapterTimeframe==='7days'?'active':''}" style="padding: 4px 8px; font-size: 0.7rem; border-radius: 6px;" onclick="setChapterChartTimeframe('7days')">7D</button><button class="prac-btn ${selectedChapterTimeframe==='30days'?'active':''}" style="padding: 4px 8px; font-size: 0.7rem; border-radius: 6px;" onclick="setChapterChartTimeframe('30days')">30D</button></div><div class="chart-svg-container" id="chapterSummaryVolumeChartCanvas" style="height: 250px; border: none; background: transparent; padding: 0;"></div></div><div class="card" style="box-shadow: none; padding: 20px;"><div class="card-title" style="margin-bottom: 12px; font-size: 1rem;"><span>Log Timeline</span><div style="display: flex; gap: 4px; align-items: center;"><button class="prac-btn" style="padding: 2px 8px; font-size: 0.7rem; border-radius: 6px;" onclick="navigateChapterDateTimeline(-1)">◀</button><button class="prac-btn" style="padding: 2px 8px; font-size: 0.7rem; border-radius: 6px;" onclick="navigateChapterDateTimeline(1)">▶</button></div></div><div class="chart-svg-container" id="chapterHistoricalTimelineChartCanvas" style="height: 250px; border: none; background: transparent; padding: 0;"></div></div><div class="card" style="box-shadow: none; padding: 20px;"><div class="card-title" style="margin-bottom: 12px; font-size: 1rem;">Accuracy Analytics</div><div style="display: flex; gap: 4px; margin-bottom: 12px; flex-wrap: wrap;"><button class="prac-btn ${selectedChapterAccuracyType==='all'?'active':''}" style="padding: 4px 8px; font-size: 0.7rem; border-radius: 6px;" onclick="setChapterAccuracyType('all')">All Qs</button><button class="prac-btn ${selectedChapterAccuracyType==='standard'?'active':''}" style="padding: 4px 8px; font-size: 0.7rem; border-radius: 6px;" onclick="setChapterAccuracyType('standard')">Standard</button><button class="prac-btn ${selectedChapterAccuracyType==='quick'?'active':''}" style="padding: 4px 8px; font-size: 0.7rem; border-radius: 6px;" onclick="setChapterAccuracyType('quick')">Quick</button><button class="prac-btn ${selectedChapterAccuracyType==='pyqs'?'active':''}" style="padding: 4px 8px; font-size: 0.7rem; border-radius: 6px;" onclick="setChapterAccuracyType('pyqs')">PYQs</button></div><div class="chart-svg-container" id="chapterAccuracyProfileCanvas" style="height: 250px; border: none; background: transparent; padding: 0;"></div></div><div class="card" style="box-shadow: none; padding: 20px;"><div class="card-title" style="margin-bottom: 12px; font-size: 1rem;">Mistake Categorization</div><div class="chart-svg-container" id="chapterMistakeProfileCanvas" style="height: 250px; border: none; background: transparent; padding: 0;"></div></div><div class="card" style="box-shadow: none; padding: 20px; grid-column: 1 / -1;"><div class="card-title" style="margin-bottom: 4px; font-size: 1rem;">📈 Chapter-Wise Accuracy Trend</div><p style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600; margin-bottom: 12px;">Session-over-session accuracy for this chapter.</p><div style="display: flex; gap: 4px; margin-bottom: 12px; flex-wrap: wrap;"><select class="filter-select" style="padding:4px 8px; font-size:0.75rem;" onchange="setPortalTrendType(this.value)"><option value="all" selected>All Qs</option><option value="standard">Standard</option><option value="quick">Quick</option><option value="pyqs">PYQs</option></select><select class="filter-select" style="padding:4px 8px; font-size:0.75rem;" onchange="setPortalTrendDiff(this.value)"><option value="all" selected>All Difficulty</option><option value="1">L1 · Basic</option><option value="2">L2 · Mains</option><option value="3">L3 · Advanced</option></select></div><div class="chart-svg-container" id="chapterTrendPortalCanvas" style="height: 280px; border: none; background: transparent; padding: 0;"></div></div></div></div><div style="flex: 1 1 30%; min-width: 320px; display: flex; flex-direction: column; gap: 24px;"><div class="card" style="box-shadow: none; background: var(--bg-dark);"><div class="card-title" style="margin-bottom: 16px; font-size: 1.1rem;">Quick Action Hub</div><div style="display: flex; flex-direction: column; gap: 12px;"><div style="display: flex; gap: 8px;"><button class="prac-btn" style="flex: 1; background: ${accentColor}; color: white; border: none; padding: 12px; font-size:0.95rem;" onclick="openMistakeLogger('${s}', ${idx}, 'q', null)">Log Standard Questions</button></div><div style="display: flex; gap: 8px;"><button class="prac-btn" style="flex: 1; background: var(--grad-pyq); color: white; border: none; padding: 12px; font-size:0.95rem;" onclick="openMistakeLogger('${s}', ${idx}, 'pyq', null)">Log PYQs Pattern</button></div><div style="display: flex; gap: 8px;"><button class="prac-btn" style="flex: 1; background: var(--accent-yellow); color: #000; border: none; padding: 12px; font-size:0.95rem;" onclick="openMistakeLogger('${s}', ${idx}, 'fast_q', null)">Log Quick Metrics</button></div></div></div><div class="card" style="box-shadow: none;"><div class="card-title" style="margin-bottom: 16px; font-size: 1.1rem;">Goals & Settings</div><div style="display: flex; flex-direction: column; gap: 16px;"><div><label style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin-bottom: 4px; display: block;">Target Practice Goal</label><input type="number" class="prac-input" style="width: 100%; padding: 10px; font-size: 0.9rem;" placeholder="E.g., 100 Qs" value="${st.target_q || ''}" onchange="setChapterTargetPractice('${s}', ${idx}, this.value)"></div></div>${revHistoryHtml}</div></div></div>`;
 
             renderBespokeChapterPortalVisualizations(s, idx);
         }
@@ -3032,6 +3208,7 @@
         function renderBespokeChapterPortalVisualizations(s, idx) {
             const st = getChapterState(s, idx), summaryCanvas = document.getElementById("chapterSummaryVolumeChartCanvas"), timelineCanvas = document.getElementById("chapterHistoricalTimelineChartCanvas"), mistakeCanvas = document.getElementById("chapterMistakeProfileCanvas"), accuracyCanvas = document.getElementById("chapterAccuracyProfileCanvas");
             if(mistakeCanvas) mistakeCanvas.innerHTML = createMistakeSvg(st.err, 250);
+            renderChapterTrendPortal(s, idx);
             if(!summaryCanvas || !timelineCanvas || !accuracyCanvas) return;
 
             let standardCount = 0, quickCount = 0, pyqCount = 0, stdInc = 0, quickInc = 0, pyqInc = 0;
@@ -3489,7 +3666,7 @@
         }
 
         function toggleSidebarMenu(o) { document.getElementById('sidebarMenu').classList.toggle('open', o); document.getElementById('sidebarOverlay').classList.toggle('open', o); }
-        function toggleSystemThemeMode() { const m = document.body.getAttribute('data-theme') === 'cyber-light' ? 'amoled-dark' : 'cyber-light'; document.body.setAttribute('data-theme', m); localStorage.setItem('jee_system_theme_preference', m); if(activeOpenViewId === 'progress' || activeOpenViewId === 'home') { renderProgressGraphs(); renderRoiWeightageMatrix(); renderGlobalMistakeProfile(); renderGlobalAccuracyGraph(); renderCumulativeGraph(); renderProgressAdvancedAnalytics(); renderGoalPaceCard(); } if(activeOpenViewId === 'progress') { renderLectureVsQuestionsGraph(); } if(activeOpenViewId === 'insights') { buildInsightsHub(); } }
+        function toggleSystemThemeMode() { const m = document.body.getAttribute('data-theme') === 'cyber-light' ? 'amoled-dark' : 'cyber-light'; document.body.setAttribute('data-theme', m); localStorage.setItem('jee_system_theme_preference', m); if(activeOpenViewId === 'progress' || activeOpenViewId === 'home') { renderProgressGraphs(); renderRoiWeightageMatrix(); renderGlobalMistakeProfile(); renderGlobalAccuracyGraph(); renderCumulativeGraph(); renderProgressAdvancedAnalytics(); renderGoalPaceCard(); } if(activeOpenViewId === 'progress') { renderLectureVsQuestionsGraph(); renderTimeOfDayAccuracyGraph(); renderChapterTrendHub(); } if(activeOpenViewId === 'chapter-portal' && currentlyOpenChapterPortalData) { renderChapterTrendPortal(currentlyOpenChapterPortalData.s, currentlyOpenChapterPortalData.idx); } if(activeOpenViewId === 'insights') { buildInsightsHub(); } }
         function toggleFullscreenView() { if (!document.fullscreenElement) { document.documentElement.requestFullscreen().catch(()=>{}); } else { document.exitFullscreen(); } }
 
         window.showRoiLabel = function(e, name, cx, cy) {
@@ -3540,7 +3717,8 @@
             ];
 
             const nowTime = new Date().getTime();
-            
+
+            if (cumulDiffFilter === 'all') {
             Object.keys(practiceData).forEach(dateStr => {
                 const logDate = new Date(dateStr).getTime();
                 const diffDays = (nowTime - logDate) / 86400000;
@@ -3578,6 +3756,18 @@
                     }
                 });
             });
+            } else {
+                // Difficulty-specific view sources from the granular per-session log
+                const typeMap = { standard: 'q', quick: 'fast_q', pyqs: 'pyq' };
+                const wantedType = cumulTypeFilter === 'all' ? 'all' : typeMap[cumulTypeFilter];
+                sessionLogDB.filter(l => sessionLogMatches(l, cumulSubjectFilter, wantedType, cumulDiffFilter, 'all')).forEach(l => {
+                    const diffDays = (nowTime - new Date(l.date).getTime()) / 86400000;
+                    let valToAdd = l.total;
+                    if(cumulAccFilter === 'correct') valToAdd = l.correct;
+                    if(cumulAccFilter === 'incorrect') valToAdd = l.incorrect;
+                    buckets.forEach(b => { if(diffDays <= b.days) b.val += valToAdd; });
+                });
+            }
 
             let maxV = Math.max(...buckets.map(b => b.val), 10);
             const setEl = (id, val) => { const e = document.getElementById(id); if(e) e.innerHTML = val; };
@@ -3605,6 +3795,101 @@
             
             canvas.innerHTML = html;
         }
+
+        // ================== NEW: Time-of-Day Accuracy Graph + Chapter-Wise Accuracy Trend Graph ==================
+        function buildLineChartSvg(points, opts) {
+            opts = opts || {};
+            const w = opts.w || 600, h = opts.h || 260, padL = 46, padR = 20, padT = 20, padB = 44;
+            const plotW = w - padL - padR, plotH = h - padT - padB;
+            if (!points || points.length === 0) {
+                return `<div style="display:flex; height:100%; align-items:center; justify-content:center; color:var(--text-muted); font-size:0.9rem; font-weight:700; text-align:center; padding: 20px;">${opts.emptyMsg || 'No data logged yet for this filter combination.'}</div>`;
+            }
+            const maxY = opts.maxY !== undefined ? opts.maxY : 100;
+            const minY = opts.minY !== undefined ? opts.minY : 0;
+            const n = points.length;
+            const stepX = n > 1 ? plotW / (n - 1) : 0;
+            const xFor = (i) => padL + (n > 1 ? i * stepX : plotW/2);
+            const yFor = (v) => padT + plotH - ((Math.max(minY, Math.min(maxY, v)) - minY) / (maxY - minY || 1)) * plotH;
+
+            let svg = `<svg width="100%" height="100%" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">`;
+            for (let i = 0; i <= 4; i++) {
+                const y = padT + (plotH / 4) * i;
+                const val = Math.round(maxY - (i * (maxY - minY) / 4));
+                svg += `<line x1="${padL}" y1="${y}" x2="${w - padR}" y2="${y}" class="svg-grid-line" /><text x="8" y="${y+4}" class="svg-axis-text">${val}${opts.ySuffix || ''}</text>`;
+            }
+            const color = opts.color || 'var(--accent-blue)';
+            let path = '', areaPath = '';
+            points.forEach((p, i) => {
+                const x = xFor(i), y = yFor(p.value);
+                path += (i === 0 ? `M${x},${y}` : ` L${x},${y}`);
+            });
+            areaPath = `${path} L${xFor(n-1)},${padT+plotH} L${xFor(0)},${padT+plotH} Z`;
+            svg += `<path d="${areaPath}" fill="${color}" opacity="0.10" stroke="none" />`;
+            svg += `<path d="${path}" fill="none" stroke="${color}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />`;
+            points.forEach((p, i) => {
+                const x = xFor(i), y = yFor(p.value);
+                svg += `<circle cx="${x}" cy="${y}" r="5" fill="${color}" stroke="var(--bg-panel)" stroke-width="2" />`;
+                svg += `<text x="${x}" y="${y - 12}" fill="var(--text-main)" font-size="11" font-weight="900" text-anchor="middle">${Math.round(p.value)}${opts.ySuffix || ''}</text>`;
+                svg += `<text x="${x}" y="${h - 12}" class="svg-axis-text" text-anchor="middle" font-size="10">${p.label}</text>`;
+                if (p.sub) svg += `<text x="${x}" y="${h - 2}" class="svg-axis-text" text-anchor="middle" font-size="8" opacity="0.7">${p.sub}</text>`;
+            });
+            svg += `</svg>`;
+            return svg;
+        }
+
+        // --- 1. Time-of-Day Focus & Efficiency Accuracy Graph ---
+        function setTodSubjFilter(v) { todSubjFilter = v; renderTimeOfDayAccuracyGraph(); }
+        function setTodTypeFilter(v) { todTypeFilter = v; renderTimeOfDayAccuracyGraph(); }
+        function setTodDiffFilter(v) { todDiffFilter = v; renderTimeOfDayAccuracyGraph(); }
+        function renderTimeOfDayAccuracyGraph() {
+            const canvas = document.getElementById('todAccuracyChartCanvas'); if (!canvas) return;
+            const typeMap = { standard: 'q', quick: 'fast_q', pyqs: 'pyq' };
+            const wantedType = todTypeFilter === 'all' ? 'all' : typeMap[todTypeFilter];
+            const points = TIME_BLOCKS_DEF.map(([key, label]) => {
+                const matches = sessionLogDB.filter(l => l.block === key && sessionLogMatches(l, todSubjFilter, wantedType, todDiffFilter, 'all'));
+                const total = matches.reduce((a,l) => a + l.total, 0);
+                const correct = matches.reduce((a,l) => a + l.correct, 0);
+                return { label, value: total > 0 ? (correct/total)*100 : 0, sub: total > 0 ? `${total} Qs` : 'No data', hasData: total > 0 };
+            });
+            const anyData = points.some(p => p.hasData);
+            if (!anyData) { canvas.innerHTML = buildLineChartSvg([], { emptyMsg: 'No difficulty/time-tagged logs yet. Log a question set to start tracking your peak cognitive hours.' }); return; }
+            canvas.innerHTML = buildLineChartSvg(points, { ySuffix: '%', color: 'var(--accent-purple)', h: 320 });
+        }
+
+        // --- 2. Chapter-Wise Accuracy Trend Line (shared engine for Progress Hub + Chapter Page) ---
+        function computeChapterSessionSeries(s, idx, typeFilter, diffFilter) {
+            const typeMap = { standard: 'q', quick: 'fast_q', pyqs: 'pyq' };
+            const wantedType = typeFilter === 'all' ? 'all' : typeMap[typeFilter];
+            const matches = sessionLogDB.filter(l => l.s === s && l.chapterIdx === idx && sessionLogMatches(l, s, wantedType, diffFilter, 'all'));
+            if (matches.length === 0) return [];
+            const byDate = {};
+            matches.forEach(l => { if (!byDate[l.date]) byDate[l.date] = { total: 0, correct: 0, date: l.date }; byDate[l.date].total += l.total; byDate[l.date].correct += l.correct; });
+            const sessions = Object.values(byDate).sort((a,b) => new Date(a.date) - new Date(b.date));
+            return sessions.map((sess, i) => ({ label: `S${i+1}`, sub: new Date(sess.date).toLocaleDateString('en-IN', {day:'numeric', month:'short'}), value: (sess.correct/sess.total)*100, count: sess.total }));
+        }
+
+        function setChTrendSubj(v) { chTrendSubjFilter = v; chTrendChapterIdx = 0; renderChapterTrendHub(); }
+        function setChTrendChapter(v) { chTrendChapterIdx = parseInt(v, 10); renderChapterTrendHub(); }
+        function setChTrendType(v) { chTrendTypeFilter = v; renderChapterTrendHub(); }
+        function setChTrendDiff(v) { chTrendDiffFilter = v; renderChapterTrendHub(); }
+        function renderChapterTrendHub() {
+            const sel = document.getElementById('chTrendChapterSelect');
+            if (sel) {
+                sel.innerHTML = syllabusDB[chTrendSubjFilter].map((c, i) => `<option value="${i}" ${i===chTrendChapterIdx?'selected':''}>${c.n}</option>`).join('');
+            }
+            const canvas = document.getElementById('chTrendHubChartCanvas'); if (!canvas) return;
+            const series = computeChapterSessionSeries(chTrendSubjFilter, chTrendChapterIdx, chTrendTypeFilter, chTrendDiffFilter);
+            canvas.innerHTML = buildLineChartSvg(series, { ySuffix: '%', color: colorMap[chTrendSubjFilter], h: 320, emptyMsg: 'No sessions logged yet for this chapter with the selected filters. Log a question set with a difficulty level to begin the trend.' });
+        }
+
+        function setPortalTrendType(v) { portalTrendTypeFilter = v; if(currentlyOpenChapterPortalData) renderChapterTrendPortal(currentlyOpenChapterPortalData.s, currentlyOpenChapterPortalData.idx); }
+        function setPortalTrendDiff(v) { portalTrendDiffFilter = v; if(currentlyOpenChapterPortalData) renderChapterTrendPortal(currentlyOpenChapterPortalData.s, currentlyOpenChapterPortalData.idx); }
+        function renderChapterTrendPortal(s, idx) {
+            const canvas = document.getElementById('chapterTrendPortalCanvas'); if (!canvas) return;
+            const series = computeChapterSessionSeries(s, idx, portalTrendTypeFilter, portalTrendDiffFilter);
+            canvas.innerHTML = buildLineChartSvg(series, { ySuffix: '%', color: colorMap[s], h: 260, emptyMsg: 'No sessions logged yet for this chapter with the selected filters. Log a question set with a difficulty level to begin the trend.' });
+        }
+        // ================== END NEW ANALYTICS ENGINE ==================
 
         function renderProgressGraphs() {
             const pCanvas = document.getElementById("problemsChartCanvas"), wCanvas = document.getElementById("watchMinutesChartCanvas"); if(!pCanvas || !wCanvas) return;
